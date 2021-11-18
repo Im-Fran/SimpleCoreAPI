@@ -207,11 +207,3 @@ tasks.withType<PublishToMavenRepository> {
 tasks.withType<PublishToMavenLocal> {
     dependsOn(tasks.test, tasks.kotlinSourcesJar, tasks.jar, dokkaJavadocJar, tasks.shadowJar)
 }
-
-tasks.register("env-test") {
-    doLast {
-        println("env: ${env["env"]}")
-        println("SONATYPE_USERNAME: ${env["SONATYPE_USERNAME"]}")
-        println("SONATYPE_PASSWORD: ${env["SONATYPE_PASSWORD"]}")
-    }
-}
