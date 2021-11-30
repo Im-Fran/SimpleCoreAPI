@@ -1,0 +1,4 @@
+name: 'SimpleCoreAPI'
+main: 'xyz.theprogramsrc.simplecoreapi.spigot.SpigotLoader'
+version: '@version@'
+api-version: '1.13'
