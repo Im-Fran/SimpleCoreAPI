@@ -9,6 +9,7 @@ _The best way to create a plugin_<br>
 
 ## Included Libraries
 * [commons-io](https://github.com/apache/commons-io) ([License](https://www.apache.org/licenses/LICENSE-2.0))
+* [Zip4J](https://github.com/srikanth-lingala/zip4j) ([License](https://github.com/srikanth-lingala/zip4j/blob/master/LICENSE))
 
 ## Links
 * Become a [Patron](https://go.theprogramsrc.xyz/patreon) and support us!
