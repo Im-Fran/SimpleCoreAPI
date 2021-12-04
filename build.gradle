@@ -11,9 +11,9 @@ group 'xyz.theprogramsrc'
 version '0.1.1-SNAPSHOT'
 description 'The best way to create a plugin'
 
-repositories{
-    mavenCentral()
+repositories {
     mavenLocal()
+    mavenCentral()
 
     maven { url 'https://repo.theprogramsrc.xyz/repository/maven-public/' }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
@@ -34,9 +34,9 @@ dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'net.lingala.zip4j:zip4j:2.9.0'
+    implementation 'net.lingala.zip4j:zip4j:2.9.1'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 }
 
 test {
@@ -86,7 +86,6 @@ shadowJar {
 
     archiveBaseName.set('SimpleCoreAPI')
     archiveClassifier.set('')
-    minimize()
 }
 
 configurations {
@@ -118,14 +117,21 @@ publishing {
         }
     }
     publications {
-        shadow(MavenPublication) { publication ->
-            artifactId 'simplecoreapi'
-            project.shadow.component(publication)
-
-            publication.pom.withXml {
-                asNode().appendNode('packaging', 'jar')
-                asNode().remove(asNode().get('dependencies')[0])
+        mavenJava(MavenPublication) {
+            artifactId = 'simplecoreapi'
+            pom {
+                name = 'SimpleCoreAPI'
+                description = project.description
+                url = 'https://github.com/TheProgramSrc/SimpleCoreAPI'
+                packaging = 'jar'
+                licenses {
+                    license {
+                        name = 'GNU General Public License v3.0'
+                        url = 'https://www.gnu.org/licenses/gpl-3.0.en.html'
+                    }
+                }
             }
+            artifact(shadowJar)
         }
     }
 }
