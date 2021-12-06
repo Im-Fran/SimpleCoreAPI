@@ -1,7 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.6.0'
+    id 'org.jetbrains.kotlin.jvm' version "1.5.10"
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '7.1.0'
     id 'com.dorongold.task-tree' version '2.1.0'
@@ -30,7 +30,7 @@ dependencies {
     compileOnly 'org.spigotmc:spigot:1.16.5-R0.1-SNAPSHOT'
     compileOnly 'net.md-5:bungeecord-api:1.17-R0.1-SNAPSHOT'
 
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.10'
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.google.code.gson:gson:2.8.9'
@@ -102,7 +102,7 @@ sourceSets {
 publishing {
     repositories {
         maven {
-            name = 'TheProgramSrcRepository'
+            name = 'TheProgramSrc'
             credentials.username = System.getenv('NEXUS_USERNAME')
             credentials.password = System.getenv('NEXUS_PASSWORD')
             url = uri(version.contains('-SNAPSHOT') ? 'https://repo.theprogramsrc.xyz/repository/maven-snapshots/' : 'https://repo.theprogramsrc.xyz/repository/maven-releases/')
@@ -119,19 +119,22 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             artifactId = 'simplecoreapi'
-            pom {
-                name = 'SimpleCoreAPI'
-                description = project.description
-                url = 'https://github.com/TheProgramSrc/SimpleCoreAPI'
-                packaging = 'jar'
-                licenses {
-                    license {
-                        name = 'GNU General Public License v3.0'
-                        url = 'https://www.gnu.org/licenses/gpl-3.0.en.html'
-                    }
-                }
+
+            from components.java
+
+            pom.withXml {
+                asNode().appendNode('packaging', 'jar')
+                asNode().appendNode('name', 'SimpleCoreAPI')
+                asNode().appendNode('description', project.description)
+                asNode().appendNode('url', 'https://github.com/TheProgramSrc/SimpleCoreAPI')
+                asNode().remove(asNode().get('dependencies'))
+
+                def dependenciesNode = asNode().appendNode('dependencies')
+                def jetbrainsAnnotations = dependenciesNode.appendNode('dependency')
+                jetbrainsAnnotations.appendNode('groupId', 'org.jetbrains')
+                jetbrainsAnnotations.appendNode('artifactId', 'annotations')
+                jetbrainsAnnotations.appendNode('version', '23.0.0')
             }
-            artifact(shadowJar)
         }
     }
 }
