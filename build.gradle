@@ -1,14 +1,14 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version "1.5.10"
+    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '7.1.0'
     id 'com.dorongold.task-tree' version '2.1.0'
 }
 
 group 'xyz.theprogramsrc'
-version '0.1.1-SNAPSHOT'
+version '0.0.1.2-SNAPSHOT'
 description 'The best way to create a plugin'
 
 repositories {
@@ -39,42 +39,6 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 }
 
-test {
-    useJUnitPlatform()
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-    withJavadocJar()
-    withSourcesJar()
-}
-
-processResources {
-    filter ReplaceTokens, tokens: [name: rootProject.name, version: project.version.toString(), description: project.description]
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-tasks.withType(Javadoc) {
-    failOnError false
-    options.addStringOption('Xdoclint:none', '-quiet')
-    options.addStringOption('encoding', 'UTF-8')
-    options.addStringOption('charSet', 'UTF-8')
-}
-
-tasks.withType(Copy) {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    exclude 'META-INF/**'
-}
-
-tasks.withType(Jar) {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    exclude 'META-INF/**'
-}
-
 shadowJar {
     relocate 'com.google', 'xyz.theprogramsrc.simplecoreapi.libs.google'
     relocate 'org.apache.commons', 'xyz.theprogramsrc.simplecoreapi.libs.apache.commons'
@@ -88,52 +52,80 @@ shadowJar {
     archiveClassifier.set('')
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+processResources {
+    filter ReplaceTokens, tokens: [name: rootProject.name, version: project.version.toString(), description: project.description]
+}
+
+tasks.withType(JavaCompile){
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Javadoc) {
+    failOnError false
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+tasks.withType(Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.withType(Copy) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+test {
+    useJUnitPlatform()
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 configurations {
     testImplementation {
         extendsFrom(compileOnly)
     }
 }
 
-sourceSets {
-    main.kotlin.srcDirs += 'src/main/kotlin'
-    main.resources.srcDirs += 'src/main/resources'
-}
-
 publishing {
     repositories {
-        maven {
-            name = 'TheProgramSrc'
-            credentials.username = System.getenv('NEXUS_USERNAME')
-            credentials.password = System.getenv('NEXUS_PASSWORD')
-            url = uri(version.contains('-SNAPSHOT') ? 'https://repo.theprogramsrc.xyz/repository/maven-snapshots/' : 'https://repo.theprogramsrc.xyz/repository/maven-releases/')
-        }
-        maven {
-            name = 'GitHubPackages'
-            url = 'https://maven.pkg.github.com/TheProgramSrc/SimpleCoreAPI'
-            credentials {
-                username = System.getenv('GITHUB_ACTOR')
-                password = System.getenv('GITHUB_TOKEN')
+        if(System.getenv('env') == 'prod') {
+            maven {
+                name = 'TheProgramSrc'
+                credentials.username = System.getenv('NEXUS_USERNAME')
+                credentials.password = System.getenv('NEXUS_PASSWORD')
+                url = uri(version.contains('-SNAPSHOT') ? 'https://repo.theprogramsrc.xyz/repository/maven-snapshots/' : 'https://repo.theprogramsrc.xyz/repository/maven-releases/')
             }
+            maven {
+                name = 'GitHubPackages'
+                url = 'https://maven.pkg.github.com/TheProgramSrc/SimpleCoreAPI'
+                credentials {
+                    username = System.getenv('GITHUB_ACTOR')
+                    password = System.getenv('GITHUB_TOKEN')
+                }
+            }
+        }else {
+            mavenLocal()
         }
     }
+
     publications {
-        mavenJava(MavenPublication) {
+        mavenKotlin(MavenPublication) { publication ->
             artifactId = 'simplecoreapi'
 
-            from components.java
+            from components.kotlin
 
             pom.withXml {
                 asNode().appendNode('packaging', 'jar')
-                asNode().appendNode('name', 'SimpleCoreAPI')
-                asNode().appendNode('description', project.description)
-                asNode().appendNode('url', 'https://github.com/TheProgramSrc/SimpleCoreAPI')
-                asNode().remove(asNode().get('dependencies'))
-
-                def dependenciesNode = asNode().appendNode('dependencies')
-                def jetbrainsAnnotations = dependenciesNode.appendNode('dependency')
-                jetbrainsAnnotations.appendNode('groupId', 'org.jetbrains')
-                jetbrainsAnnotations.appendNode('artifactId', 'annotations')
-                jetbrainsAnnotations.appendNode('version', '23.0.0')
+                asNode().remove(asNode().get('dependencies')[0])
             }
         }
     }
