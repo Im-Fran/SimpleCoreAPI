@@ -32,7 +32,8 @@ jobs:
       with:
         name: SimpleCoreAPI
         path: ./build/libs/SimpleCoreAPI.jar
-     - name: Deploy Dokka
+    # Now we deploy the documents to github pages
+    - name: Deploy Dokka
        uses: JamesIves/github-pages-deploy-action@4.1.7
        with:
          branch: gh-pages
