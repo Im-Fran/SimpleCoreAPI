@@ -27,13 +27,11 @@ jobs:
     - name: Test and Deploy with Gradle
       run: ./gradlew clean test publish shadow
       # Now we store the artifact in the action
-    - name: Create & Copy artifact
-      run: mkdir -p ./artifacts && cp build/libs/SimpleCoreAPI.jar ./artifacts/
     - name: Upload the artifact
       uses: actions/upload-artifact@v2
       with:
         name: SimpleCoreAPI
-        path: ./artifacts/SimpleCoreAPI.jar
+        path: ./build/libs/SimpleCoreAPI.jar
      - name: Deploy Dokka
        uses: JamesIves/github-pages-deploy-action@4.1.7
        with:
