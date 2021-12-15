@@ -4,7 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.0'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '7.1.0'
-    id 'com.dorongold.task-tree' version '2.1.0'
+    id 'org.jetbrains.dokka' version '1.6.0'
 }
 
 group 'xyz.theprogramsrc'
@@ -71,13 +71,6 @@ tasks.withType(JavaCompile){
     options.encoding = 'UTF-8'
 }
 
-tasks.withType(Javadoc) {
-    failOnError false
-    options.addStringOption('Xdoclint:none', '-quiet')
-    options.addStringOption('encoding', 'UTF-8')
-    options.addStringOption('charSet', 'UTF-8')
-}
-
 tasks.withType(Jar) {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
@@ -94,6 +87,10 @@ configurations {
     testImplementation {
         extendsFrom(compileOnly)
     }
+}
+
+tasks.named("dokkaHtml") {
+    outputDirectory.set(file(project.buildDir.absolutePath + '/dokka'))
 }
 
 publishing {
@@ -129,12 +126,6 @@ publishing {
                 asNode().remove(asNode().get('dependencies')[0])
             }
         }
-    }
-}
-
-javadoc {
-    if(JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption('html5', true)
     }
 }
 

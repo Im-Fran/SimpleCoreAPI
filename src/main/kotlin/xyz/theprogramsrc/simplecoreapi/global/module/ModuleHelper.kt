@@ -5,9 +5,17 @@ import xyz.theprogramsrc.simplecoreapi.global.objects.CloudModuleStorage
 import java.io.File
 import java.net.URL
 
+/**
+ * Module Helper to Download or Sort modules
+ */
 object ModuleHelper {
     private val downloadLocation = File("plugins/SimpleCoreAPI/modules/")
 
+    /**
+     * Downloads a Module from the database
+     * @param name Module Name
+     * @return true if the module was downloaded, false otherwise
+     */
     fun downloadModule(name: String): Boolean{
         if(!downloadLocation.exists()) downloadLocation.mkdirs()
         val module = CloudModuleStorage.instance.get(name) ?: return false
@@ -22,6 +30,11 @@ object ModuleHelper {
         }
     }
 
+    /**
+     * Generate a new list with the correct order to load the modules
+     * @param dependencies List of dependencies
+     * @return List of the sorted modules to load
+     */
     fun sortModuleDependencies(dependencies: Map<String, Collection<String>>): List<String> {
         val sorted = mutableListOf<String>()
         dependencies.forEach { (moduleName, moduleDepends) ->

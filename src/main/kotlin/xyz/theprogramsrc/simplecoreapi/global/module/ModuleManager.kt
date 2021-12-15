@@ -33,6 +33,13 @@ class ModuleManager(private val logger: Logger) {
         }
     }
 
+    /**
+     * Gets a module from the loaded modules
+     * @param name The name of the module
+     * @return The requested module, or null if is not found or enabled
+     */
+    fun getModule(name: String): Module? = loadedModules[name]
+
     private fun load() {
         val files = (modulesFolder.listFiles() ?: emptyArray()).filter { it.name.endsWith(".jar") }
         if (files.isEmpty()) return

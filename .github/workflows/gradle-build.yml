@@ -25,7 +25,7 @@ jobs:
     - name: Make gradle executable
       run: chmod +x gradlew
     - name: Test and Deploy with Gradle
-      run: ./gradlew clean test shadow publish
+      run: ./gradlew clean test publish shadow
       # Now we store the artifact in the action
     - name: Create & Copy artifact
       run: mkdir -p ./artifacts && cp build/libs/SimpleCoreAPI.jar ./artifacts/
@@ -34,11 +34,11 @@ jobs:
       with:
         name: SimpleCoreAPI
         path: ./artifacts/SimpleCoreAPI.jar
-    # - name: Deploy Javadoc
-    #   uses: JamesIves/github-pages-deploy-action@4.1.5
-    #   with:
-    #     branch: gh-pages
-    #     folder: build/docs/javadoc
-    #     clean: true
+     - name: Deploy Dokka
+       uses: JamesIves/github-pages-deploy-action@4.1.7
+       with:
+         branch: gh-pages
+         folder: build/dokka
+         clean: true
       
       
