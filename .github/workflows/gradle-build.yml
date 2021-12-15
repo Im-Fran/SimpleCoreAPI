@@ -1,7 +1,7 @@
 name: Java CI
 on:
   release:
-    types: [published,prereleased]
+    types: [published]
 jobs:
   build:
     # Setup the OS
@@ -9,6 +9,7 @@ jobs:
     env:
       NEXUS_USERNAME: '${{ secrets.NEXUS_USERNAME }}'
       NEXUS_PASSWORD: '${{ secrets.NEXUS_PASSWORD }}'
+      env: 'prod'
     steps:
     # Checkout the code
     - name: Ceckout the Code
