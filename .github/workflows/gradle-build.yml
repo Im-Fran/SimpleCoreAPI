@@ -26,7 +26,7 @@ jobs:
       run: chmod +x gradlew
     - name: Test and Deploy with Gradle
       run: ./gradlew clean test publish shadow
-      # Now we store the artifact in the action
+    # Now we store the artifact in the action
     - name: Upload the artifact
       uses: actions/upload-artifact@v2
       with:
@@ -34,10 +34,8 @@ jobs:
         path: ./build/libs/SimpleCoreAPI.jar
     # Now we deploy the documents to github pages
     - name: Deploy Dokka
-       uses: JamesIves/github-pages-deploy-action@4.1.7
-       with:
-         branch: gh-pages
-         folder: build/dokka
-         clean: true
-      
-      
+      uses: JamesIves/github-pages-deploy-action@4.1.7
+      with:
+        branch: gh-pages
+        folder: build/dokka
+        clean: true
