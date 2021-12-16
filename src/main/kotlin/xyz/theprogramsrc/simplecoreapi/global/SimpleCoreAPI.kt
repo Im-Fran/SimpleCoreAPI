@@ -1,6 +1,7 @@
 package xyz.theprogramsrc.simplecoreapi.global
 
 import xyz.theprogramsrc.simplecoreapi.global.module.ModuleManager
+import java.util.*
 import java.util.logging.Logger
 
 /**
@@ -23,9 +24,35 @@ class SimpleCoreAPI(logger: Logger) {
      */
     val moduleManager: ModuleManager
 
+    /**
+     * SimpleCoreAPI Properties
+     * @return The {@link Properties} of SimpleCoreAPI
+     */
+    val props: Properties = Properties()
+
     init {
         instance = this
+        props.load(SimpleCoreAPI::class.java.getResourceAsStream("/simplecoreapi.properties"))
+        logger.info("SimpleCoreAPI v${getVersion()} - Git Commit: ${getShortHash()}")
         moduleManager = ModuleManager.init(logger)
     }
+
+    /**
+     * Gets the short version of the commit hash
+     * @return The short commit hash
+     */
+    fun getShortHash(): String = props.getProperty("git-short", "unknown")
+
+    /**
+     * Gets the full version of the commit hash
+     * @return The full commit hash
+     */
+    fun getFullHash(): String = props.getProperty("git-full", "unknown")
+
+    /**
+     * Gets the version of SimpleCoreAPI
+     * @return The version of SimpleCoreAPI
+     */
+    fun getVersion(): String = props.getProperty("version", "unknown")
 
 }
