@@ -54,7 +54,6 @@ shadowJar {
 
     archiveBaseName.set('SimpleCoreAPI')
     archiveClassifier.set('')
-    archiveVersion.set('')
 }
 
 java {
