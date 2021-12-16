@@ -64,7 +64,7 @@ java {
 }
 
 processResources {
-    filter ReplaceTokens, tokens: [name: rootProject.name, version: project.version.toString(), description: project.description, git_short: System.getenv("GIT_SHORT_HASH") ?: "unknown", git_full: System.getenv("GIT_FULL_HASH") ?: "unknown"]
+    filter ReplaceTokens, tokens: [name: rootProject.name, version: project.version.toString(), description: project.description, git_short: System.getenv("GIT_COMMIT_SHORT_HASH") ?: "unknown", git_full: System.getenv("GIT_COMMIT_LONG_HASH") ?: "unknown"]
 }
 
 tasks.withType(JavaCompile){

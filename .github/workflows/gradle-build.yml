@@ -13,11 +13,6 @@ jobs:
       GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
       # Set environment
       env: 'prod'
-      # Retrieve the version from 'github.ref_name' context and remove the first character 'v' if is present
-      VERSION: '$(echo ${{ github.ref_name }} | sed -e "s/^v//")'
-      # Save the short version of the commit hash
-      GIT_FULL_HASH: '${{ github.sha }}'
-      GIT_SHORT_HASH: '$(echo ${{ github.sha }} | cut -c1-7)'
     steps:
       # Checkout the Code
       - name: Checkout Code
