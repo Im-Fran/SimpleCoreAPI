@@ -8,7 +8,7 @@ plugins {
 }
 
 group 'xyz.theprogramsrc'
-version '0.1.2-SNAPSHOT'
+version System.getenv("VERSION") ?: '0.1.3-SNAPSHOT'
 description 'The best way to create a plugin'
 
 repositories {
@@ -64,7 +64,7 @@ java {
 }
 
 processResources {
-    filter ReplaceTokens, tokens: [name: rootProject.name, version: project.version.toString(), description: project.description]
+    filter ReplaceTokens, tokens: [name: rootProject.name, version: project.version.toString(), description: project.description, git_short: System.getenv("GIT_SHORT_HASH") ?: "unknown", git_full: System.getenv("GIT_FULL_HASH") ?: "unknown"]
 }
 
 tasks.withType(JavaCompile){
@@ -110,7 +110,7 @@ publishing {
                     password = System.getenv('GITHUB_TOKEN')
                 }
             }
-        }else {
+        } else {
             mavenLocal()
         }
     }

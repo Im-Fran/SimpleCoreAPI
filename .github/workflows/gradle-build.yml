@@ -1,38 +1,46 @@
-name: Java CI
+name: "Build and Deploy"
 on:
   release:
-    types: [published]
+    types: [published,edited]
 jobs:
   build:
-    # Setup the OS
+    # Set up the OS
     runs-on: ubuntu-latest
     env:
+      # Nexus credentials and GitHub token
       NEXUS_USERNAME: '${{ secrets.NEXUS_USERNAME }}'
       NEXUS_PASSWORD: '${{ secrets.NEXUS_PASSWORD }}'
       GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      # Set environment
       env: 'prod'
+      # Retrieve the version from 'github.ref_name' context and remove the first character 'v' if is present
+      VERSION: '$(echo ${{ github.ref_name }} | sed -e "s/^v//")'
+      # Save the short version of the commit hash
+      GIT_FULL_HASH: '${{ github.sha }}'
+      GIT_SHORT_HASH: '$(echo ${{ github.sha }} | cut -c1-7)'
     steps:
-    # Checkout the code
-    - name: Ceckout the Code
+    # Checkout the Code
+    - name: Checkout Code
       uses: actions/checkout@v2
-    # Install java and maven
-    - name: Set up JDK 1.8
+    # Set up the JDK
+    - name: Set up JDK 8
       uses: actions/setup-java@v2
       with:
         distribution: adopt
         java-version: 8
-    # Test and deploy
+    # Make gradle executable
     - name: Make gradle executable
       run: chmod +x gradlew
-    - name: Test and Deploy with Gradle
-      run: ./gradlew clean test publish shadow
+    # Clean, Test, Publish and Build (in that order to save the artifact to the action)
+    - name: Test, Deploy and Build with Gradle
+      run: ./gradlew clean test publish shadow dokkaHtml
     # Now we store the artifact in the action
     - name: Upload the artifact
       uses: actions/upload-artifact@v2
       with:
         name: SimpleCoreAPI
-        path: ./build/libs/SimpleCoreAPI.jar
-    # Now we deploy the documents to github pages
+        path: ./build/libs/SimpleCoreAPI-${{ env.VERSION }}.jar
+    # Now we deploy the documents to GitHub pages
     - name: Deploy Dokka
       uses: JamesIves/github-pages-deploy-action@4.1.7
       with:
