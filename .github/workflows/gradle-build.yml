@@ -13,37 +13,40 @@ jobs:
       GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
       # Set environment
       env: 'prod'
-      # Retrieve the version from 'github.ref_name' context and remove the first character 'v' if is present
-      VERSION: '$(echo ${{ github.ref_name }} | sed -e "s/^v//")'
-      # Save the short version of the commit hash
-      GIT_FULL_HASH: '${{ github.sha }}'
-      GIT_SHORT_HASH: '$(echo ${{ github.sha }} | cut -c1-7)'
     steps:
-    # Checkout the Code
-    - name: Checkout Code
-      uses: actions/checkout@v2
-    # Set up the JDK
-    - name: Set up JDK 8
-      uses: actions/setup-java@v2
-      with:
-        distribution: adopt
-        java-version: 8
-    # Make gradle executable
-    - name: Make gradle executable
-      run: chmod +x gradlew
-    # Clean, Test, Publish and Build (in that order to save the artifact to the action)
-    - name: Test, Deploy and Build with Gradle
-      run: ./gradlew clean test publish shadow dokkaHtml
-    # Now we store the artifact in the action
-    - name: Upload the artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: SimpleCoreAPI
-        path: ./build/libs/SimpleCoreAPI-${{ env.VERSION }}.jar
-    # Now we deploy the documents to GitHub pages
-    - name: Deploy Dokka
-      uses: JamesIves/github-pages-deploy-action@4.1.7
-      with:
-        branch: gh-pages
-        folder: build/dokka
-        clean: true
+      # Checkout the Code
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      # Set up git hashes environment variables
+      - name: Git Hashes
+        uses: Im-Fran/git-hashes-action@v1.0.0
+        # Set up version from tag environment variables
+      - name: Version from Tag Action
+        uses: Im-Fran/version-from-tag-action@v1.0.0
+        with:
+          remove-first-character: 'v'
+        # Set up the JDK
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          distribution: adopt
+          java-version: 8
+      # Make gradle executable
+      - name: Make gradle executable
+        run: chmod +x gradlew
+      # Clean, Test, Publish and Build (in that order to save the artifact to the action)
+      - name: Test, Deploy and Build with Gradle
+        run: ./gradlew clean test publish shadow dokkaHtml
+      # Now we store the artifact in the action
+      - name: Upload the artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: SimpleCoreAPI
+          path: ./build/libs/SimpleCoreAPI-${{ env.VERSION }}.jar
+      # Now we deploy the documents to GitHub pages
+      - name: Deploy Dokka
+        uses: JamesIves/github-pages-deploy-action@4.1.7
+        with:
+          branch: gh-pages
+          folder: build/dokka
+          clean: true
