@@ -61,7 +61,7 @@ class ModuleManager(private val logger: Logger) {
             try {
                 // Validate that this file is a module
                 val props = loadDescription(file) ?: throw InvalidModuleDescriptionException("Failed to load module description for " + file!!.name)
-                val required = arrayOf("main", "name", "version", "author", "description")
+                val required = arrayOf("main", "name", "version", "author", "description", "repository-id")
                 for (req in required) {
                     if (!props.containsKey(req)) {
                         throw InvalidModuleDescriptionException("Missing required property " + req + " in module " + file!!.name)
@@ -75,6 +75,7 @@ class ModuleManager(private val logger: Logger) {
                     props.getProperty("version").replace("\"(.+)\"".toRegex(), "$1"),
                     props.getProperty("author").replace("\"(.+)\"".toRegex(), "$1"),
                     props.getProperty("description").replace("\"(.+)\"".toRegex(), "$1"),
+                    props.getProperty("repository-id").replace("\"(.+)\"".toRegex(), "$1"),
                     (if (props.containsKey("dependencies")) props.getProperty("dependencies") else "").replace(
                         "\"(.+)\"".toRegex(),
                         "$1"
@@ -220,7 +221,7 @@ class ModuleManager(private val logger: Logger) {
     private fun updateJars(){
         updatesFolder.listFiles()?.filter { it.name.endsWith(".jar") }?.filter { loadDescription(it) != null }?.forEach {
             val name = loadDescription(it)?.getProperty("name") ?: return@forEach
-            val outdatedFile = modulesFolder.listFiles()?.filter { it.name.endsWith(".jar") }?.firstOrNull { loadDescription(it)?.getProperty("name")?.equals(name) ?: false }?.toPath() ?: return@forEach
+            val outdatedFile = modulesFolder.listFiles()?.filter { jar -> jar.name.endsWith(".jar") }?.firstOrNull { jar -> loadDescription(jar)?.getProperty("name")?.equals(name) ?: false }?.toPath() ?: return@forEach
             Files.deleteIfExists(outdatedFile)
             Files.move(it.toPath(), outdatedFile)
         }

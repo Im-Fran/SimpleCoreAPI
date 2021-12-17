@@ -76,3 +76,4 @@ build/
 bin/
 *.pom.xml
 modules/
+plugins/

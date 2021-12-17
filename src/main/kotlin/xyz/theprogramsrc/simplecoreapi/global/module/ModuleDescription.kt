@@ -7,9 +7,10 @@ package xyz.theprogramsrc.simplecoreapi.global.module
  * @param version The version of the module
  * @param author The author of the module
  * @param description The description of the module
+ * @param repositoryId The identifier of this artifact in the repository (usually the name in lowercase)
  * @param dependencies The dependencies of the module (must be the name of the module)
  */
-data class ModuleDescription(val mainClass: String, val name: String, val version: String, val author: String, val description: String, val dependencies: Array<String>) {
+data class ModuleDescription(val mainClass: String, val name: String, val version: String, val author: String, val description: String, val repositoryId: String, val dependencies: Array<String>) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -22,6 +23,7 @@ data class ModuleDescription(val mainClass: String, val name: String, val versio
         if (version != other.version) return false
         if (author != other.author) return false
         if (description != other.description) return false
+        if (repositoryId != other.repositoryId) return false
         if (!dependencies.contentEquals(other.dependencies)) return false
 
         return true
@@ -33,6 +35,7 @@ data class ModuleDescription(val mainClass: String, val name: String, val versio
         result = 31 * result + version.hashCode()
         result = 31 * result + author.hashCode()
         result = 31 * result + description.hashCode()
+        result = 31 * result + repositoryId.hashCode()
         result = 31 * result + dependencies.contentHashCode()
         return result
     }
