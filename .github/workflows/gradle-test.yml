@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     # Set up environment variables
     env:
-      env: 'local' # Set to local so it won't deploy the jar to the repos
+      env: 'local' # Set to local, so it won't deploy the jar to the repos
     steps:
     # Checkout code
     - name: Checkout Code
