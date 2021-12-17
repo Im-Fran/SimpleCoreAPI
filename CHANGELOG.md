@@ -1,3 +1,6 @@
+## v0.1.8 - Snapshot
+* Updated gradle to v7.3.2
+
 ## v0.1.7 - Snapshot
 * Fixes to the module download
 * Migrated to new module download system (repository based)
