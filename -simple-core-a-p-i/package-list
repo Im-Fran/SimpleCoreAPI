@@ -30,7 +30,7 @@ $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/Module/init/#java.
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/Module/onDisable/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module/on-disable.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/Module/onEnable/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module/on-enable.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleDescription///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-description/index.html
-$dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleDescription/ModuleDescription/#kotlin.String#kotlin.String#kotlin.String#kotlin.String#kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-description/-module-description.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleDescription/ModuleDescription/#kotlin.String#kotlin.String#kotlin.String#kotlin.String#kotlin.String#kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-description/-module-description.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleDescription/author/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-description/author.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleDescription/dependencies/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-description/dependencies.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleDescription/description/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-description/description.html
@@ -38,6 +38,7 @@ $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleDescription/
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleDescription/hashCode/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-description/hash-code.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleDescription/mainClass/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-description/main-class.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleDescription/name/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-description/name.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleDescription/repositoryId/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-description/repository-id.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleDescription/version/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-description/version.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleHelper///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-helper/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleHelper/downloadModule/#kotlin.String/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-helper/download-module.html
@@ -48,17 +49,6 @@ $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleManager///Po
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleManager/ModuleManager/#java.util.logging.Logger/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-manager/-module-manager.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleManager/disableModules/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-manager/disable-modules.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleManager/getModule/#kotlin.String/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-manager/get-module.html
-$dokka.location:xyz.theprogramsrc.simplecoreapi.global.objects////PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.objects/index.html
-$dokka.location:xyz.theprogramsrc.simplecoreapi.global.objects/CloudModule///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.objects/-cloud-module/index.html
-$dokka.location:xyz.theprogramsrc.simplecoreapi.global.objects/CloudModule/CloudModule/#kotlin.Int#kotlin.String/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.objects/-cloud-module/-cloud-module.html
-$dokka.location:xyz.theprogramsrc.simplecoreapi.global.objects/CloudModule/id/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.objects/-cloud-module/id.html
-$dokka.location:xyz.theprogramsrc.simplecoreapi.global.objects/CloudModule/name/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.objects/-cloud-module/name.html
-$dokka.location:xyz.theprogramsrc.simplecoreapi.global.objects/CloudModuleStorage.Companion///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.objects/-cloud-module-storage/-companion/index.html
-$dokka.location:xyz.theprogramsrc.simplecoreapi.global.objects/CloudModuleStorage.Companion/instance/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.objects/-cloud-module-storage/-companion/instance.html
-$dokka.location:xyz.theprogramsrc.simplecoreapi.global.objects/CloudModuleStorage///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.objects/-cloud-module-storage/index.html
-$dokka.location:xyz.theprogramsrc.simplecoreapi.global.objects/CloudModuleStorage/CloudModuleStorage/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.objects/-cloud-module-storage/-cloud-module-storage.html
-$dokka.location:xyz.theprogramsrc.simplecoreapi.global.objects/CloudModuleStorage/get/#kotlin.String/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.objects/-cloud-module-storage/get.html
-$dokka.location:xyz.theprogramsrc.simplecoreapi.global.objects/CloudModuleStorage/loadAll/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.objects/-cloud-module-storage/load-all.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global////PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI.Companion///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/-companion/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI.Companion/instance/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/-companion/instance.html
@@ -78,6 +68,5 @@ xyz.theprogramsrc.simplecoreapi.bungee
 xyz.theprogramsrc.simplecoreapi.global
 xyz.theprogramsrc.simplecoreapi.global.exceptions
 xyz.theprogramsrc.simplecoreapi.global.module
-xyz.theprogramsrc.simplecoreapi.global.objects
 xyz.theprogramsrc.simplecoreapi.spigot
 
