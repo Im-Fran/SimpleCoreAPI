@@ -48,6 +48,6 @@ object ModuleHelper {
             }
             if(!sorted.contains(moduleName)) sorted.add(moduleName)
         }
-        return sorted
+        return sorted.filter { it.isNotBlank() && it.isNotEmpty() }
     }
 }

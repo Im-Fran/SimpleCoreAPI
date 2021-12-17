@@ -10,7 +10,7 @@ class SpigotLoader: JavaPlugin() {
     }
 
     override fun onDisable() {
-        SimpleCoreAPI.instance.moduleManager.disableModules()
+        SimpleCoreAPI.instance.moduleManager?.disableModules()
     }
 
 }

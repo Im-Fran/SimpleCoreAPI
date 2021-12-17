@@ -10,7 +10,7 @@ class BungeeLoader: Plugin() {
     }
 
     override fun onDisable() {
-        SimpleCoreAPI.instance.moduleManager.disableModules()
+        SimpleCoreAPI.instance.moduleManager?.disableModules()
     }
 
 }
