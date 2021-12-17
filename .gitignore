@@ -76,3 +76,5 @@ build/
 bin/
 *.pom.xml
 modules/
+plugins/
+!gradle-wrapper.jar

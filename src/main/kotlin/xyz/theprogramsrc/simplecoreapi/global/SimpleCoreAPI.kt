@@ -32,7 +32,7 @@ class SimpleCoreAPI(logger: Logger) {
 
     init {
         instance = this
-        props.load(SimpleCoreAPI::class.java.getResourceAsStream("/simplecoreapi.properties"))
+        props.load(javaClass.getResourceAsStream("simplecoreapi.properties"))
         logger.info("SimpleCoreAPI v${getVersion()} - Git Commit: ${getShortHash()}")
         moduleManager = ModuleManager.init(logger)
     }

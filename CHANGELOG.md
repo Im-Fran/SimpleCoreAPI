@@ -1,3 +1,9 @@
+## v0.1.7 - Snapshot
+* Fixes to the module download
+* Migrated to new module download system (repository based)
+* Added required repository-id field to module properties
+* Removed CloudModule.kt due to migration to new module download system
+
 ## v0.1.6 - Snapshot
 * Added update system like update folder in bukkit servers
 * Fixed modules not being loaded (Class Not Found Exception)
