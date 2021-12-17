@@ -22,7 +22,7 @@ class SimpleCoreAPI(logger: Logger) {
      * The Module Manager
      * @return The {@link ModuleManager}
      */
-    val moduleManager: ModuleManager
+    val moduleManager: ModuleManager?
 
     /**
      * SimpleCoreAPI Properties

@@ -1,3 +1,14 @@
+## v0.1.6 - Snapshot
+* Added update system like update folder in bukkit servers
+* Fixed modules not being loaded (Class Not Found Exception)
+* Fixed Null Pointer Exception when abruptly disabling the api
+* Improvements to the module load order
+* Fixes to issue templates
+
+## v0.1.4 - Snapshot / v0.1.5 - Snapshot
+* Fixed build script not working
+* Implemented custom actions
+
 ## v0.1.3 - Snapshot
 * Added ability to re-deploy a version by specifying it in the environment variable `VERSION`
 * Add a way to let know the user the current commit hash of the running release.

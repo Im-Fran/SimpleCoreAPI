@@ -1,24 +1,30 @@
 package xyz.theprogramsrc.simplecoreapi.global.module
 
-import xyz.theprogramsrc.simplecoreapi.global.exceptions.*
+import xyz.theprogramsrc.simplecoreapi.global.exceptions.InvalidModuleDescriptionException
+import xyz.theprogramsrc.simplecoreapi.global.exceptions.InvalidModuleException
+import xyz.theprogramsrc.simplecoreapi.global.exceptions.ModuleDownloadException
+import xyz.theprogramsrc.simplecoreapi.global.exceptions.ModuleLoadException
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.net.URLClassLoader
+import java.nio.file.Files
 import java.util.*
-import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarInputStream
 import java.util.logging.Logger
+import java.util.zip.ZipEntry
 
 
 class ModuleManager(private val logger: Logger) {
 
-    private var modulesFolder = File("plugins/SimpleCoreAPI/modules")
+    private val modulesFolder = File("plugins/SimpleCoreAPI/modules")
+    private val updatesFolder = File("plugins/SimpleCoreAPI/update")
     private var loadedModules = mutableMapOf<String, Module>()
 
     init {
         if (!modulesFolder.exists()) modulesFolder.mkdirs()
+        if (!updatesFolder.exists()) updatesFolder.mkdirs()
     }
 
     companion object {
@@ -47,7 +53,10 @@ class ModuleManager(private val logger: Logger) {
         val dependencies = mutableListOf<String>()
         val loadedModules = mutableSetOf<String>()
 
-        // First we load and save all the module descriptions from the avialable modules
+        // First we update the module jars
+        updateJars()
+
+        // Now we load and save all the module descriptions from the available modules
         files.forEach { file ->
             try {
                 // Validate that this file is a module
@@ -114,11 +123,12 @@ class ModuleManager(private val logger: Logger) {
             moduleDependencies[it.key] = it.value.second.dependencies.toList()
         }
 
-        ModuleHelper.sortModuleDependencies(moduleDependencies).forEach {
-            if(!loadedModules.contains(it)){
-                val pair = modules[it]!!
-                if(loadIntoClasspath(pair.first, pair.second)){
-                    loadedModules.add(it)
+        ModuleHelper.sortModuleDependencies(moduleDependencies).forEach { moduleName ->
+            if(!loadedModules.contains(moduleName) && modules.containsKey(moduleName)) {
+                modules[moduleName]?.let { pair ->
+                    if(loadIntoClasspath(pair.first, pair.second)){
+                        loadedModules.add(moduleName)
+                    }
                 }
             }
         }
@@ -134,22 +144,23 @@ class ModuleManager(private val logger: Logger) {
      */
     @Throws(InvalidModuleException::class, ModuleLoadException::class)
     private fun loadIntoClasspath(file: File, description: ModuleDescription): Boolean {
-        var entry: JarEntry
+        var entry: ZipEntry?
         try {
             URLClassLoader(arrayOf(file.toURI().toURL()), this.javaClass.classLoader).use { loader ->
                 FileInputStream(file).use { fileInputStream ->
                     JarInputStream(fileInputStream).use { jarInputStream ->
-                        while (jarInputStream.nextJarEntry.also { entry = it } != null) {
-                            if (entry.name.endsWith(".class")) {
-                                val name = entry.name.replace("/", ".").replace(".class", "")
-                                val clazz = loader.loadClass(name)
+                        while (jarInputStream.nextEntry.also { entry = it } != null) {
+                            val entryName = entry?.name ?: continue
+                            if (entryName.endsWith(".class")) {
+                                val name = entryName.replace("/", ".").replace(".class", "")
+                                val clazz = Class.forName(name, true, loader)
                                 if (name == description.mainClass) {
                                     if (!Module::class.java.isAssignableFrom(clazz)) {
                                         throw InvalidModuleException("The class ${description.mainClass} must be extended to the Module class!")
                                     }
                                     return try {
                                         logger.info("Loading module ${description.name} v${description.version}")
-                                        val moduleClass = Class.forName(description.mainClass).asSubclass(Module::class.java)
+                                        val moduleClass = clazz.asSubclass(Module::class.java)
                                         val module = moduleClass.getConstructor().newInstance()
                                         module.init(file, description)
                                         module.onEnable()
@@ -201,5 +212,17 @@ class ModuleManager(private val logger: Logger) {
         loadedModules.values.forEach { it.onDisable() }
         loadedModules.clear()
         System.gc()
+    }
+
+    /**
+     * Updates all the jars placed under the update/ folder
+     */
+    private fun updateJars(){
+        updatesFolder.listFiles()?.filter { it.name.endsWith(".jar") }?.filter { loadDescription(it) != null }?.forEach {
+            val name = loadDescription(it)?.getProperty("name") ?: return@forEach
+            val outdatedFile = modulesFolder.listFiles()?.filter { it.name.endsWith(".jar") }?.firstOrNull { loadDescription(it)?.getProperty("name")?.equals(name) ?: false }?.toPath() ?: return@forEach
+            Files.deleteIfExists(outdatedFile)
+            Files.move(it.toPath(), outdatedFile)
+        }
     }
 }
