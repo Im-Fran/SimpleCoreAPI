@@ -1,3 +1,6 @@
+## v0.1.9 - Snapshot
+* Fixed when trying to get simplecoreapi.properties resource returning null
+
 ## v0.1.8 - Snapshot
 * Updated gradle to v7.3.2
 
