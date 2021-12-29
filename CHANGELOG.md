@@ -1,3 +1,7 @@
+## v0.1.10 - Snapshot
+* Added GitHub update checker
+* Added method to download modules from SimpleCoreAPI.kt 
+
 ## v0.1.9 - Snapshot
 * Fixed when trying to get simplecoreapi.properties resource returning null
 
