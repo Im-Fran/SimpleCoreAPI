@@ -1,5 +1,6 @@
 package xyz.theprogramsrc.simplecoreapi.global
 
+import xyz.theprogramsrc.simplecoreapi.global.module.ModuleHelper
 import xyz.theprogramsrc.simplecoreapi.global.module.ModuleManager
 import java.util.*
 import java.util.logging.Logger
@@ -33,10 +34,14 @@ class SimpleCoreAPI(logger: Logger) {
     init {
         instance = this
         val resource = SimpleCoreAPI::class.java.getResource("/simplecoreapi.properties")
-        if(resource != null){
+        if (resource != null) {
             props.load(resource.openStream())
         }
+
         logger.info("SimpleCoreAPI v${getVersion()} - Git Commit: ${getShortHash()}")
+        if (getVersion() != "unknown") {
+            GitHubUpdateChecker(logger, "TheProgramSrc/SimpleCoreAPI", getVersion())
+        }
         moduleManager = ModuleManager.init(logger)
     }
 
@@ -57,5 +62,12 @@ class SimpleCoreAPI(logger: Logger) {
      * @return The version of SimpleCoreAPI
      */
     fun getVersion(): String = props.getProperty("version", "unknown")
+
+    /**
+     * Downloads a Module from the database
+     * @param repositoryId Identifier of the artifact inside the repository
+     * @return true if the module was downloaded, false otherwise
+     */
+    fun downloadModule(repositoryId: String): Boolean = ModuleHelper.downloadModule(repositoryId)
 
 }
