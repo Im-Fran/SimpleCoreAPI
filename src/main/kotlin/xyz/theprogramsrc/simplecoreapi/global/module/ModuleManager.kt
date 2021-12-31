@@ -47,6 +47,7 @@ class ModuleManager(private val logger: Logger) {
     fun getModule(name: String): Module? = loadedModules[name]
 
     private fun load() {
+        ModuleHelper.scanRequiredModules()
         val files = (modulesFolder.listFiles() ?: emptyArray()).filter { it.name.endsWith(".jar") }
         if (files.isEmpty()) return
         val modules = mutableMapOf<String, Pair<File, ModuleDescription>>()

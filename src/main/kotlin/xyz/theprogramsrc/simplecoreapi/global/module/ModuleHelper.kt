@@ -1,10 +1,13 @@
 package xyz.theprogramsrc.simplecoreapi.global.module
 
 import com.google.gson.JsonParser
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
 import java.net.URL
 import java.security.MessageDigest
 import java.util.*
+import java.util.jar.JarFile
 
 /**
  * Module Helper to Download or Sort modules
@@ -95,4 +98,40 @@ object ModuleHelper {
      * @return Host of the URL
      */
     private fun parseHost(url: String): String = if(url.startsWith("http")) url.split("://")[1].split("/")[0] else url.split("/")[0]
+
+    /**
+     * Scans the given folder for jar files and then scan
+     * every jar file to download the required modules
+     */
+    fun scanRequiredModules(folder: File = File(".")): Unit = (folder.listFiles() ?: emptyArray()).forEach {
+        if(it.isDirectory) {
+            scanRequiredModules(it)
+        }else if(it.extension == "jar") {
+            downloadRequiredModules(it)
+        }
+    }
+
+    /**
+     * Scans the given [File] for the simplecoreapi.modules
+     * file and loads the required modules if any
+     */
+    fun downloadRequiredModules(file: File){
+        if(file.extension != "jar") return
+        try {
+            JarFile(file).use { jarFile ->
+                val jarEntry = jarFile.getJarEntry("simplecoreapi.modules")
+                if (jarEntry != null) {
+                    val inputStream = jarFile.getInputStream(jarEntry)
+                    val reader = BufferedReader(InputStreamReader(inputStream))
+                    reader.readLines().forEach {
+                        if(it.isNotBlank() && it.isNotEmpty() && !it.startsWith("#")) {
+                            if(!File(downloadLocation, "$it.jar").exists()){
+                                downloadModule(it)
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (ignored: Exception) {}
+    }
 }

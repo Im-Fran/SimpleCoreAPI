@@ -1,3 +1,6 @@
+## v0.1.11 - Snapshot
+* Added scanner to load all required modules
+
 ## v0.1.10 - Snapshot
 * Added GitHub update checker
 * Added method to download modules from SimpleCoreAPI.kt 
