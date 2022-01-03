@@ -8,7 +8,10 @@ _The best way to create a plugin_<br>
 [![Become a Patron](https://i.imgur.com/h9Y1X2X.png)](https://go.theprogramsrc.xyz/patreon)
 
 ## Included Libraries
+* [Kotlin](https://github.com/JetBrains/Kotlin) ([License](https://github.com/JetBrains/Kotlin/blob/master/license/))
+* [JetBrains Annotations](https://github.com/JetBrains/java-annotations) ([License](https://github.com/JetBrains/java-annotations/blob/master/LICENSE.txt))
 * [commons-io](https://github.com/apache/commons-io) ([License](https://www.apache.org/licenses/LICENSE-2.0))
+* [Google Gson](https://github.com/google/gson) ([License](https://github.com/google/gson/blob/master/LICENSE))
 * [Zip4J](https://github.com/srikanth-lingala/zip4j) ([License](https://github.com/srikanth-lingala/zip4j/blob/master/LICENSE))
 
 ## Links
