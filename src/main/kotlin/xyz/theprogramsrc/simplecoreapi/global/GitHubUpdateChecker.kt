@@ -43,7 +43,7 @@ class GitHubUpdateChecker(val logger: Logger, val repo: String, val currentVersi
         if(difference > 60000 || lastCheck == 0L){
             lastCheckResult = try {
                 val parser = DateTimeFormatter.ISO_INSTANT
-                val currentData = JsonParser().parse(URL("https://api.github.com/repos/$repo/releases/tags/$current").readText()).asJsonObject
+                val currentData = JsonParser.parseString(URL("https://api.github.com/repos/$repo/releases/tags/$current").readText()).asJsonObject
                 val currentReleasedAt = Instant.from(parser.parse(currentData.get("published_at").asString))
                 val latestData = getLatestReleaseData()
                 val latestReleasedAt = Instant.from(parser.parse(latestData.get("published_at").asString))
@@ -65,7 +65,7 @@ class GitHubUpdateChecker(val logger: Logger, val repo: String, val currentVersi
     fun getLatestReleaseData(): JsonObject {
         val difference = System.currentTimeMillis() - lastRequest
         if(difference > 60000 || lastRequest == 0L){
-            latestData = JsonParser().parse(URL(if(latestReleaseTag != "latest") "https://api.github.com/repos/$repo/releases/tags/$latestReleaseTag" else "https://api.github.com/repos/$repo/releases/latest").readText()).asJsonObject
+            latestData = JsonParser.parseString(URL(if(latestReleaseTag != "latest") "https://api.github.com/repos/$repo/releases/tags/$latestReleaseTag" else "https://api.github.com/repos/$repo/releases/latest").readText()).asJsonObject
             lastRequest = System.currentTimeMillis()
         }
         return latestData

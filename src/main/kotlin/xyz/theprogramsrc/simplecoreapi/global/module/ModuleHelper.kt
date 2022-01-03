@@ -23,10 +23,10 @@ object ModuleHelper {
     fun downloadModule(repositoryId: String): Boolean{
         if(!downloadLocation.exists()) downloadLocation.mkdirs()
         validateRepositories()
-        val repo = (JsonParser().parse(File("plugins/SimpleCoreAPI/repositories.json").readText()).asJsonArray.firstOrNull { element ->
-            JsonParser().parse(URL("https://${parseHost(element.asJsonObject.get("url").asString)}/service/rest/v1/search?repository=${element.asJsonObject.get("repo").asString}&format=maven2&maven.artifactId=$repositoryId&maven.extension=jar&sort=version").readText()).asJsonObject.get("items").asJsonArray.size() > 0
+        val repo = (JsonParser.parseString(File("plugins/SimpleCoreAPI/repositories.json").readText()).asJsonArray.firstOrNull { element ->
+            JsonParser.parseString(URL("https://${parseHost(element.asJsonObject.get("url").asString)}/service/rest/v1/search?repository=${element.asJsonObject.get("repo").asString}&format=maven2&maven.artifactId=$repositoryId&maven.extension=jar&sort=version").readText()).asJsonObject.get("items").asJsonArray.size() > 0
         } ?: return false).asJsonObject
-        val artifact = ((JsonParser().parse(URL("https://${parseHost(repo.get("url").asString)}/service/rest/v1/search/?repository=${repo.get("repo").asString}&format=maven2&maven.artifactId=$repositoryId&maven.extension=jar&sort=version").readText()).asJsonObject.get("items").asJsonArray.firstOrNull { it.asJsonObject.get("repository").asString.equals(repo.get("repo").asString) } ?: return false).asJsonObject.get("assets").asJsonArray.firstOrNull {
+        val artifact = ((JsonParser.parseString(URL("https://${parseHost(repo.get("url").asString)}/service/rest/v1/search/?repository=${repo.get("repo").asString}&format=maven2&maven.artifactId=$repositoryId&maven.extension=jar&sort=version").readText()).asJsonObject.get("items").asJsonArray.firstOrNull { it.asJsonObject.get("repository").asString.equals(repo.get("repo").asString) } ?: return false).asJsonObject.get("assets").asJsonArray.firstOrNull {
             if(!it.asJsonObject.get("maven2").asJsonObject.get("extension").asString.equals("jar")){
                 return@firstOrNull false // Check that this is a jar file (not checksums or pom)
             }
