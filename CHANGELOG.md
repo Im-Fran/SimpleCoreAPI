@@ -1,3 +1,7 @@
+## v0.1.12 - Snapshot 
+* Updated Dependencies
+* Updated Deprecated Code
+
 ## v0.1.11 - Snapshot
 * Added scanner to load all required modules
 
