@@ -1,6 +1,8 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.bungee////PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.bungee/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.bungee/BungeeLoader.Companion///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.bungee/-bungee-loader/-companion/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.bungee/BungeeLoader.Companion/instance/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.bungee/-bungee-loader/-companion/instance.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.bungee/BungeeLoader///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.bungee/-bungee-loader/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.bungee/BungeeLoader/BungeeLoader/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.bungee/-bungee-loader/-bungee-loader.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.bungee/BungeeLoader/onDisable/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.bungee/-bungee-loader/on-disable.html
@@ -71,6 +73,8 @@ $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI/getVersion/
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI/moduleManager/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/module-manager.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI/props/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/props.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.spigot////PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.spigot/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.spigot/SpigotLoader.Companion///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.spigot/-spigot-loader/-companion/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.spigot/SpigotLoader.Companion/instance/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.spigot/-spigot-loader/-companion/instance.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.spigot/SpigotLoader///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.spigot/-spigot-loader/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.spigot/SpigotLoader/SpigotLoader/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.spigot/-spigot-loader/-spigot-loader.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.spigot/SpigotLoader/onDisable/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.spigot/-spigot-loader/on-disable.html
