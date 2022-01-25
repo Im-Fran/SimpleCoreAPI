@@ -5,7 +5,13 @@ import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
 
 class BungeeLoader: Plugin() {
 
+    companion object {
+        lateinit var instance: BungeeLoader
+            private set
+    }
+
     override fun onEnable() {
+        instance = this
         SimpleCoreAPI(this.logger)
     }
 

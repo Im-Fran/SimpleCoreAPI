@@ -1,3 +1,7 @@
+## v0.2.0 - Snapshot
+* Added Static Instance for Spigot and Bungee Loaders
+* Set initializer private to avoid issues
+
 ## v0.1.12 - Snapshot 
 * Updated Dependencies
 * Updated Deprecated Code

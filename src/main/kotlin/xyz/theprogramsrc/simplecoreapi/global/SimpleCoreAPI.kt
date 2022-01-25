@@ -16,6 +16,7 @@ class SimpleCoreAPI(logger: Logger) {
          * @return The instance of SimpleCoreAPI
          */
         lateinit var instance: SimpleCoreAPI
+            private set
     }
 
     /**
