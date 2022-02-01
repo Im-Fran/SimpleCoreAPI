@@ -105,7 +105,7 @@ class ModuleManager(private val logger: Logger) {
 
         // Loop through the dependencies and download the missing ones
         val downloadedModules: MutableList<String> = ArrayList()
-        for (module in dependencies.filter { it.isNotBlank() }.filter { !modules.containsKey(it) }) {
+        for (module in dependencies.filter { it.isNotBlank() }.filter { !modules.any { entry -> entry.value.second.repositoryId == it } }) {
             if (ModuleHelper.downloadModule(module)) {
                 downloadedModules.add(module)
             } else {

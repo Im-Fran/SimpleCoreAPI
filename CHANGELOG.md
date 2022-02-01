@@ -1,3 +1,6 @@
+## v0.2.1 - Snapshot
+* Fixed loop on load while downloading certain dependencies
+
 ## v0.2.0 - Snapshot
 * Added Static Instance for Spigot and Bungee Loaders
 * Set initializer private to avoid issues
