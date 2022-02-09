@@ -40,7 +40,7 @@ class SimpleCoreAPI(logger: Logger) {
 
         logger.info("SimpleCoreAPI v${getVersion()} - Git Commit: ${getShortHash()}")
         if (getVersion() != "unknown") {
-            GitHubUpdateChecker(logger, "TheProgramSrc/SimpleCoreAPI", getVersion())
+            GitHubUpdateChecker(logger, "TheProgramSrc/SimpleCoreAPI", getVersion()).checkWithPrint()
         }
         moduleManager = ModuleManager.init(logger)
     }
