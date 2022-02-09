@@ -1,3 +1,7 @@
+## v0.2.3 - Snapshot
+* Fixes to update checker to print the message
+* Now GitHub actions will automatically upload the jar file
+
 ## v0.2.2 - Snapshot
 * Fixed module loader not loading all the classes and stopping when the module is initialized.
 
