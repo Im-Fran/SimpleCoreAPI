@@ -14,6 +14,7 @@ import java.util.jar.JarFile
 import java.util.jar.JarInputStream
 import java.util.logging.Logger
 import java.util.zip.ZipEntry
+import java.util.zip.ZipFile
 
 
 class ModuleManager(private val logger: Logger) {
@@ -128,8 +129,13 @@ class ModuleManager(private val logger: Logger) {
         ModuleHelper.sortModuleDependencies(moduleDependencies).forEach { moduleName ->
             if(!loadedModules.contains(moduleName) && modules.containsKey(moduleName)) {
                 modules[moduleName]?.let { pair ->
-                    if(loadIntoClasspath(pair.first, pair.second)){
+                    try {
+                        loadIntoClasspath(pair.first, pair.second)
                         loadedModules.add(moduleName)
+                    } catch (e: InvalidModuleException) {
+                        e.printStackTrace()
+                    } catch (e: ModuleLoadException) {
+                        e.printStackTrace()
                     }
                 }
             }
@@ -145,33 +151,30 @@ class ModuleManager(private val logger: Logger) {
      * @throws ModuleLoadException If the module failed to load
      */
     @Throws(InvalidModuleException::class, ModuleLoadException::class)
-    private fun loadIntoClasspath(file: File, description: ModuleDescription): Boolean {
+    private fun loadIntoClasspath(file: File, description: ModuleDescription) {
         var entry: ZipEntry?
         try {
             URLClassLoader(arrayOf(file.toURI().toURL()), this.javaClass.classLoader).use { loader ->
-                FileInputStream(file).use { fileInputStream ->
-                    JarInputStream(fileInputStream).use { jarInputStream ->
-                        while (jarInputStream.nextEntry.also { entry = it } != null) {
-                            val entryName = entry?.name ?: continue
-                            if (entryName.endsWith(".class")) {
-                                val name = entryName.replace("/", ".").replace(".class", "")
-                                val clazz = Class.forName(name, true, loader)
-                                if (name == description.mainClass) {
-                                    if (!Module::class.java.isAssignableFrom(clazz)) {
-                                        throw InvalidModuleException("The class ${description.mainClass} must be extended to the Module class!")
-                                    }
-                                    return try {
-                                        logger.info("Loading module ${description.name} v${description.version}")
-                                        val moduleClass = clazz.asSubclass(Module::class.java)
-                                        val module = moduleClass.getConstructor().newInstance()
-                                        module.init(file, description)
-                                        module.onEnable()
-                                        loadedModules[description.name] = module
-                                        logger.info("Module ${description.name} v${description.version} loaded!")
-                                        true
-                                    } catch (e: Exception) {
-                                        throw ModuleLoadException("Failed to load module ${description.name} v${description.version}", e)
-                                    }
+                JarInputStream(FileInputStream(file)).use { jarInputStream ->
+                    while (jarInputStream.nextEntry.also { entry = it } != null) {
+                        val entryName = entry?.name ?: continue
+                        if (entryName.endsWith(".class")) {
+                            val name = entryName.replace("/", ".").replace(".class", "")
+                            val clazz = loader.loadClass(name)
+                            if (name == description.mainClass) {
+                                if (!Module::class.java.isAssignableFrom(clazz)) {
+                                    throw InvalidModuleException("The class ${description.mainClass} must be extended to the Module class!")
+                                }
+                                try {
+                                    logger.info("Loading module ${description.name} v${description.version}")
+                                    val moduleClass = clazz.asSubclass(Module::class.java)
+                                    val module = moduleClass.getConstructor().newInstance()
+                                    module.init(file, description)
+                                    module.onEnable()
+                                    loadedModules[description.name] = module
+                                    logger.info("Module ${description.name} v${description.version} loaded!")
+                                } catch (e: Exception) {
+                                    throw ModuleLoadException("Failed to load module ${description.name} v${description.version}", e)
                                 }
                             }
                         }
@@ -181,7 +184,6 @@ class ModuleManager(private val logger: Logger) {
         } catch (e: Exception) {
             throw ModuleLoadException("Failed to load module ${file.name}", e)
         }
-        return false
     }
 
     /**
