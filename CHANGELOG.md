@@ -1,3 +1,6 @@
+## v0.2.2 - Snapshot
+* Fixed module loader not loading all the classes and stopping when the module is initialized.
+
 ## v0.2.1 - Snapshot
 * Fixed loop on load while downloading certain dependencies
 
