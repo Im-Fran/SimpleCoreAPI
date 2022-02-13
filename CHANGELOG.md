@@ -1,3 +1,7 @@
+## v0.2.4 - Snapshot
+* Fixed Class Not Found error
+* Improvements to the Module Loader
+
 ## v0.2.3 - Snapshot
 * Fixes to update checker to print the message
 * Now GitHub actions will automatically upload the jar file
