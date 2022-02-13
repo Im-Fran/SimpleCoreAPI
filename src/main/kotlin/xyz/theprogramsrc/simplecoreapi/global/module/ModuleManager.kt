@@ -126,11 +126,13 @@ class ModuleManager(private val logger: Logger) {
             moduleDependencies[it.key] = it.value.second.dependencies.toList()
         }
 
+        val urlClassLoader = URLClassLoader(modules.map { it.value.first }.map { it.toURI().toURL() }.toTypedArray(), this::class.java.classLoader)
+
         ModuleHelper.sortModuleDependencies(moduleDependencies).forEach { moduleName ->
             if(!loadedModules.contains(moduleName) && modules.containsKey(moduleName)) {
                 modules[moduleName]?.let { pair ->
                     try {
-                        loadIntoClasspath(pair.first, pair.second)
+                        loadIntoClasspath(urlClassLoader, pair.first, pair.second)
                         loadedModules.add(moduleName)
                     } catch (e: InvalidModuleException) {
                         e.printStackTrace()
@@ -145,40 +147,38 @@ class ModuleManager(private val logger: Logger) {
 
     /**
      * Loads a module into the classpath
+     * @param loader The [URLClassLoader] to load the module into
      * @param file The file to load
      * @param description The module description
      * @throws InvalidModuleException If the main module class is invalid
      * @throws ModuleLoadException If the module failed to load
      */
     @Throws(InvalidModuleException::class, ModuleLoadException::class)
-    private fun loadIntoClasspath(file: File, description: ModuleDescription) {
+    private fun loadIntoClasspath(loader: URLClassLoader, file: File, description: ModuleDescription) {
         var entry: ZipEntry?
         try {
-            URLClassLoader(arrayOf(file.toURI().toURL()), this.javaClass.classLoader).use { loader ->
-                JarInputStream(FileInputStream(file)).use { jarInputStream ->
-                    while (jarInputStream.nextEntry.also { entry = it } != null) {
-                        val entryName = entry?.name ?: continue
-                        if (entryName.endsWith(".class")) {
-                            val name = entryName.replace("/", ".").replace(".class", "")
-                            val clazz = loader.loadClass(name)
-                            if (name == description.mainClass) {
-                                if (!Module::class.java.isAssignableFrom(clazz)) {
-                                    throw InvalidModuleException("The class ${description.mainClass} must be extended to the Module class!")
-                                }
-                                try {
-                                    logger.info("Loading module ${description.name} v${description.version}")
-                                    val moduleClass = clazz.asSubclass(Module::class.java)
-                                    val module = moduleClass.getConstructor().newInstance()
-                                    module.init(file, description)
-                                    module.onEnable()
-                                    loadedModules[description.name] = module
-                                    logger.info("Module ${description.name} v${description.version} loaded!")
-                                } catch (e: Exception) {
-                                    throw ModuleLoadException("Failed to load module ${description.name} v${description.version}", e)
-                                }
-                            }
-                        }
-                    }
+            JarInputStream(FileInputStream(file)).use { jarInputStream ->
+                val mainClass = loader.loadClass(description.mainClass)
+                if(!Module::class.java.isAssignableFrom(mainClass)){
+                    throw InvalidModuleException("The class ${description.mainClass} must be extended to the Module class!")
+                }
+
+                while (jarInputStream.nextEntry.also { entry = it } != null) {
+                    val entryName = entry?.name ?: continue
+                    if(!entryName.endsWith(".class")) continue
+                    loader.loadClass(entryName.replace('/', '.').replace(".class", ""))
+                }
+
+                try {
+                    logger.info("Loading module ${description.name} v${description.version}")
+                    val moduleClass = mainClass.asSubclass(Module::class.java)
+                    val module = moduleClass.getConstructor().newInstance()
+                    module.init(file, description)
+                    module.onEnable()
+                    loadedModules[description.name] = module
+                    logger.info("Module ${description.name} v${description.version} loaded!")
+                } catch (e: Exception) {
+                    throw ModuleLoadException("Failed to load module ${description.name} v${description.version}", e)
                 }
             }
         } catch (e: Exception) {
