@@ -13,14 +13,14 @@ import java.util.jar.JarFile
  * Module Helper to Download or Sort modules
  */
 object ModuleHelper {
-    private val downloadLocation = File("plugins/SimpleCoreAPI/modules/")
 
     /**
      * Downloads a Module from the database
      * @param repositoryId Identifier of the artifact inside the repository
+     * @param downloadLocation Location to download the module. (Defaults to plugins/SimpleCoreAPI/modules/)
      * @return true if the module was downloaded, false otherwise
      */
-    fun downloadModule(repositoryId: String): Boolean{
+    fun downloadModule(repositoryId: String, downloadLocation: File = File("plugins/SimpleCoreAPI/modules/")): Boolean{
         if(!downloadLocation.exists()) downloadLocation.mkdirs()
         validateRepositories()
         val repo = (JsonParser.parseString(File("plugins/SimpleCoreAPI/repositories.json").readText()).asJsonArray.firstOrNull { element ->
@@ -68,13 +68,17 @@ object ModuleHelper {
      */
     fun sortModuleDependencies(dependencies: Map<String, Collection<String>>): List<String> {
         val sorted = mutableListOf<String>()
-        dependencies.forEach { (moduleName, moduleDepends) ->
-            moduleDepends.forEach {
-                if(sorted.contains(it) && sorted.indexOf(moduleName) > sorted.indexOf(it)) {
-                    sorted.remove(it)
-                    sorted.add(sorted.indexOf(moduleName), it)
-                }else if(!sorted.contains(it)){
-                    sorted.add(it)
+        // First add the modules that don't have dependencies
+        sorted.addAll(dependencies.filter { it.value.isEmpty() }.keys)
+
+        // Now add the modules that have dependencies
+        dependencies.filter { !sorted.contains(it.key) }.forEach { (moduleName, moduleDepends) ->
+            moduleDepends.forEach { dependency ->
+                if(sorted.contains(dependency) && sorted.indexOf(moduleName) > sorted.indexOf(dependency)) {
+                    sorted.remove(dependency)
+                    sorted.add(sorted.indexOf(moduleName), dependency)
+                }else if(!sorted.contains(dependency)){
+                    sorted.add(dependency)
                 }
             }
             if(!sorted.contains(moduleName)) sorted.add(moduleName)
@@ -114,8 +118,10 @@ object ModuleHelper {
     /**
      * Scans the given [File] for the simplecoreapi.modules
      * file and loads the required modules if any
+     * @param file File to scan.
+     * @param downloadLocation Location to download the modules. (Defaults to plugins/SimpleCoreAPI/modules/)
      */
-    fun downloadRequiredModules(file: File){
+    fun downloadRequiredModules(file: File, downloadLocation: File = File("plugins/SimpleCoreAPI/modules/")){
         if(file.extension != "jar") return
         try {
             JarFile(file).use { jarFile ->

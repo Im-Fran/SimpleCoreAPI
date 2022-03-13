@@ -1,3 +1,9 @@
+## v0.2.5 - Snapshot
+* Improved dependency sorting (It puts first the modules with no dependencies, then the modules with dependencies)
+* Added GitHub Update Checker and GitHub Auto Updater for the modules
+* Added `github-repository` to the module properties
+* Added configuration
+
 ## v0.2.4 - Snapshot
 * Fixed Class Not Found error
 * Improvements to the Module Loader
