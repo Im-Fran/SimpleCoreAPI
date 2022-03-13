@@ -7,7 +7,7 @@ plugins {
     id 'org.jetbrains.dokka' version '1.6.0'
 }
 
-def projectVersion = (System.getenv("VERSION") ?: '0.2.4-SNAPSHOT').replaceFirst("v", "").replace('/', '')
+def projectVersion = (System.getenv("VERSION") ?: '0.2.5-SNAPSHOT').replaceFirst("v", "").replace('/', '')
 
 group 'xyz.theprogramsrc'
 version projectVersion
@@ -32,7 +32,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.10'
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'commons-io:commons-io:2.11.0'
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'net.lingala.zip4j:zip4j:2.9.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'

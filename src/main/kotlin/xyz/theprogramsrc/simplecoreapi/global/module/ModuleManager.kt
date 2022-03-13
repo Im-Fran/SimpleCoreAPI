@@ -1,9 +1,7 @@
 package xyz.theprogramsrc.simplecoreapi.global.module
 
-import xyz.theprogramsrc.simplecoreapi.global.exceptions.InvalidModuleDescriptionException
-import xyz.theprogramsrc.simplecoreapi.global.exceptions.InvalidModuleException
-import xyz.theprogramsrc.simplecoreapi.global.exceptions.ModuleDownloadException
-import xyz.theprogramsrc.simplecoreapi.global.exceptions.ModuleLoadException
+import xyz.theprogramsrc.simplecoreapi.global.GitHubUpdateChecker
+import xyz.theprogramsrc.simplecoreapi.global.exceptions.*
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -14,8 +12,6 @@ import java.util.jar.JarFile
 import java.util.jar.JarInputStream
 import java.util.logging.Logger
 import java.util.zip.ZipEntry
-import java.util.zip.ZipFile
-
 
 class ModuleManager(private val logger: Logger) {
 
@@ -40,6 +36,46 @@ class ModuleManager(private val logger: Logger) {
         }
     }
 
+    private var config = mutableMapOf<String, String>()
+
+    fun loadConfig(){
+        config = File("plugins/SimpleCoreAPI/Settings.yml").apply {
+            if(!exists()){
+                parentFile.mkdirs()
+                createNewFile()
+            }
+        }.let { f ->
+            f.readLines().filter { !it.startsWith("#") }.map { it.split(": ") }.filter { it.size == 2 }.associate { it[0] to it[1] }
+        }.toMutableMap()
+    }
+
+    fun saveConfig(){
+        File("plugins/SimpleCoreAPI/Settings.yml").apply {
+            if(!exists()){
+                parentFile.mkdirs()
+                createNewFile()
+            }
+        }.let {
+            val lines = it.readLines().toMutableList()
+            lines.forEachIndexed { index, line ->
+                this.config.forEach { (key,value) ->
+                    if(line.startsWith("$key: ")){
+                        lines[index] = "$key: $value"
+                    }
+                }
+            }
+            it.writeBytes(lines.joinToString("\n").toByteArray())
+        }
+    }
+
+    init {
+        loadConfig()
+        if(!config.containsKey("auto-update")){ // Load defaults
+            config["auto-update"] = "false"
+            saveConfig()
+        }
+    }
+
     /**
      * Gets a module from the loaded modules
      * @param name The name of the module
@@ -51,14 +87,15 @@ class ModuleManager(private val logger: Logger) {
         ModuleHelper.scanRequiredModules()
         val files = (modulesFolder.listFiles() ?: emptyArray()).filter { it.name.endsWith(".jar") }
         if (files.isEmpty()) return
-        val modules = mutableMapOf<String, Pair<File, ModuleDescription>>()
-        val dependencies = mutableListOf<String>()
-        val loadedModules = mutableSetOf<String>()
+        val modules = mutableMapOf<File, ModuleDescription>()
+        val dependencies = mutableListOf<String>() // Used to download missing dependencies
+        val loadedModules = mutableSetOf<String>() // Used to check if a module is already loaded
 
-        // First we update the module jars
+        // First we update the module jars (moving the ones from update/ to the modules/ folder)
         updateJars()
 
         // Now we load and save all the module descriptions from the available modules
+        val updatedModules = mutableListOf<String>()
         files.forEach { file ->
             try {
                 // Validate that this file is a module
@@ -82,8 +119,28 @@ class ModuleManager(private val logger: Logger) {
                         "\"(.+)\"".toRegex(),
                         "$1"
                     ).split(",")
-                        .toTypedArray()
+                        .filter { it.isNotBlank() }
+                        .toTypedArray(),
+                    props.getProperty("github-repository") ?: "",
                 )
+
+                if(description.githubRepository.isNotBlank()){
+                    // Check for updates
+                    val checker = GitHubUpdateChecker(logger, description.githubRepository, description.version) // Generate a new update checker
+                    val isAvailable = checker.checkForUpdates() // Check for the updates
+                    val autoUpdate = config["auto-update"] == "true" // Check if we have enabled the auto updater
+                    if(isAvailable && autoUpdate){ // Download an update if there is one available and the auto updater is enabled
+                        logger.info("An update for the module ${description.name} is available. Downloading and updating...")
+                        if(ModuleHelper.downloadModule(description.repositoryId, File("plugins/SimpleCoreAPI/update/").apply { if(!exists()) mkdirs() })){
+                            logger.info("Successfully updated the module ${description.name}")
+                            updatedModules.add(description.name)
+                        } else {
+                            logger.severe("Failed to update the module ${description.name}. Please download manually from https://github.com/${description.githubRepository}/releases/latest")
+                        }
+                    } else if(isAvailable){ // Notify the user that an update is available
+                        checker.checkWithPrint()
+                    }
+                }
 
                 // Validate the module name
                 if (description.name.indexOf(' ') != -1) {
@@ -91,7 +148,7 @@ class ModuleManager(private val logger: Logger) {
                 }
 
                 // Save to load later
-                modules[description.name] = Pair(file, description)
+                modules[file] = description
 
                 // Save the dependencies to download the missing ones
                 description.dependencies.forEach { dependency ->
@@ -104,36 +161,41 @@ class ModuleManager(private val logger: Logger) {
             }
         }
 
+        if(updatedModules.isNotEmpty()){
+            load()
+            return
+        }
+
         // Loop through the dependencies and download the missing ones
         val downloadedModules: MutableList<String> = ArrayList()
-        for (module in dependencies.filter { it.isNotBlank() }.filter { !modules.any { entry -> entry.value.second.repositoryId == it } }) {
-            if (ModuleHelper.downloadModule(module)) {
-                downloadedModules.add(module)
+        for (dependencyId in dependencies.filter { it.isNotBlank() && !modules.any { entry -> entry.value.repositoryId == it } }) {
+            if (ModuleHelper.downloadModule(dependencyId)) {
+                downloadedModules.add(dependencyId)
             } else {
-                throw ModuleDownloadException("Failed to download module '$module'")
+                throw ModuleDownloadException("Failed to download module with id '$dependencyId'")
             }
         }
 
         // Load the modules again if there are new dependencies
-        if (downloadedModules.size > 0) {
+        if (downloadedModules.isNotEmpty()) {
             load()
             return
         }
 
         // Sort the modules to load dependencies first
         val moduleDependencies = mutableMapOf<String, Collection<String>>()
-        modules.forEach {
-            moduleDependencies[it.key] = it.value.second.dependencies.toList()
+        modules.values.forEach {
+            moduleDependencies[it.repositoryId] = it.dependencies.toList()
         }
 
-        val urlClassLoader = URLClassLoader(modules.map { it.value.first }.map { it.toURI().toURL() }.toTypedArray(), this::class.java.classLoader)
+        val urlClassLoader = URLClassLoader(modules.map { it.key }.map { it.toURI().toURL() }.toTypedArray(), this::class.java.classLoader)
+        val sorted = ModuleHelper.sortModuleDependencies(moduleDependencies).filter { it.isNotBlank() }
 
-        ModuleHelper.sortModuleDependencies(moduleDependencies).forEach { moduleName ->
-            if(!loadedModules.contains(moduleName) && modules.containsKey(moduleName)) {
-                modules[moduleName]?.let { pair ->
+        sorted.forEach { moduleName ->
+            if(!loadedModules.contains(moduleName)) {
+                modules.entries.firstOrNull { it.value.repositoryId == moduleName }?.let { entry ->
                     try {
-                        loadIntoClasspath(urlClassLoader, pair.first, pair.second)
-                        loadedModules.add(moduleName)
+                        loadIntoClasspath(urlClassLoader, entry.key, entry.value)
                     } catch (e: InvalidModuleException) {
                         e.printStackTrace()
                     } catch (e: ModuleLoadException) {
@@ -171,12 +233,13 @@ class ModuleManager(private val logger: Logger) {
 
                 try {
                     logger.info("Loading module ${description.name} v${description.version}")
+                    val start = System.currentTimeMillis()
                     val moduleClass = mainClass.asSubclass(Module::class.java)
                     val module = moduleClass.getConstructor().newInstance()
                     module.init(file, description)
                     module.onEnable()
-                    loadedModules[description.name] = module
-                    logger.info("Module ${description.name} v${description.version} loaded!")
+                    loadedModules[description.repositoryId] = module
+                    logger.info("Module ${description.name} v${description.version} loaded! (${System.currentTimeMillis() - start}ms)")
                 } catch (e: Exception) {
                     throw ModuleLoadException("Failed to load module ${description.name} v${description.version}", e)
                 }
@@ -225,8 +288,9 @@ class ModuleManager(private val logger: Logger) {
         updatesFolder.listFiles()?.filter { it.name.endsWith(".jar") }?.filter { loadDescription(it) != null }?.forEach {
             val name = loadDescription(it)?.getProperty("name") ?: return@forEach
             val outdatedFile = modulesFolder.listFiles()?.filter { jar -> jar.name.endsWith(".jar") }?.firstOrNull { jar -> loadDescription(jar)?.getProperty("name")?.equals(name) ?: false }?.toPath() ?: return@forEach
+            val newFile = File(modulesFolder.absolutePath, it.name)
             Files.deleteIfExists(outdatedFile)
-            Files.move(it.toPath(), outdatedFile)
+            Files.move(it.toPath(), newFile.toPath())
         }
     }
 }

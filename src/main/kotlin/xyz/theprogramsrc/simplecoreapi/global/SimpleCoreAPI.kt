@@ -1,6 +1,7 @@
 package xyz.theprogramsrc.simplecoreapi.global
 
 import xyz.theprogramsrc.simplecoreapi.global.module.ModuleManager
+import java.io.File
 import java.util.*
 import java.util.logging.Logger
 
@@ -39,7 +40,7 @@ class SimpleCoreAPI(logger: Logger) {
         }
 
         logger.info("SimpleCoreAPI v${getVersion()} - Git Commit: ${getShortHash()}")
-        if (getVersion() != "unknown") {
+        if (getFullHash() != "unknown") {
             GitHubUpdateChecker(logger, "TheProgramSrc/SimpleCoreAPI", getVersion()).checkWithPrint()
         }
         moduleManager = ModuleManager.init(logger)
