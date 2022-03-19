@@ -1,23 +1,24 @@
 package xyz.theprogramsrc.simplecoreapi.global.module
 
+import org.apache.commons.io.FileUtils
 import xyz.theprogramsrc.simplecoreapi.global.GitHubUpdateChecker
 import xyz.theprogramsrc.simplecoreapi.global.exceptions.*
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.net.URLClassLoader
-import java.nio.file.Files
 import java.util.*
 import java.util.jar.JarFile
 import java.util.jar.JarInputStream
 import java.util.logging.Logger
 import java.util.zip.ZipEntry
+import kotlin.collections.LinkedHashMap
 
 class ModuleManager(private val logger: Logger) {
 
     private val modulesFolder = File("plugins/SimpleCoreAPI/modules")
     private val updatesFolder = File("plugins/SimpleCoreAPI/update")
-    private var loadedModules = mutableMapOf<String, Module>()
+    private var loadedModules = LinkedHashMap<String, Module>()
 
     init {
         if (!modulesFolder.exists()) modulesFolder.mkdirs()
@@ -38,34 +39,34 @@ class ModuleManager(private val logger: Logger) {
 
     private var config = mutableMapOf<String, String>()
 
-    fun loadConfig(){
-        config = File("plugins/SimpleCoreAPI/Settings.yml").apply {
+    private fun loadConfig(){
+        logger.info("Loading config...")
+        val file = File("plugins/SimpleCoreAPI/Settings.yml").apply {
             if(!exists()){
                 parentFile.mkdirs()
                 createNewFile()
             }
-        }.let { f ->
-            f.readLines().filter { !it.startsWith("#") }.map { it.split(": ") }.filter { it.size == 2 }.associate { it[0] to it[1] }
-        }.toMutableMap()
+        }
+        config = FileUtils.readLines(file, Charsets.UTF_8).filter { !it.startsWith("#") }.map { it.split(": ") }.filter { it.size == 2 }.associate { it[0] to it[1] }.toMutableMap()
     }
 
-    fun saveConfig(){
-        File("plugins/SimpleCoreAPI/Settings.yml").apply {
+    private fun saveConfig(){
+        val file = File("plugins/SimpleCoreAPI/Settings.yml").apply {
             if(!exists()){
                 parentFile.mkdirs()
                 createNewFile()
             }
-        }.let {
-            val lines = it.readLines().toMutableList()
-            lines.forEachIndexed { index, line ->
-                this.config.forEach { (key,value) ->
-                    if(line.startsWith("$key: ")){
-                        lines[index] = "$key: $value"
-                    }
-                }
-            }
-            it.writeBytes(lines.joinToString("\n").toByteArray())
         }
+        val lines = file.readLines().toMutableList()
+        this.config.forEach { (key, value) ->
+            val index = lines.indexOfFirst { it.startsWith(key) }
+            if(index == -1){
+                lines.add("$key: $value")
+            } else {
+                lines[index] = "$key: $value"
+            }
+        }
+        FileUtils.writeLines(file, lines)
     }
 
     init {
@@ -84,15 +85,18 @@ class ModuleManager(private val logger: Logger) {
     fun getModule(name: String): Module? = loadedModules[name]
 
     private fun load() {
+        val start = System.currentTimeMillis()
+
+        // First we update the module jars (moving the ones from update/ to the modules/ folder)
+        updateJars()
+
+        // Now we load the modules
         ModuleHelper.scanRequiredModules()
         val files = (modulesFolder.listFiles() ?: emptyArray()).filter { it.name.endsWith(".jar") }
         if (files.isEmpty()) return
         val modules = mutableMapOf<File, ModuleDescription>()
         val dependencies = mutableListOf<String>() // Used to download missing dependencies
         val loadedModules = mutableSetOf<String>() // Used to check if a module is already loaded
-
-        // First we update the module jars (moving the ones from update/ to the modules/ folder)
-        updateJars()
 
         // Now we load and save all the module descriptions from the available modules
         val updatedModules = mutableListOf<String>()
@@ -204,7 +208,26 @@ class ModuleManager(private val logger: Logger) {
                 }
             }
         }
-        logger.info("Successfully enabled ${this.loadedModules.size} modules.")
+        logger.info("Successfully loaded ${this.loadedModules.size} modules (${System.currentTimeMillis() - start}ms)")
+    }
+
+    /**
+     * Enables the modules by running the [Module.onEnable] method.
+     */
+    fun enableModules(){
+        val start = System.currentTimeMillis()
+        loadedModules.filter { !it.value.isEnabled() }.forEach { (_, module) ->
+            val description = module.getModuleDescription()
+            try {
+                logger.info("Enabling module ${description.name} v${description.version}")
+                val enableStart = System.currentTimeMillis()
+                module.enable()
+                logger.info("Module ${description.name} v${description.version} enabled! (${System.currentTimeMillis() - enableStart}ms)")
+            } catch (e: Exception) {
+                ModuleEnableException("Failed to enable module ${description.name} v${description.version}", e).printStackTrace() // Just print the stack trace to not interfere with the loading process
+            }
+        }
+        logger.info("Successfully enabled ${this.loadedModules.values.filter { it.isEnabled() }.size} modules (${System.currentTimeMillis() - start}ms)")
     }
 
     /**
@@ -236,8 +259,7 @@ class ModuleManager(private val logger: Logger) {
                     val start = System.currentTimeMillis()
                     val moduleClass = mainClass.asSubclass(Module::class.java)
                     val module = moduleClass.getConstructor().newInstance()
-                    module.init(file, description)
-                    module.onEnable()
+                    module.init(file, description) // onLoad is automatically called
                     loadedModules[description.repositoryId] = module
                     logger.info("Module ${description.name} v${description.version} loaded! (${System.currentTimeMillis() - start}ms)")
                 } catch (e: Exception) {
@@ -276,9 +298,22 @@ class ModuleManager(private val logger: Logger) {
      * Disable all the loaded modules
      */
     fun disableModules() {
-        loadedModules.values.forEach { it.onDisable() }
-        loadedModules.clear()
-        System.gc()
+        val start = System.currentTimeMillis()
+        val iterator = this.loadedModules.iterator()
+        while(iterator.hasNext()){
+            val module = iterator.next().value
+            val description = module.getModuleDescription()
+            try {
+                val disableStart = System.currentTimeMillis()
+                logger.info("Disabling module ${description.name} v${description.version}")
+                module.onDisable()
+                logger.info("Successfully disabled module ${description.name} v${description.version} (${System.currentTimeMillis() - disableStart}ms)")
+            }catch (e: Exception){
+                ModuleLoadException("Failed to disable module ${description.name} v${description.version}", e).printStackTrace() // Just print the stack trace to not interfere with the disabling process
+            }
+            iterator.remove()
+        }
+        logger.info("Successfully disabled all modules (${System.currentTimeMillis() - start}ms)")
     }
 
     /**
@@ -286,11 +321,13 @@ class ModuleManager(private val logger: Logger) {
      */
     private fun updateJars(){
         updatesFolder.listFiles()?.filter { it.name.endsWith(".jar") }?.filter { loadDescription(it) != null }?.forEach {
-            val name = loadDescription(it)?.getProperty("name") ?: return@forEach
-            val outdatedFile = modulesFolder.listFiles()?.filter { jar -> jar.name.endsWith(".jar") }?.firstOrNull { jar -> loadDescription(jar)?.getProperty("name")?.equals(name) ?: false }?.toPath() ?: return@forEach
-            val newFile = File(modulesFolder.absolutePath, it.name)
-            Files.deleteIfExists(outdatedFile)
-            Files.move(it.toPath(), newFile.toPath())
+            val description = loadDescription(it) ?: return@forEach
+            val name = description.getProperty("name") ?: return@forEach
+            val version = description.getProperty("version") ?: return@forEach
+            val outdatedFile = modulesFolder.listFiles()?.filter { jar -> jar.name.endsWith(".jar") }?.firstOrNull { jar -> loadDescription(jar)?.getProperty("name")?.equals(name) ?: false } ?: return@forEach
+            FileUtils.forceDelete(outdatedFile)
+            FileUtils.moveFile(it, File(modulesFolder, it.name))
+            logger.info("Updated module $name to version v$version")
         }
     }
 }

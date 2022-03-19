@@ -1,3 +1,11 @@
+## v0.3.0 - Snapshot
+* Now the API will be initialized at the load stage of the server
+* Added Module#onLoad function to add the ability of loading a module at the load stage of the server
+* Added Module#isEnabled function to check if the module is enabled
+* Added Module#isLoaded function to check if the module is loaded
+* Improved the Jar update process (where the files from plugins/SimpleCoreAPI/update/ are moved to the modules folder)
+* Fixed Settings.yml not being properly updated
+
 ## v0.2.5 - Snapshot
 * Improved dependency sorting (It puts first the modules with no dependencies, then the modules with dependencies)
 * Added GitHub Update Checker and GitHub Auto Updater for the modules
