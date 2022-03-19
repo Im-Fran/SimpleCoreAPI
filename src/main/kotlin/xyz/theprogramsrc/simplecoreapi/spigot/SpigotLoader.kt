@@ -10,9 +10,13 @@ class SpigotLoader: JavaPlugin() {
             private set
     }
 
-    override fun onEnable() {
+    override fun onLoad() {
         instance = this
         SimpleCoreAPI(this.logger)
+    }
+
+    override fun onEnable() {
+        SimpleCoreAPI.instance.moduleManager?.enableModules()
     }
 
     override fun onDisable() {
