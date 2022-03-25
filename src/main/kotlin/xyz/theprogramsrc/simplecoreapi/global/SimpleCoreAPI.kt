@@ -1,7 +1,7 @@
 package xyz.theprogramsrc.simplecoreapi.global
 
 import xyz.theprogramsrc.simplecoreapi.global.module.ModuleManager
-import java.io.File
+import xyz.theprogramsrc.simplecoreapi.global.utils.SoftwareType
 import java.util.*
 import java.util.logging.Logger
 
@@ -22,15 +22,21 @@ class SimpleCoreAPI(logger: Logger) {
 
     /**
      * The Module Manager
-     * @return The {@link ModuleManager}
+     * @return The [ModuleManager]
      */
     val moduleManager: ModuleManager?
 
     /**
      * SimpleCoreAPI Properties
-     * @return The {@link Properties} of SimpleCoreAPI
+     * @return The [Properties] of SimpleCoreAPI
      */
     val props: Properties = Properties()
+
+    /**
+     * The [SoftwareType] type running on the server
+     * @return The [SoftwareType] the server is running
+     */
+    val softwareType: SoftwareType
 
     init {
         instance = this
@@ -42,6 +48,10 @@ class SimpleCoreAPI(logger: Logger) {
         logger.info("SimpleCoreAPI v${getVersion()} - Git Commit: ${getShortHash()}")
         if (getFullHash() != "unknown") {
             GitHubUpdateChecker(logger, "TheProgramSrc/SimpleCoreAPI", getVersion()).checkWithPrint()
+        }
+        softwareType = SoftwareType.values().firstOrNull { it.check() } ?: SoftwareType.UNKNOWN
+        if(softwareType != SoftwareType.UNKNOWN && softwareType.display != null) {
+            logger.info("Running API with software ${softwareType.display}")
         }
         moduleManager = ModuleManager.init(logger)
     }
@@ -63,4 +73,11 @@ class SimpleCoreAPI(logger: Logger) {
      * @return The version of SimpleCoreAPI
      */
     fun getVersion(): String = props.getProperty("version", "unknown")
+
+    /**
+     * Checks if the current [SoftwareType] is the one specified
+     * @param softwareType The [SoftwareType] to check
+     * @return true if the current [SoftwareType] is the one specified
+     */
+    fun isRunningSoftwareType(softwareType: SoftwareType) = softwareType.check()
 }

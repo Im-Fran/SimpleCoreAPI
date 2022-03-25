@@ -1,3 +1,8 @@
+## v0.3.1 - Snapshot
+* Added class `SoftwareType` to list all available software types.
+* Added Method `SimpleCoreAPI.softwareType` to get the current software running the server
+* Added Method `SimpleCoreAPI#isRunningSoftwareType` to check if the server is running a specific software
+
 ## v0.3.0 - Snapshot
 * Now the API will be initialized at the load stage of the server
 * Added Module#onLoad function to add the ability of loading a module at the load stage of the server
