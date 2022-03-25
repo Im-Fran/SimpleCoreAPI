@@ -69,6 +69,17 @@ $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleManager/Modu
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleManager/disableModules/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-manager/disable-modules.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleManager/enableModules/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-manager/enable-modules.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleManager/getModule/#kotlin.String/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.module/-module-manager/get-module.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils////PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType.BUKKIT///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/-b-u-k-k-i-t/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType.BUNGEE///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/-b-u-n-g-e-e/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType.PAPER///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/-p-a-p-e-r/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType.PURPUR///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/-p-u-r-p-u-r/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType.SPIGOT///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/-s-p-i-g-o-t/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType.UNKNOWN///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/-u-n-k-n-o-w-n/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType.WATERFALL///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/-w-a-t-e-r-f-a-l-l/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType/check/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/check.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType/display/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/display.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global////PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/GitHubUpdateChecker///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-git-hub-update-checker/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/GitHubUpdateChecker/GitHubUpdateChecker/#java.util.logging.Logger#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-git-hub-update-checker/-git-hub-update-checker.html
@@ -86,8 +97,10 @@ $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI/SimpleCoreA
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI/getFullHash/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/get-full-hash.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI/getShortHash/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/get-short-hash.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI/getVersion/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/get-version.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI/isRunningSoftwareType/#xyz.theprogramsrc.simplecoreapi.global.utils.SoftwareType/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/is-running-software-type.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI/moduleManager/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/module-manager.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI/props/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/props.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI/softwareType/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/software-type.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.spigot////PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.spigot/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.spigot/SpigotLoader.Companion///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.spigot/-spigot-loader/-companion/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.spigot/SpigotLoader.Companion/instance/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.spigot/-spigot-loader/-companion/instance.html
@@ -100,5 +113,6 @@ xyz.theprogramsrc.simplecoreapi.bungee
 xyz.theprogramsrc.simplecoreapi.global
 xyz.theprogramsrc.simplecoreapi.global.exceptions
 xyz.theprogramsrc.simplecoreapi.global.module
+xyz.theprogramsrc.simplecoreapi.global.utils
 xyz.theprogramsrc.simplecoreapi.spigot
 
