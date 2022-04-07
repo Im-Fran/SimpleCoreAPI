@@ -11,8 +11,6 @@ import java.util.*
 import java.util.jar.JarFile
 import java.util.jar.JarInputStream
 import java.util.logging.Logger
-import java.util.zip.ZipEntry
-import kotlin.collections.LinkedHashMap
 
 class ModuleManager(private val logger: Logger) {
 
@@ -240,18 +238,11 @@ class ModuleManager(private val logger: Logger) {
      */
     @Throws(InvalidModuleException::class, ModuleLoadException::class)
     private fun loadIntoClasspath(loader: URLClassLoader, file: File, description: ModuleDescription) {
-        var entry: ZipEntry?
         try {
-            JarInputStream(FileInputStream(file)).use { jarInputStream ->
+            JarInputStream(FileInputStream(file)).use {
                 val mainClass = loader.loadClass(description.mainClass)
                 if(!Module::class.java.isAssignableFrom(mainClass)){
                     throw InvalidModuleException("The class ${description.mainClass} must be extended to the Module class!")
-                }
-
-                while (jarInputStream.nextEntry.also { entry = it } != null) {
-                    val entryName = entry?.name ?: continue
-                    if(!entryName.endsWith(".class")) continue
-                    loader.loadClass(entryName.replace('/', '.').replace(".class", ""))
                 }
 
                 try {

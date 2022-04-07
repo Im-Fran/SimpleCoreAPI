@@ -1,3 +1,7 @@
+## v0.3.2 - Snapshot
+* Fixed class loader issue causing ClassNotFoundException for some servers.
+* Now the class loader will only load the main class of the modules.
+
 ## v0.3.1 - Snapshot
 * Added class `SoftwareType` to list all available software types.
 * Added Method `SimpleCoreAPI.softwareType` to get the current software running the server
