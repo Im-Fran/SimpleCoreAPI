@@ -16,7 +16,7 @@ jobs:
     steps:
       # Checkout the Code
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       # Set up git hashes environment variables
       - name: Git Hashes
         uses: Im-Fran/git-hashes-action@v1.0.0
