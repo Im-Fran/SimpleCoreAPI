@@ -6,8 +6,8 @@ import java.util.logging.Logger
 
 internal class GitHubUpdateCheckerTest {
 
-    private val check1 = GitHubUpdateChecker(Logger.getLogger("GitHubUpdateCheckerTest - 1"), "TheProgramSrc/SimpleCoreAPI", "0.1.9-SNAPSHOT", "v0.1.9-SNAPSHOT")
-    private val check2 = GitHubUpdateChecker(Logger.getLogger("GitHubUpdateCheckerTest - 2"), "TheProgramSrc/SimpleCoreAPI", "0.1.6-SNAPSHOT")
+    private val check1 = GitHubUpdateChecker(Logger.getLogger("GitHubUpdateCheckerTest - 1"), "TheProgramSrc/SimpleCoreAPI", "0.3.0-SNAPSHOT", "v0.3.0-SNAPSHOT")
+    private val check2 = GitHubUpdateChecker(Logger.getLogger("GitHubUpdateCheckerTest - 2"), "TheProgramSrc/SimpleCoreAPI", "0.3.0-SNAPSHOT")
 
     @Test
     fun noUpdatesAvailableTest() {

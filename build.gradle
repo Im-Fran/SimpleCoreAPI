@@ -7,7 +7,7 @@ plugins {
     id 'org.jetbrains.dokka' version '1.6.10'
 }
 
-def projectVersion = (System.getenv("VERSION") ?: '0.3.2-SNAPSHOT').replaceFirst("v", "").replace('/', '')
+def projectVersion = (System.getenv("VERSION") ?: '0.3.3-SNAPSHOT').replaceFirst("v", "").replace('/', '')
 
 group 'xyz.theprogramsrc'
 version projectVersion

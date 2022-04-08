@@ -1,3 +1,8 @@
+## v0.3.3 - Snapshot
+* Configured Renovate
+* Updated dependencies
+* Fixed GitHubUpdateCheckerTest.kt
+
 ## v0.3.2 - Snapshot
 * Fixed class loader issue causing ClassNotFoundException for some servers.
 * Now the class loader will only load the main class of the modules.
