@@ -29,7 +29,7 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
     compileOnly 'net.md-5:bungeecord-api:1.18-R0.1-SNAPSHOT'
 
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.10'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.20'
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.google.code.gson:gson:2.9.0'
