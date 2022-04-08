@@ -39,7 +39,7 @@ jobs:
         run: ./gradlew clean test publish shadow dokkaHtml
       # Now we store the artifact in the action
       - name: Upload the artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: SimpleCoreAPI
           path: ./build/libs/SimpleCoreAPI-${{ env.VERSION }}.jar
