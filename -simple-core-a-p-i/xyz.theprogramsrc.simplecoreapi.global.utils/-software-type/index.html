@@ -12,7 +12,7 @@ if(savedDarkMode === true){
     <div class="navigation-wrapper" id="navigation-wrapper">
       <div id="leftToggler"><span class="icon-toggler"></span></div>
       <div class="library-name"><a href="../../../index.html">SimpleCoreAPI</a></div>
-      <div>0.3.3-SNAPSHOT</div>
+      <div>0.3.4-SNAPSHOT</div>
       <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
         <div id="searchBar"></div>
       </div>
@@ -63,9 +63,12 @@ if(savedDarkMode === true){
                       <div class="title">
                         <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><div class="block"><a href="-w-a-t-e-r-f-a-l-l/index.html">WATERFALL</a><span class="token punctuation">(</span>{
         try {
-            val proxyServerInstance = Class.forName(&quot;net.md_5.bungee.api.ProxyServer&quot;).getMethod(&quot;getInstance&quot;).invoke(null) as Class&lt;*&gt;
-            val name = proxyServerInstance.getMethod(&quot;getName&quot;).invoke(proxyServerInstance) as String
-            name.equals(&quot;Waterfall&quot;)
+            val proxyServer = Class.forName(&quot;net.md_5.bungee.api.ProxyServer&quot;)
+            val proxyServerInstanceValue = proxyServer.getDeclaredField(&quot;instance&quot;).apply {
+                isAccessible = true
+            }.get(null)
+            val proxyServerName = proxyServer.getMethod(&quot;getName&quot;).invoke(proxyServerInstanceValue) as String
+            Objects.equals(proxyServerName, &quot;Waterfall&quot;)
         } catch (e: Exception) {
             false
         }
@@ -86,9 +89,12 @@ if(savedDarkMode === true){
                       <div class="title">
                         <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><div class="block"><a href="-b-u-n-g-e-e/index.html">BUNGEE</a><span class="token punctuation">(</span>{
         try {
-            val proxyServerInstance = Class.forName(&quot;net.md_5.bungee.api.ProxyServer&quot;).getMethod(&quot;getInstance&quot;).invoke(null) as Class&lt;*&gt;
-            val name = proxyServerInstance.getMethod(&quot;getName&quot;).invoke(proxyServerInstance) as String
-            name.equals(&quot;BungeeCord&quot;)
+            val proxyServer = Class.forName(&quot;net.md_5.bungee.api.ProxyServer&quot;)
+            val proxyServerInstanceValue = proxyServer.getDeclaredField(&quot;instance&quot;).apply {
+                isAccessible = true
+            }.get(null)
+            val proxyServerName = proxyServer.getMethod(&quot;getName&quot;).invoke(proxyServerInstanceValue) as String
+            Objects.equals(proxyServerName, &quot;BungeeCord&quot;)
         } catch (e: Exception) {
             false
         }
