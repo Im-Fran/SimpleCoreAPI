@@ -1,5 +1,7 @@
 package xyz.theprogramsrc.simplecoreapi.global.utils
 
+import java.util.Objects
+
 /**
  * Representation of a ServerSoftware
  * @param check The function to check if the software is running the server or not.
@@ -49,9 +51,12 @@ enum class SoftwareType(val check: () -> Boolean = { false }, val display: Strin
     // Proxies
     BUNGEE(check = {
         try {
-            val proxyServerInstance = Class.forName("net.md_5.bungee.api.ProxyServer").getMethod("getInstance").invoke(null) as Class<*>
-            val name = proxyServerInstance.getMethod("getName").invoke(proxyServerInstance) as String
-            name.equals("BungeeCord")
+            val proxyServer = Class.forName("net.md_5.bungee.api.ProxyServer")
+            val proxyServerInstanceValue = proxyServer.getDeclaredField("instance").apply {
+                isAccessible = true
+            }.get(null)
+            val proxyServerName = proxyServer.getMethod("getName").invoke(proxyServerInstanceValue) as String
+            Objects.equals(proxyServerName, "BungeeCord")
         } catch (e: Exception) {
             false
         }
@@ -59,9 +64,12 @@ enum class SoftwareType(val check: () -> Boolean = { false }, val display: Strin
 
     WATERFALL(check = {
         try {
-            val proxyServerInstance = Class.forName("net.md_5.bungee.api.ProxyServer").getMethod("getInstance").invoke(null) as Class<*>
-            val name = proxyServerInstance.getMethod("getName").invoke(proxyServerInstance) as String
-            name.equals("Waterfall")
+            val proxyServer = Class.forName("net.md_5.bungee.api.ProxyServer")
+            val proxyServerInstanceValue = proxyServer.getDeclaredField("instance").apply {
+                isAccessible = true
+            }.get(null)
+            val proxyServerName = proxyServer.getMethod("getName").invoke(proxyServerInstanceValue) as String
+            Objects.equals(proxyServerName, "Waterfall")
         } catch (e: Exception) {
             false
         }

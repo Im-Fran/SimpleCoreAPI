@@ -1,3 +1,6 @@
+## v0.3.4 - Snapshot
+* Fixed SoftwareType Checker
+
 ## v0.3.3 - Snapshot
 * Configured Renovate
 * Updated dependencies
