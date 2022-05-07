@@ -4,7 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.21'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
-    id 'org.jetbrains.dokka' version '1.6.10'
+    id 'org.jetbrains.dokka' version '1.6.21'
 }
 
 def projectVersion = (System.getenv("VERSION") ?: '0.3.4-SNAPSHOT').replaceFirst("v", "").replace('/', '')
