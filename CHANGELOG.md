@@ -1,3 +1,7 @@
+## v0.3.6 - Snapshot
+* Updated Dependencies
+* Spigot/Bungee 1.19 Support
+
 ## v0.3.5 - Snapshot
 * Dependency Updates
 
