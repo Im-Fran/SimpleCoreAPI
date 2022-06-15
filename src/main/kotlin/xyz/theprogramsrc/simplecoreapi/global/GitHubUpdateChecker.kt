@@ -2,18 +2,18 @@ package xyz.theprogramsrc.simplecoreapi.global
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
 import java.net.URL
 import java.time.Instant
 import java.time.format.DateTimeFormatter
-import java.util.logging.Logger
 
 /**
  * Representation of the GitHub Update Checker
- * @param logger The logger to use
+ * @param logger The logger to use, it must be an instance of [ILogger]
  * @param repo The repository to check
  * @param currentVersion the current version (tag name) of the product
  */
-class GitHubUpdateChecker(val logger: Logger, val repo: String, val currentVersion: String, val latestReleaseTag: String = "latest") {
+class GitHubUpdateChecker(val logger: ILogger, val repo: String, val currentVersion: String, val latestReleaseTag: String = "latest") {
 
     private var lastCheck = 0L
     private var lastCheckResult = false

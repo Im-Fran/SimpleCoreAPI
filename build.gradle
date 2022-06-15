@@ -4,6 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.7.0'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'net.kyori.blossom' version '1.2.0'
     id 'org.jetbrains.dokka' version '1.6.21'
 }
 
@@ -21,6 +22,7 @@ repositories {
     maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
     maven { url 'https://oss.sonatype.org/content/groups/public/' }
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
     maven { url 'https://repo.codemc.org/repository/maven-public/' }
     maven { url 'https://jitpack.io/' }
 }
@@ -28,12 +30,15 @@ repositories {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
     compileOnly 'net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT'
+    compileOnly 'com.velocitypowered:velocity-api:3.1.2-SNAPSHOT'
 
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.7.0'
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'net.lingala.zip4j:zip4j:2.10.0'
+
+    annotationProcessor 'com.velocitypowered:velocity-api:3.0.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 }
@@ -61,8 +66,14 @@ java {
     withSourcesJar()
 }
 
-processResources {
-    filter ReplaceTokens, tokens: [name: rootProject.name, version: project.version.toString(), description: project.description, git_short: System.getenv("GIT_COMMIT_SHORT_HASH") ?: "unknown", git_full: System.getenv("GIT_COMMIT_LONG_HASH") ?: "unknown"]
+blossom {
+    replaceTokenIn('src/main/kotlin/xyz/theprogramsrc/simplecoreapi/velocity/VelocityLoader.kt')
+
+    replaceToken '@name@', rootProject.name
+    replaceToken '@version@', project.version.toString()
+    replaceToken '@description@', project.description
+    replaceToken '@git_short@', System.getenv("GIT_COMMIT_SHORT_HASH") ?: "unknown"
+    replaceToken '@git_full@', System.getenv("GIT_COMMIT_LONG_HASH") ?: "unknown"
 }
 
 tasks.withType(JavaCompile){

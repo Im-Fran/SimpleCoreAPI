@@ -2,6 +2,7 @@ package xyz.theprogramsrc.simplecoreapi.spigot
 
 import org.bukkit.plugin.java.JavaPlugin
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
+import xyz.theprogramsrc.simplecoreapi.global.utils.logger.JavaLogger
 
 class SpigotLoader: JavaPlugin() {
 
@@ -12,7 +13,7 @@ class SpigotLoader: JavaPlugin() {
 
     override fun onLoad() {
         instance = this
-        SimpleCoreAPI(this.logger)
+        SimpleCoreAPI(JavaLogger(this.logger))
     }
 
     override fun onEnable() {
