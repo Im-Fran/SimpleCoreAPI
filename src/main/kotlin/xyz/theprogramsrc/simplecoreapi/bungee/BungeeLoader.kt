@@ -2,6 +2,7 @@ package xyz.theprogramsrc.simplecoreapi.bungee
 
 import net.md_5.bungee.api.plugin.Plugin
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
+import xyz.theprogramsrc.simplecoreapi.global.utils.logger.JavaLogger
 
 class BungeeLoader: Plugin() {
 
@@ -12,7 +13,7 @@ class BungeeLoader: Plugin() {
 
     override fun onLoad() {
         instance = this
-        SimpleCoreAPI(this.logger)
+        SimpleCoreAPI(JavaLogger(this.logger))
     }
 
     override fun onEnable() {

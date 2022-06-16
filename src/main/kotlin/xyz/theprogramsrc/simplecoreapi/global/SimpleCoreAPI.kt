@@ -1,15 +1,15 @@
 package xyz.theprogramsrc.simplecoreapi.global
 
 import xyz.theprogramsrc.simplecoreapi.global.module.ModuleManager
+import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
 import xyz.theprogramsrc.simplecoreapi.global.utils.SoftwareType
 import java.util.*
-import java.util.logging.Logger
 
 /**
  * Class used to initialize SimpleCoreAPI (DO NOT CALL IT FROM EXTERNAL PLUGINS, IT MAY CRASH)
  * @param logger The logger to use
  */
-class SimpleCoreAPI(logger: Logger) {
+class SimpleCoreAPI(logger: ILogger) {
 
     companion object {
         /**

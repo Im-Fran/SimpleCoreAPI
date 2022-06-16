@@ -3,6 +3,7 @@ package xyz.theprogramsrc.simplecoreapi.global.module
 import org.apache.commons.io.FileUtils
 import xyz.theprogramsrc.simplecoreapi.global.GitHubUpdateChecker
 import xyz.theprogramsrc.simplecoreapi.global.exceptions.*
+import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -10,9 +11,8 @@ import java.net.URLClassLoader
 import java.util.*
 import java.util.jar.JarFile
 import java.util.jar.JarInputStream
-import java.util.logging.Logger
 
-class ModuleManager(private val logger: Logger) {
+class ModuleManager(private val logger: ILogger) {
 
     private val modulesFolder = File("plugins/SimpleCoreAPI/modules")
     private val updatesFolder = File("plugins/SimpleCoreAPI/update")
@@ -26,7 +26,7 @@ class ModuleManager(private val logger: Logger) {
     companion object {
         private var isLoaded = false
 
-        fun init(logger: Logger): ModuleManager {
+        fun init(logger: ILogger): ModuleManager {
             check(!isLoaded) { "ModuleManager is already loaded!" }
             isLoaded = true
             val moduleManager = ModuleManager(logger)
@@ -137,7 +137,7 @@ class ModuleManager(private val logger: Logger) {
                             logger.info("Successfully updated the module ${description.name}")
                             updatedModules.add(description.name)
                         } else {
-                            logger.severe("Failed to update the module ${description.name}. Please download manually from https://github.com/${description.githubRepository}/releases/latest")
+                            logger.error("Failed to update the module ${description.name}. Please download manually from https://github.com/${description.githubRepository}/releases/latest")
                         }
                     } else if(isAvailable){ // Notify the user that an update is available
                         checker.checkWithPrint()

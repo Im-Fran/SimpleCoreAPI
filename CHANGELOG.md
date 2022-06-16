@@ -1,3 +1,8 @@
+## v0.4.0 - Snapshot
+* Added Velocity Support
+* Now we use the ILogger util to allow the usage of slf4j and JUL
+* Now we use blossom to inject variables into the jar and the code
+
 ## v0.3.6 - Snapshot
 * Updated Dependencies
 * Spigot/Bungee 1.19 Support
