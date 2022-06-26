@@ -50,7 +50,7 @@ jobs:
           args: ./build/libs/SimpleCoreAPI-${{ env.VERSION }}.jar application/java-archive
       # Now we deploy the documents to GitHub pages
       - name: Deploy Dokka
-        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        uses: JamesIves/github-pages-deploy-action@v4.3.4
         with:
           branch: gh-pages
           folder: build/dokka
