@@ -2,6 +2,7 @@ package xyz.theprogramsrc.simplecoreapi.global
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import xyz.theprogramsrc.simplecoreapi.global.utils.update.GitHubUpdateChecker
 import xyz.theprogramsrc.simplecoreapi.global.utils.logger.JavaLogger
 import xyz.theprogramsrc.simplecoreapi.global.utils.logger.SLF4JLogger
 import java.util.logging.Logger

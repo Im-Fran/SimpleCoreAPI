@@ -1,4 +1,4 @@
-package xyz.theprogramsrc.simplecoreapi.global
+package xyz.theprogramsrc.simplecoreapi.global.utils.update
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser

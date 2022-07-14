@@ -1,9 +1,9 @@
 package xyz.theprogramsrc.simplecoreapi.global.module
 
 import org.apache.commons.io.FileUtils
-import xyz.theprogramsrc.simplecoreapi.global.GitHubUpdateChecker
 import xyz.theprogramsrc.simplecoreapi.global.exceptions.*
 import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
+import xyz.theprogramsrc.simplecoreapi.global.utils.update.GitHubUpdateChecker
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
