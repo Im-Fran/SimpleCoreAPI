@@ -1,19 +1,15 @@
 package xyz.theprogramsrc.simplecoreapi.global.utils.update
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
 import java.net.URL
 import java.time.Instant
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
 
-/**
- * Representation of the GitHub Update Checker
- * @param logger The logger to use, it must be an instance of [ILogger]
- * @param repo The repository to check
- * @param currentVersion the current version (tag name) of the product
- */
-class GitHubUpdateChecker(val logger: ILogger, val repo: String, val currentVersion: String, val latestReleaseTag: String = "latest"): UpdateChecker {
+class SpigotUpdateChecker(val logger: ILogger, val resourceId: String, val currentVersion: String): UpdateChecker {
 
     private var lastCheck = 0L
     private var lastCheckResult = false
@@ -29,29 +25,24 @@ class GitHubUpdateChecker(val logger: ILogger, val repo: String, val currentVers
         val latestData = getReleaseData()
         val latestVersion = latestData.get("version").asString
         if(checkForUpdates()){
-            logger.info("Please update (from $current to $latestVersion)! Download it now from here: https://github.com/$repo/releases/tag/$latestVersion")
+            logger.info("Please update (from $current to $latestVersion)! Download it now from here: https://spigotmc.org/resources/$resourceId")
         }
     }
 
-    /**
-     * Checks if there is an update available
-     * @return true if there is an update available, false otherwise
-     */
     override fun checkForUpdates(): Boolean {
         val difference = System.currentTimeMillis() - lastCheck
-        if(difference > 60000 || lastCheck == 0L){
+        if(difference > 60000 || lastCheck == 0L) {
             lastCheckResult = try {
                 val parser = DateTimeFormatter.ISO_INSTANT
-                val currentReleasedAt = Instant.from(parser.parse(getReleaseData(current).get("published_at").asString))
-                val latestReleasedAt = Instant.from(parser.parse(getReleaseData(latestReleaseTag).get("published_at").asString))
-                Instant.from(currentReleasedAt).isBefore(latestReleasedAt)
-            }catch (e: Exception){
+                val currentReleasedAt = Instant.from(parser.parse(getReleaseData(currentVersion).get("published_at").asString))
+                val latestReleasedAt = Instant.from(parser.parse(getReleaseData().get("published_at").asString))
+                currentReleasedAt.isBefore(latestReleasedAt)
+            }catch (e: Exception) {
                 e.printStackTrace()
                 false
             }
-
-            lastCheck = System.currentTimeMillis()
         }
+
         return lastCheckResult
     }
 
@@ -72,15 +63,30 @@ class GitHubUpdateChecker(val logger: ILogger, val repo: String, val currentVers
         var cached = requestedData.getOrDefault(id, Pair(JsonObject(), 0L))
         val difference = System.currentTimeMillis() - cached.second
         if(difference > 60000 || cached.second == 0L){
-            val json = JsonParser.parseString(URL(if(id != "latest") "https://api.github.com/repos/$repo/releases/tags/$id" else "https://api.github.com/repos/$repo/releases/latest").readText()).asJsonObject
+            val json = if(id == "latest"){
+                JsonParser.parseString(URL("https://api.spiget.org/v2/resources/$resourceId/versions/latest").readText()).asJsonObject
+            } else {
+                var page = 1
+                var data: JsonObject? = null
+                while(data == null) {
+                    val versions = JsonParser.parseString(URL("http://api.spiget.org/v2/resources/$resourceId/versions?size=50&page=$page").readText()).asJsonArray
+                    if(versions.isEmpty) throw RuntimeException("Couldn't find any version for the given id: $id! Make sure you're using a valid version")
+                    data = versions.firstOrNull {
+                        it.asJsonObject.get("name").asString == id
+                    }?.asJsonObject
+                    page++
+                }
+                data
+            }
+
             cached = Pair(JsonObject().apply {
-                addProperty("published_at", json.get("published_at").asString)
-                addProperty("version", json.get("tag_name").asString)
+                addProperty("published_at", DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(json.get("releaseDate").asLong * 1000L)))
+                addProperty("version", json.get("name").asString)
             }, System.currentTimeMillis())
             requestedData[id] = cached
         }
-        println(cached.first.toString() + " - $id")
         return cached.first
     }
+
 
 }

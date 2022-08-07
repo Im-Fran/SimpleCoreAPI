@@ -1,5 +1,6 @@
 package xyz.theprogramsrc.simplecoreapi.global.utils.update
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
@@ -7,13 +8,7 @@ import java.net.URL
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 
-/**
- * Representation of the GitHub Update Checker
- * @param logger The logger to use, it must be an instance of [ILogger]
- * @param repo The repository to check
- * @param currentVersion the current version (tag name) of the product
- */
-class GitHubUpdateChecker(val logger: ILogger, val repo: String, val currentVersion: String, val latestReleaseTag: String = "latest"): UpdateChecker {
+class SongodaUpdateChecker(val logger: ILogger, val productId: String, val currentVersion: String): UpdateChecker {
 
     private var lastCheck = 0L
     private var lastCheckResult = false
@@ -29,7 +24,7 @@ class GitHubUpdateChecker(val logger: ILogger, val repo: String, val currentVers
         val latestData = getReleaseData()
         val latestVersion = latestData.get("version").asString
         if(checkForUpdates()){
-            logger.info("Please update (from $current to $latestVersion)! Download it now from here: https://github.com/$repo/releases/tag/$latestVersion")
+            logger.info("Please update (from $current to $latestVersion)! Download it now from here: https://songoda.org/marketplace/product/$productId")
         }
     }
 
@@ -39,19 +34,18 @@ class GitHubUpdateChecker(val logger: ILogger, val repo: String, val currentVers
      */
     override fun checkForUpdates(): Boolean {
         val difference = System.currentTimeMillis() - lastCheck
-        if(difference > 60000 || lastCheck == 0L){
+        if(difference > 60000 || lastCheck == 0L) {
             lastCheckResult = try {
                 val parser = DateTimeFormatter.ISO_INSTANT
-                val currentReleasedAt = Instant.from(parser.parse(getReleaseData(current).get("published_at").asString))
-                val latestReleasedAt = Instant.from(parser.parse(getReleaseData(latestReleaseTag).get("published_at").asString))
-                Instant.from(currentReleasedAt).isBefore(latestReleasedAt)
-            }catch (e: Exception){
+                val currentReleasedAt = Instant.from(parser.parse(getReleaseData(currentVersion).get("published_at").asString))
+                val latestReleasedAt = Instant.from(parser.parse(getReleaseData().get("published_at").asString))
+                currentReleasedAt.isBefore(latestReleasedAt)
+            }catch (e: Exception) {
                 e.printStackTrace()
                 false
             }
-
-            lastCheck = System.currentTimeMillis()
         }
+
         return lastCheckResult
     }
 
@@ -72,14 +66,26 @@ class GitHubUpdateChecker(val logger: ILogger, val repo: String, val currentVers
         var cached = requestedData.getOrDefault(id, Pair(JsonObject(), 0L))
         val difference = System.currentTimeMillis() - cached.second
         if(difference > 60000 || cached.second == 0L){
-            val json = JsonParser.parseString(URL(if(id != "latest") "https://api.github.com/repos/$repo/releases/tags/$id" else "https://api.github.com/repos/$repo/releases/latest").readText()).asJsonObject
+            val url = if(id == "latest"){
+                "https://songoda.com/api/v2/products/id/$productId/versions?sort=-created_at&per_page=1"
+            } else {
+                "https://songoda.com/api/v2/products/id/$productId/versions?sort=-created_at&per_page=1&filter[version]=$id"
+            }
+
+            val data = JsonParser.parseString(URL(url).readText()).asJsonObject.getAsJsonArray("data")
+            if(data.isEmpty){
+                throw RuntimeException("We couldn't find any data for the product with id '$productId' and version '$id'. Please try again later.")
+            }
+            val json = data.get(0).asJsonObject
+
             cached = Pair(JsonObject().apply {
-                addProperty("published_at", json.get("published_at").asString)
-                addProperty("version", json.get("tag_name").asString)
-            }, System.currentTimeMillis())
+                addProperty("published_at", DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(json.get("created_at").asLong * 1000L)))
+                addProperty("version", json.get("version").asString)
+                addProperty("url", json.get("url").asString)
+                addProperty("author_url", "https://songoda.com/profiles/${json.get("uploaded_by").asJsonObject.get("name").asString}")
+                }, System.currentTimeMillis())
             requestedData[id] = cached
         }
-        println(cached.first.toString() + " - $id")
         return cached.first
     }
 
