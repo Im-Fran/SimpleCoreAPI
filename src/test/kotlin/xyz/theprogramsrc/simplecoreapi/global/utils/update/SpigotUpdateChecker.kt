@@ -14,7 +14,6 @@ internal class SpigotUpdateCheckerTest {
     fun getReleaseData() {
         val data = check1.getReleaseData()
         assertFalse(data.keySet().isEmpty())
-        println(data.toString())
     }
 
     @Test

@@ -11,6 +11,12 @@ internal class GitHubUpdateCheckerTest {
     private val check2 = GitHubUpdateChecker(SLF4JLogger(org.slf4j.LoggerFactory.getLogger("GitHubUpdateCheckerTest - 2")), "TheProgramSrc/SimpleCoreAPI", "0.3.6-SNAPSHOT")
 
     @Test
+    fun getReleaseData() {
+        val data = check1.getReleaseData()
+        assertFalse(data.keySet().isEmpty())
+    }
+
+    @Test
     fun noUpdatesAvailableTest() {
         assertFalse(check1.checkForUpdates())
     }

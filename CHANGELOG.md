@@ -5,6 +5,7 @@
 * Added new update check utils
 * Updated .idea files
 * Removed simplecoreapi properties to use injected variables
+* Added tests for every update checker (available at the moment)
 
 ## v0.4.0 - Snapshot
 * Added Velocity Support

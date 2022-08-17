@@ -10,8 +10,9 @@ import java.time.format.DateTimeFormatter
 /**
  * Representation of the GitHub Update Checker
  * @param logger The logger to use, it must be an instance of [ILogger]
- * @param repo The repository to check
+ * @param repo The repository to check. The format should be <Holder>/<Repository>, for example TheProgramSrc/SimpleCoreAPI
  * @param currentVersion the current version (tag name) of the product
+ * @param latestReleaseTag The tag name of the latest release. (Defaults to "latest")
  */
 class GitHubUpdateChecker(val logger: ILogger, val repo: String, val currentVersion: String, val latestReleaseTag: String = "latest"): UpdateChecker {
 
@@ -76,6 +77,8 @@ class GitHubUpdateChecker(val logger: ILogger, val repo: String, val currentVers
             cached = Pair(JsonObject().apply {
                 addProperty("published_at", json.get("published_at").asString)
                 addProperty("version", json.get("tag_name").asString)
+                addProperty("url", json.get("html_url").asString)
+                addProperty("author_url", json.get("author").asJsonObject.get("html_url").asString)
             }, System.currentTimeMillis())
             requestedData[id] = cached
         }
