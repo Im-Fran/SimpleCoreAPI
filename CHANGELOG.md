@@ -1,3 +1,12 @@
+## v0.4.1 - Snapshot
+* Added custom blossom injector dependency
+* Updated dependencies
+* Moved github update check util
+* Added new update check utils
+* Updated .idea files
+* Removed simplecoreapi properties to use injected variables
+* Added tests for every update checker (available at the moment)
+
 ## v0.4.0 - Snapshot
 * Added Velocity Support
 * Now we use the ILogger util to allow the usage of slf4j and JUL
