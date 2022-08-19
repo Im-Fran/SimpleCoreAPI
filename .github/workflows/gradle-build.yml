@@ -55,3 +55,5 @@ jobs:
           branch: gh-pages
           folder: build/dokka
           clean: true
+          clean-exclude: |
+            CNAME
