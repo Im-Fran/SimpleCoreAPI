@@ -19,4 +19,4 @@ _The best way to create a plugin_<br>
 * [Donate](https://go.theprogramsrc.xyz/donate) to support us!
 
 ## Where is the documentation?
-This can be found [here](https://theprogramsrc.github.io/SimpleCoreAPI/) (it's a Dokka Resource), everything is documented through the Kotlin Docs (Similar to JavaDocs but for Kotlin :p )
+This can be found [here](https://docs.theprogramsrc.xyz/SimpleCoreAPI/) (it's a Dokka Resource), everything is documented through the Kotlin Docs (Similar to JavaDocs but for Kotlin :p )
