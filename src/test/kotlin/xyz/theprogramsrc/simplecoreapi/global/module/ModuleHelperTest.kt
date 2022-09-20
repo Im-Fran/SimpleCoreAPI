@@ -9,7 +9,8 @@ internal class ModuleHelperTest {
 
     @Test
     fun downloadModule() {
-        assertTrue(ModuleHelper.downloadModule("loggingmodule")) // Test the download
+        assertTrue(ModuleHelper.downloadModule("TheProgramSrc/SimpleCore-TasksModule", "TasksModule")) // Test the download
+        assertTrue(File("plugins/SimpleCoreAPI/modules/TasksModule.jar").exists())
         File("plugins/").deleteRecursively() // Recursively delete the plugins folder
     }
 

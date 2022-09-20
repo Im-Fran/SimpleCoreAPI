@@ -15,7 +15,6 @@ description 'The best way to create a plugin'
 repositories {
     mavenCentral()
 
-    maven { url 'https://repo.theprogramsrc.xyz/repository/maven-public/' }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
     maven { url 'https://oss.sonatype.org/content/groups/public/' }
@@ -101,12 +100,6 @@ tasks.named("dokkaHtml") {
 publishing {
     repositories {
         if(System.getenv('env') == 'prod') {
-            maven {
-                name = 'TheProgramSrc'
-                credentials.username = System.getenv('NEXUS_USERNAME')
-                credentials.password = System.getenv('NEXUS_PASSWORD')
-                url = uri(version.contains('-SNAPSHOT') ? 'https://repo.theprogramsrc.xyz/repository/maven-snapshots/' : 'https://repo.theprogramsrc.xyz/repository/maven-releases/')
-            }
             maven {
                 name = 'GitHubPackages'
                 url = 'https://maven.pkg.github.com/TheProgramSrc/SimpleCoreAPI'

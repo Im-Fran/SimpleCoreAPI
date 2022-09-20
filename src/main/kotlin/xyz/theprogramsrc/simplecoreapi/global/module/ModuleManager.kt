@@ -133,11 +133,17 @@ class ModuleManager(private val logger: ILogger) {
                     val autoUpdate = config["auto-update"] == "true" // Check if we have enabled the auto updater
                     if(isAvailable && autoUpdate){ // Download an update if there is one available and the auto updater is enabled
                         logger.info("An update for the module ${description.name} is available. Downloading and updating...")
-                        if(ModuleHelper.downloadModule(description.repositoryId, File("plugins/SimpleCoreAPI/update/").apply { if(!exists()) mkdirs() })){
-                            logger.info("Successfully updated the module ${description.name}")
-                            updatedModules.add(description.name)
+                        val meta = ModuleHelper.getModuleMeta(description.repositoryId)
+                        if(meta == null) {
+                            logger.error("Failed to update the module ${description.name}. Please download manually from ${if(description.githubRepository.isBlank()) "https://github.com/${description.githubRepository}/releases/latest" else " the module page."}")
                         } else {
-                            logger.error("Failed to update the module ${description.name}. Please download manually from https://github.com/${description.githubRepository}/releases/latest")
+                            val repo = if(meta.has("repository")) meta.get("repository").asString else "TheProgramSrc/SimpleCore-${description.repositoryId}" // Generate default repo if not found
+                            if(ModuleHelper.downloadModule(repo, meta.get("file_name").asString, File("plugins/SimpleCoreAPI/update/").apply { if(!exists()) mkdirs() })){
+                                logger.info("Successfully updated the module ${description.name}")
+                                updatedModules.add(description.name)
+                            } else {
+                                logger.error("Failed to update the module ${description.name}. Please download manually from https://github.com/${description.githubRepository}/releases/latest")
+                            }
                         }
                     } else if(isAvailable){ // Notify the user that an update is available
                         checker.checkWithPrint()
@@ -171,7 +177,9 @@ class ModuleManager(private val logger: ILogger) {
         // Loop through the dependencies and download the missing ones
         val downloadedModules: MutableList<String> = ArrayList()
         for (dependencyId in dependencies.filter { it.isNotBlank() && !modules.any { entry -> entry.value.repositoryId == it } }) {
-            if (ModuleHelper.downloadModule(dependencyId)) {
+            val meta = ModuleHelper.getModuleMeta(dependencyId) ?: throw ModuleDownloadException("Failed to download module with id '$dependencyId'")
+            val repo = if(meta.has("repository")) meta.get("repository").asString else "TheProgramSrc/SimpleCore-${dependencyId}" // Generate default repo if not found
+            if (ModuleHelper.downloadModule(repo, meta.get("file_name").asString)) {
                 downloadedModules.add(dependencyId)
             } else {
                 throw ModuleDownloadException("Failed to download module with id '$dependencyId'")
