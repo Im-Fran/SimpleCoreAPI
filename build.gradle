@@ -6,7 +6,7 @@ plugins {
     id 'org.jetbrains.dokka' version '1.7.10'
 }
 
-def projectVersion = (System.getenv("VERSION") ?: '0.4.1-SNAPSHOT').replaceFirst("v", "").replace('/', '')
+def projectVersion = (System.getenv("VERSION") ?: '0.4.2-SNAPSHOT').replaceFirst("v", "").replace('/', '')
 
 group 'xyz.theprogramsrc'
 version projectVersion
@@ -15,7 +15,6 @@ description 'The best way to create a plugin'
 repositories {
     mavenCentral()
 
-    maven { url 'https://repo.theprogramsrc.xyz/repository/maven-public/' }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
     maven { url 'https://oss.sonatype.org/content/groups/public/' }
@@ -34,7 +33,7 @@ dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.google.code.gson:gson:2.9.1'
-    implementation 'net.lingala.zip4j:zip4j:2.11.1'
+    implementation 'net.lingala.zip4j:zip4j:2.11.2'
 
     annotationProcessor 'com.velocitypowered:velocity-api:3.1.1'
 
@@ -101,12 +100,6 @@ tasks.named("dokkaHtml") {
 publishing {
     repositories {
         if(System.getenv('env') == 'prod') {
-            maven {
-                name = 'TheProgramSrc'
-                credentials.username = System.getenv('NEXUS_USERNAME')
-                credentials.password = System.getenv('NEXUS_PASSWORD')
-                url = uri(version.contains('-SNAPSHOT') ? 'https://repo.theprogramsrc.xyz/repository/maven-snapshots/' : 'https://repo.theprogramsrc.xyz/repository/maven-releases/')
-            }
             maven {
                 name = 'GitHubPackages'
                 url = 'https://maven.pkg.github.com/TheProgramSrc/SimpleCoreAPI'

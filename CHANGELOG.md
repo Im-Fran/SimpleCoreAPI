@@ -1,3 +1,7 @@
+## v0.4.2 - Snapshot
+* Updated dependencies
+* Moving to jitpack
+
 ## v0.4.1 - Snapshot
 * Added custom blossom injector dependency
 * Updated dependencies
