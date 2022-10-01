@@ -29,7 +29,7 @@ dependencies {
     compileOnly 'net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT'
     compileOnly 'com.velocitypowered:velocity-api:3.1.2-SNAPSHOT'
 
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.7.10'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.7.20'
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.google.code.gson:gson:2.9.1'
