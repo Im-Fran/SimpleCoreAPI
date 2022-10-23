@@ -1,3 +1,7 @@
+## v0.4.4 - Snapshot
+* Updated some dependencies
+* Removed debug logs
+
 ## v0.4.3 - Snapshot
 * Updated kotlin 1.7.20
 * Updated junit 5.9.1

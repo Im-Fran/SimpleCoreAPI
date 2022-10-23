@@ -82,7 +82,6 @@ class GitHubUpdateChecker(val logger: ILogger, val repo: String, val currentVers
             }, System.currentTimeMillis())
             requestedData[id] = cached
         }
-        println(cached.first.toString() + " - $id")
         return cached.first
     }
 
