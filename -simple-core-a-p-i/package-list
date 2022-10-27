@@ -132,6 +132,8 @@ $dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType.WATERF
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType/check/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/check.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType/display/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/display.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType/valueOf/#kotlin.String/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/value-of.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType/values/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/values.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global////PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI.Companion///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/-companion/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI.Companion/instance/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/-companion/instance.html
