@@ -1,3 +1,7 @@
+## v0.4.5 - Update Spigot & gson
+* Updated spigot
+* Updated gson
+
 ## v0.4.4 - Snapshot
 * Updated some dependencies
 * Removed debug logs
