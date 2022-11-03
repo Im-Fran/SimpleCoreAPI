@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v3
       # Set up git hashes environment variables
       - name: Git Hashes
-        uses: Im-Fran/git-hashes-action@v1.0.0
+        uses: Im-Fran/git-hashes-action@v1.0.1
         # Set up version from tag environment variables
       - name: Version from Tag Action
         uses: Im-Fran/version-from-tag-action@v1.0.1
