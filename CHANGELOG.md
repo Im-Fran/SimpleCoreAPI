@@ -1,4 +1,8 @@
-## v0.4.5 - Update Spigot & gson
+## v0.4.6 - Snapshot
+* Updated dependencies
+* Added caching for workflows
+
+## v0.4.5 - Snapshot
 * Updated spigot
 * Updated gson
 
