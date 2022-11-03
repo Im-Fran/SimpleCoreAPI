@@ -31,6 +31,7 @@ jobs:
         with:
           distribution: adopt
           java-version: 11
+          cache: 'gradle'
       # Make gradle executable
       - name: Make gradle executable
         run: chmod +x gradlew

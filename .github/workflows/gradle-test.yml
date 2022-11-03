@@ -23,6 +23,7 @@ jobs:
       with:
         distribution: adopt
         java-version: ${{ matrix.java-version }}
+        cache: 'gradle'
     # Setup executable gradle
     - name: Make Gradle executable
       run: chmod +x gradlew
