@@ -22,7 +22,7 @@ jobs:
         uses: Im-Fran/git-hashes-action@v1.0.3
         # Set up version from tag environment variables
       - name: Version from Tag Action
-        uses: Im-Fran/version-from-tag-action@v1.0.1
+        uses: Im-Fran/version-from-tag-action@v1.0.3
         with:
           remove-first-character: 'v'
         # Set up the JDK
