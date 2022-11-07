@@ -1,3 +1,6 @@
+## v0.4.7 - Snapshot
+* Add Velocity SoftwareType
+
 ## v0.4.6 - Snapshot
 * Updated dependencies
 * Added caching for workflows

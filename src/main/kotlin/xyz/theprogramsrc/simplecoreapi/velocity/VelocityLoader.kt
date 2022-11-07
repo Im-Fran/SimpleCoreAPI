@@ -24,5 +24,8 @@ class VelocityLoader @Inject constructor(val server: ProxyServer, val logger: Lo
     init {
         instance = this
         SimpleCoreAPI(SLF4JLogger(this.logger))
+        println("version_vendor: " + this.server.version.vendor)
+        println("version_version: " + this.server.version.version)
+        println("version_name: " + this.server.version.name)
     }
 }
