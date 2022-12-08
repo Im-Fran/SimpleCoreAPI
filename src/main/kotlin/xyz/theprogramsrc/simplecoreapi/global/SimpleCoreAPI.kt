@@ -44,6 +44,8 @@ class SimpleCoreAPI(logger: ILogger) {
         softwareType = SoftwareType.values().firstOrNull { it.check() } ?: SoftwareType.UNKNOWN
         if(softwareType != SoftwareType.UNKNOWN && softwareType.display != null) {
             logger.info("Running API with software ${softwareType.display}")
+        } else {
+            logger.info("Running on unknown server software. Some features might not work as expected!")
         }
         moduleManager = ModuleManager.init(logger)
     }

@@ -4,7 +4,6 @@
 # SimpleCoreAPI
 _The best way to create a plugin_<br>
 
-<br>
 [![Discord](https://i.imgur.com/J1XhmMd.png)](https://go.theprogramsrc.xyz/discord)
 [![Terms of Service](https://i.imgur.com/4tFAGtE.png)](https://go.theprogramsrc.xyz/tos)
 [![Become a Patron](https://i.imgur.com/h9Y1X2X.png)](https://go.theprogramsrc.xyz/patreon)

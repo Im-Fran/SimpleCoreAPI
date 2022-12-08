@@ -41,7 +41,6 @@ dependencies {
 }
 
 shadowJar {
-    relocate 'com.google', 'xyz.theprogramsrc.simplecoreapi.libs.google'
     relocate 'org.apache.commons', 'xyz.theprogramsrc.simplecoreapi.libs.apache.commons'
     relocate 'org.checkerframework', 'xyz.theprogramsrc.simplecoreapi.libs.checkerframework'
     relocate 'org.intellij', 'xyz.theprogramsrc.simplecoreapi.libs.intellij'

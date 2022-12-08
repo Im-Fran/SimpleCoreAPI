@@ -77,7 +77,7 @@ enum class SoftwareType(val check: () -> Boolean = { false }, val display: Strin
 
     VELOCITY(check = {
         try {
-            val proxyServer = Class.forName("com.velocitypowered.api.util.ProxyVersion")
+            Class.forName("com.velocitypowered.api.util.ProxyVersion")
             true
         } catch(e: Exception) {
             false

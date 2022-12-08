@@ -24,7 +24,7 @@ class SongodaUpdateChecker(val logger: ILogger, val productId: String, val curre
         val latestData = getReleaseData()
         val latestVersion = latestData.get("version").asString
         if(checkForUpdates()){
-            logger.info("Please update (from $current to $latestVersion)! Download it now from here: https://songoda.org/marketplace/product/$productId")
+            logger.info("Please update (from $current to $latestVersion)! Download it now from here: https://marketplace.songoda.org/marketplace/product/$productId")
         }
     }
 
@@ -67,9 +67,9 @@ class SongodaUpdateChecker(val logger: ILogger, val productId: String, val curre
         val difference = System.currentTimeMillis() - cached.second
         if(difference > 60000 || cached.second == 0L){
             val url = if(id == "latest"){
-                "https://songoda.com/api/v2/products/id/$productId/versions?sort=-created_at&per_page=1"
+                "https://marketplace.songoda.com/api/v2/products/id/$productId/versions?sort=-created_at&per_page=1"
             } else {
-                "https://songoda.com/api/v2/products/id/$productId/versions?sort=-created_at&per_page=1&filter[version]=$id"
+                "https://marketplace.songoda.com/api/v2/products/id/$productId/versions?sort=-created_at&per_page=1&filter[version]=$id"
             }
 
             val data = JsonParser.parseString(URL(url).readText()).asJsonObject.getAsJsonArray("data")
@@ -82,7 +82,7 @@ class SongodaUpdateChecker(val logger: ILogger, val productId: String, val curre
                 addProperty("published_at", DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(json.get("created_at").asLong * 1000L)))
                 addProperty("version", json.get("version").asString)
                 addProperty("url", json.get("url").asString)
-                addProperty("author_url", "https://songoda.com/profiles/${json.get("uploaded_by").asJsonObject.get("name").asString}")
+                addProperty("author_url", "https://marketplace.songoda.com/profiles/${json.get("uploaded_by").asJsonObject.get("name").asString}")
                 }, System.currentTimeMillis())
             requestedData[id] = cached
         }
