@@ -6,7 +6,7 @@ plugins {
     id 'org.jetbrains.dokka' version '1.7.20'
 }
 
-def projectVersion = (System.getenv("VERSION") ?: '0.4.6-SNAPSHOT').replaceFirst("v", "").replace('/', '')
+def projectVersion = (System.getenv("VERSION") ?: '0.4.7-SNAPSHOT').replaceFirst("v", "").replace('/', '')
 
 group 'xyz.theprogramsrc'
 version projectVersion
@@ -41,7 +41,6 @@ dependencies {
 }
 
 shadowJar {
-    relocate 'com.google', 'xyz.theprogramsrc.simplecoreapi.libs.google'
     relocate 'org.apache.commons', 'xyz.theprogramsrc.simplecoreapi.libs.apache.commons'
     relocate 'org.checkerframework', 'xyz.theprogramsrc.simplecoreapi.libs.checkerframework'
     relocate 'org.intellij', 'xyz.theprogramsrc.simplecoreapi.libs.intellij'
