@@ -1,5 +1,8 @@
-## v0.4.7 - Snapshot
+## v0.5.0 - Snapshot
 * Add Velocity SoftwareType
+* Migrated to Gradle Kotlin DSL
+* Updated Dependencies
+* Added .sdkmanrc
 
 ## v0.4.6 - Snapshot
 * Updated dependencies
