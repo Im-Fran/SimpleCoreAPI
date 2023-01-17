@@ -1,5 +1,6 @@
 package xyz.theprogramsrc.simplecoreapi.global.utils
 
+import xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader
 import java.util.Objects
 
 /**
@@ -77,12 +78,17 @@ enum class SoftwareType(val check: () -> Boolean = { false }, val display: Strin
 
     VELOCITY(check = {
         try {
-            Class.forName("com.velocitypowered.api.util.ProxyVersion")
+            Class.forName("com.velocitypowered.proxy.VelocityServer")
             true
         } catch(e: Exception) {
             false
         }
     }, "Velocity"),
+
+    // Standalone
+    STANDALONE(check = {
+        StandaloneLoader.isRunning
+    }, "Standalone"),
 
     UNKNOWN;
 }

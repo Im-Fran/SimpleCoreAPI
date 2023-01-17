@@ -1,3 +1,11 @@
+## v0.6.0 - Snapshot
+* Added Standalone support
+* Improved velocity SoftwareType check
+
+#### BREAKING CHANGE
+
+* Renamed `repositoryId` to `moduleId` in ModuleDescription and `repository-id` to `module-id` in module.properties
+
 ## v0.5.0 - Snapshot
 * Add Velocity SoftwareType
 * Migrated to Gradle Kotlin DSL
