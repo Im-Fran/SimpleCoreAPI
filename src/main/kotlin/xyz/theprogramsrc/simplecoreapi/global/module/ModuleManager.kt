@@ -103,7 +103,7 @@ class ModuleManager(private val logger: ILogger) {
             try {
                 // Validate that this file is a module
                 val props = loadDescription(file) ?: throw InvalidModuleDescriptionException("Failed to load module description for " + file!!.name)
-                val required = arrayOf("main", "name", "version", "author", "description", "repository-id")
+                val required = arrayOf("main", "name", "version", "author", "description", "module-id")
                 for (req in required) {
                     if (!props.containsKey(req)) {
                         throw InvalidModuleDescriptionException("Missing required property " + req + " in module " + file!!.name)
@@ -117,7 +117,7 @@ class ModuleManager(private val logger: ILogger) {
                     props.getProperty("version").replace("\"(.+)\"".toRegex(), "$1"),
                     props.getProperty("author").replace("\"(.+)\"".toRegex(), "$1"),
                     props.getProperty("description").replace("\"(.+)\"".toRegex(), "$1"),
-                    props.getProperty("repository-id").replace("\"(.+)\"".toRegex(), "$1"),
+                    props.getProperty("module-id").replace("\"(.+)\"".toRegex(), "$1"),
                     (if (props.containsKey("dependencies")) props.getProperty("dependencies") else "").replace(
                         "\"(.+)\"".toRegex(),
                         "$1"
@@ -142,11 +142,11 @@ class ModuleManager(private val logger: ILogger) {
                 val autoUpdate = config["auto-update"] == "true" // Check if we have enabled the auto updater
                 if(isAvailable && autoUpdate){ // Download an update if there is one available and the auto updater is enabled
                     logger.info("An update for the module ${description.name} is available. Downloading and updating...")
-                    val meta = ModuleHelper.getModuleMeta(description.repositoryId)
+                    val meta = ModuleHelper.getModuleMeta(description.moduleId)
                     if(meta == null) {
                         logger.error("Failed to update the module ${description.name}. Please download manually from ${if(description.githubRepository.isBlank()) "https://github.com/${description.githubRepository}/releases/latest" else " the module page."}")
                     } else {
-                        val repo = if(meta.has("repository")) meta.get("repository").asString else "TheProgramSrc/SimpleCore-${description.repositoryId}" // Generate default repo if not found
+                        val repo = if(meta.has("repository")) meta.get("repository").asString else "TheProgramSrc/SimpleCore-${description.moduleId}" // Generate default repo if not found
                         if(ModuleHelper.downloadModule(repo, meta.get("file_name").asString, File("plugins/SimpleCoreAPI/update/").apply { if(!exists()) mkdirs() })){
                             logger.info("Successfully updated the module ${description.name}")
                             updatedModules.add(description.name)
@@ -182,7 +182,7 @@ class ModuleManager(private val logger: ILogger) {
 
         // Loop through the dependencies and download the missing ones
         val downloadedModules: MutableList<String> = ArrayList()
-        for (dependencyId in dependencies.filter { it.isNotBlank() && !modules.any { entry -> entry.value.repositoryId == it } }) {
+        for (dependencyId in dependencies.filter { it.isNotBlank() && !modules.any { entry -> entry.value.moduleId == it } }) {
             val meta = ModuleHelper.getModuleMeta(dependencyId) ?: throw ModuleDownloadException("Failed to download module with id '$dependencyId'")
             val repo = if(meta.has("repository")) meta.get("repository").asString else "TheProgramSrc/SimpleCore-${dependencyId}" // Generate default repo if not found
             if (ModuleHelper.downloadModule(repo, meta.get("file_name").asString)) {
@@ -201,7 +201,7 @@ class ModuleManager(private val logger: ILogger) {
         // Sort the modules to load dependencies first
         val moduleDependencies = mutableMapOf<String, Collection<String>>()
         modules.values.forEach {
-            moduleDependencies[it.repositoryId] = it.dependencies.toList()
+            moduleDependencies[it.moduleId] = it.dependencies.toList()
         }
 
         val urlClassLoader = URLClassLoader(modules.map { it.key }.map { it.toURI().toURL() }.toTypedArray(), this::class.java.classLoader)
@@ -209,7 +209,7 @@ class ModuleManager(private val logger: ILogger) {
 
         sorted.forEach { moduleName ->
             if(!loadedModules.contains(moduleName)) {
-                modules.entries.firstOrNull { it.value.repositoryId == moduleName }?.let { entry ->
+                modules.entries.firstOrNull { it.value.moduleId == moduleName }?.let { entry ->
                     try {
                         loadIntoClasspath(urlClassLoader, entry.key, entry.value)
                     } catch (e: InvalidModuleException) {
@@ -266,7 +266,7 @@ class ModuleManager(private val logger: ILogger) {
                     val moduleClass = mainClass.asSubclass(Module::class.java)
                     val module = moduleClass.getConstructor().newInstance()
                     module.init(file, description) // onLoad is automatically called
-                    loadedModules[description.repositoryId] = module
+                    loadedModules[description.moduleId] = module
                     logger.info("Module ${description.name} v${description.version} loaded! (${System.currentTimeMillis() - start}ms)")
                 } catch (e: Exception) {
                     throw ModuleLoadException("Failed to load module ${description.name} v${description.version}", e)
