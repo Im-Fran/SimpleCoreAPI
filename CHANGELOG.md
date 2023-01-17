@@ -1,8 +1,9 @@
 ## v0.6.0 - Snapshot
 * Added Standalone support
 * Improved velocity SoftwareType check
-<br/>
-BREAKING CHANGE:
+
+#### BREAKING CHANGE
+
 * Renamed `repositoryId` to `moduleId` in ModuleDescription and `repository-id` to `module-id` in module.properties
 
 ## v0.5.0 - Snapshot
