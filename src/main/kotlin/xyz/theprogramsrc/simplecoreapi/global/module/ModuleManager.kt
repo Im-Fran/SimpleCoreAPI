@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils
 import xyz.theprogramsrc.simplecoreapi.global.exceptions.*
 import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
 import xyz.theprogramsrc.simplecoreapi.global.utils.update.GitHubUpdateChecker
+import xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -98,7 +99,7 @@ class ModuleManager(private val logger: ILogger) {
 
         // Now we load and save all the module descriptions from the available modules
         val updatedModules = mutableListOf<String>()
-        files.forEach { file ->
+        files.map { file ->
             try {
                 // Validate that this file is a module
                 val props = loadDescription(file) ?: throw InvalidModuleDescriptionException("Failed to load module description for " + file!!.name)
@@ -110,7 +111,7 @@ class ModuleManager(private val logger: ILogger) {
                 }
 
                 // Load the module description
-                val description = ModuleDescription(
+                file to ModuleDescription(
                     props.getProperty("main").replace("\"(.+)\"".toRegex(), "$1"),
                     props.getProperty("name").replace("\"(.+)\"".toRegex(), "$1"),
                     props.getProperty("version").replace("\"(.+)\"".toRegex(), "$1"),
@@ -124,48 +125,53 @@ class ModuleManager(private val logger: ILogger) {
                         .filter { it.isNotBlank() }
                         .toTypedArray(),
                     props.getProperty("github-repository") ?: "",
+                    props.getProperty("disable-standalone", "false") == "true"
                 )
-
-                if(description.githubRepository.isNotBlank()){
-                    // Check for updates
-                    val checker = GitHubUpdateChecker(logger, description.githubRepository, description.version) // Generate a new update checker
-                    val isAvailable = checker.checkForUpdates() // Check for the updates
-                    val autoUpdate = config["auto-update"] == "true" // Check if we have enabled the auto updater
-                    if(isAvailable && autoUpdate){ // Download an update if there is one available and the auto updater is enabled
-                        logger.info("An update for the module ${description.name} is available. Downloading and updating...")
-                        val meta = ModuleHelper.getModuleMeta(description.repositoryId)
-                        if(meta == null) {
-                            logger.error("Failed to update the module ${description.name}. Please download manually from ${if(description.githubRepository.isBlank()) "https://github.com/${description.githubRepository}/releases/latest" else " the module page."}")
-                        } else {
-                            val repo = if(meta.has("repository")) meta.get("repository").asString else "TheProgramSrc/SimpleCore-${description.repositoryId}" // Generate default repo if not found
-                            if(ModuleHelper.downloadModule(repo, meta.get("file_name").asString, File("plugins/SimpleCoreAPI/update/").apply { if(!exists()) mkdirs() })){
-                                logger.info("Successfully updated the module ${description.name}")
-                                updatedModules.add(description.name)
-                            } else {
-                                logger.error("Failed to update the module ${description.name}. Please download manually from https://github.com/${description.githubRepository}/releases/latest")
-                            }
-                        }
-                    } else if(isAvailable){ // Notify the user that an update is available
-                        checker.checkWithPrint()
-                    }
-                }
-
-                // Validate the module name
-                if (description.name.indexOf(' ') != -1) {
-                    throw InvalidModuleDescriptionException("Module name cannot contain spaces!")
-                }
-
-                // Save to load later
-                modules[file] = description
-
-                // Save the dependencies to download the missing ones
-                description.dependencies.forEach { dependency ->
-                    if (!dependencies.contains(dependency)) {
-                        dependencies.add(dependency)
-                    }
-                }
             } catch (e: Exception) {
                 e.printStackTrace()
+                null
+            }
+        }.filterNotNull().filter { !(it.second.disableStandalone && StandaloneLoader.isRunning) }.forEach { // Filter not null descriptions and filter to only run available modules
+            val file = it.first
+            val description = it.second
+
+            if(description.githubRepository.isNotBlank()){
+                // Check for updates
+                val checker = GitHubUpdateChecker(logger, description.githubRepository, description.version) // Generate a new update checker
+                val isAvailable = checker.checkForUpdates() // Check for the updates
+                val autoUpdate = config["auto-update"] == "true" // Check if we have enabled the auto updater
+                if(isAvailable && autoUpdate){ // Download an update if there is one available and the auto updater is enabled
+                    logger.info("An update for the module ${description.name} is available. Downloading and updating...")
+                    val meta = ModuleHelper.getModuleMeta(description.repositoryId)
+                    if(meta == null) {
+                        logger.error("Failed to update the module ${description.name}. Please download manually from ${if(description.githubRepository.isBlank()) "https://github.com/${description.githubRepository}/releases/latest" else " the module page."}")
+                    } else {
+                        val repo = if(meta.has("repository")) meta.get("repository").asString else "TheProgramSrc/SimpleCore-${description.repositoryId}" // Generate default repo if not found
+                        if(ModuleHelper.downloadModule(repo, meta.get("file_name").asString, File("plugins/SimpleCoreAPI/update/").apply { if(!exists()) mkdirs() })){
+                            logger.info("Successfully updated the module ${description.name}")
+                            updatedModules.add(description.name)
+                        } else {
+                            logger.error("Failed to update the module ${description.name}. Please download manually from https://github.com/${description.githubRepository}/releases/latest")
+                        }
+                    }
+                } else if(isAvailable){ // Notify the user that an update is available
+                    checker.checkWithPrint()
+                }
+            }
+
+            // Validate the module name
+            if (description.name.indexOf(' ') != -1) {
+                throw InvalidModuleDescriptionException("Module name cannot contain spaces!")
+            }
+
+            // Save to load later
+            modules[file] = description
+
+            // Save the dependencies to download the missing ones
+            description.dependencies.forEach { dependency ->
+                if (!dependencies.contains(dependency)) {
+                    dependencies.add(dependency)
+                }
             }
         }
 
@@ -222,7 +228,8 @@ class ModuleManager(private val logger: ILogger) {
      */
     fun enableModules(){
         val start = System.currentTimeMillis()
-        loadedModules.filter { !it.value.isEnabled() }.forEach { (_, module) ->
+        val isStandalone = StandaloneLoader.isRunning
+        loadedModules.filter { !it.value.isEnabled() }.filter { if(isStandalone) !it.value.getModuleDescription().disableStandalone else true }.forEach { (_, module) ->
             val description = module.getModuleDescription()
             try {
                 logger.info("Enabling module ${description.name} v${description.version}")

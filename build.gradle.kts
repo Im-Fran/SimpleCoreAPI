@@ -14,7 +14,7 @@ plugins {
 }
 
 val env = System.getenv()
-val projectVersion = env["VERSION"] ?: "0.5.0-SNAPSHOT"
+val projectVersion = env["VERSION"] ?: "0.6.0-SNAPSHOT"
 
 group = "xyz.theprogramsrc"
 version = projectVersion.replaceFirst("v", "").replace("/", "")
@@ -48,7 +48,6 @@ dependencies {
 }
 
 blossom {
-    System.getenv()
     replaceToken("@name@", rootProject.name)
     replaceToken("@version@", project.version.toString())
     replaceToken("@description@", project.description)

@@ -1,3 +1,7 @@
+## v0.6.0 - Snapshot
+* Added Standalone support
+* Improved velocity SoftwareType check
+
 ## v0.5.0 - Snapshot
 * Add Velocity SoftwareType
 * Migrated to Gradle Kotlin DSL

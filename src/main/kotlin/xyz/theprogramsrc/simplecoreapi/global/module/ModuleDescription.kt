@@ -10,8 +10,19 @@ package xyz.theprogramsrc.simplecoreapi.global.module
  * @param repositoryId The identifier of this artifact in the repository (usually the name in lowercase)
  * @param dependencies The dependencies of the module (must be the name of the module)
  * @param githubRepository The GitHub repository of the module. (Used for the update checker and auto updater)
+ * @param disableStandalone If true the module won't be loaded if it's in standalone mode.
  */
-data class ModuleDescription(val mainClass: String, val name: String, val version: String, val author: String, val description: String, val repositoryId: String, val dependencies: Array<String>, val githubRepository: String) {
+data class ModuleDescription(
+    val mainClass: String,
+    val name: String,
+    val version: String,
+    val author: String,
+    val description: String,
+    val repositoryId: String,
+    val dependencies: Array<String>,
+    val githubRepository: String,
+    val disableStandalone: Boolean = false,
+) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -27,6 +38,7 @@ data class ModuleDescription(val mainClass: String, val name: String, val versio
         if (repositoryId != other.repositoryId) return false
         if (!dependencies.contentEquals(other.dependencies)) return false
         if (githubRepository != other.githubRepository) return false
+        if (disableStandalone != other.disableStandalone) return false
 
         return true
     }
@@ -40,6 +52,7 @@ data class ModuleDescription(val mainClass: String, val name: String, val versio
         result = 31 * result + repositoryId.hashCode()
         result = 31 * result + dependencies.contentHashCode()
         result = 31 * result + githubRepository.hashCode()
+        result = 31 * result + disableStandalone.hashCode()
         return result
     }
 
