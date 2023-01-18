@@ -1,10 +1,9 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import groovy.util.Node
 import groovy.util.NodeList
-import org.jetbrains.dokka.gradle.DokkaTask
 
 plugins {
+    signing
     `maven-publish`
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("cl.franciscosolis.blossom-extended") version "1.3.1"
@@ -14,6 +13,19 @@ plugins {
 }
 
 val env = System.getenv()
+if(project.rootProject.file(".env").exists()) {
+    env.putAll(
+        project.rootProject
+            .file(".env")
+            .inputStream()
+            .bufferedReader()
+            .readLines()
+            .filter { it.isNotBlank() && !it.startsWith("#") }
+            .map { it.split("=") }
+            .associate { it[0] to it[1] }
+    )
+}
+
 val projectVersion = env["VERSION"] ?: "0.6.0-SNAPSHOT"
 
 group = "xyz.theprogramsrc"
@@ -80,25 +92,34 @@ tasks {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
         withSourcesJar()
+        withJavadocJar()
     }
 
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "11"
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "11"
+        }
     }
 
-    withType<JavaCompile>().configureEach {
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = "11"
+        }
+    }
+
+    compileJava {
         options.encoding = "UTF-8"
     }
 
-    withType<Jar>().configureEach {
+    jar {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
-    withType<Copy>().configureEach {
+    copy {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
-    named<DokkaTask>("dokkaHtml"){
+    dokkaHtml {
         outputDirectory.set(file(project.buildDir.absolutePath + "/dokka"))
     }
 }
@@ -112,12 +133,24 @@ configurations {
 publishing {
     repositories {
         if(env["env"] == "prod") {
-            maven {
-                name = "GithubPackages"
-                url = uri("https://maven.pkg.github.com/TheProgramSrc/SimpleCoreAPI")
-                credentials {
-                    username = env["GITHUB_ACTOR"]
-                    password = env["GITHUB_TOKEN"]
+            if(env.containsKey("GITHUB_ACTOR") && env.containsKey("GITHUB_TOKEN")) {
+                maven {
+                    name = "GithubPackages"
+                    url = uri("https://maven.pkg.github.com/TheProgramSrc/SimpleCoreAPI")
+                    credentials {
+                        username = env["GITHUB_ACTOR"]
+                        password = env["GITHUB_TOKEN"]
+                    }
+                }
+            }
+
+            if(env.containsKey("SONATYPE_USERNAME") && env.containsKey("SONATYPE_PASSWORD")) {
+                maven {
+                    url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                    credentials {
+                        username = env["SONATYPE_USERNAME"]
+                        password = env["SONATYPE_PASSWORD"]
+                    }
                 }
             }
         } else {
@@ -131,17 +164,28 @@ publishing {
 
             from(components["java"])
 
-            pom.withXml {
-                asNode().appendNode("packaging", "jar")
-                ((asNode().get("dependencies") as NodeList?)?.firstOrNull() as Node?)?.let { node ->
-                    asNode().remove(node)
+            artifact(tasks.dokkaJavadoc)
+            artifact(tasks.kotlinSourcesJar)
+
+            pom {
+                licenses {
+                    license {
+                        name.set("GNU GPL v3")
+                        url.set("https://github.com/TheProgramSrc/SimpleCoreAPI/blob/master/LICENSE")
+                    }
+                }
+
+                withXml {
+                    asNode().appendNode("packaging", "jar")
+                    ((asNode().get("dependencies") as NodeList?)?.firstOrNull() as Node?)?.let { node ->
+                        asNode().remove(node)
+                    }
                 }
             }
-
         }
     }
 }
 
 tasks.publish {
-    dependsOn(tasks.clean, tasks.test, tasks.jar, tasks.shadowJar)
+    dependsOn(tasks.clean, tasks.test, tasks.jar, tasks.kotlinSourcesJar, tasks.dokkaJavadoc, tasks.shadowJar)
 }
