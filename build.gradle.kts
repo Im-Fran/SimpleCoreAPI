@@ -12,7 +12,8 @@ plugins {
     id("org.jetbrains.dokka") version "1.7.20"
 }
 
-val env = System.getenv()
+val env = emptyMap<String, String>().toMutableMap()
+env.putAll(System.getenv())
 if(project.rootProject.file(".env").exists()) {
     env.putAll(
         project.rootProject
@@ -25,7 +26,6 @@ if(project.rootProject.file(".env").exists()) {
             .associate { it[0] to it[1] }
     )
 }
-
 val projectVersion = env["VERSION"] ?: "0.6.0-SNAPSHOT"
 
 group = "xyz.theprogramsrc"
