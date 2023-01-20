@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "visualstudioexptteam.vscodeintellicode",
+        "visualstudioexptteam.intellicode-api-usage-examples",
+        "vscjava.vscode-gradle",
+        "christian-kohler.path-intellisense",
+        "mikestead.dotenv",
+        "mathiasfrohlich.kotlin",
+        "fwcd.kotlin"
+    ]
+}

@@ -7,9 +7,9 @@ jobs:
     # Set up the OS
     runs-on: ubuntu-latest
     env:
-      # Nexus credentials and GitHub token
-      NEXUS_USERNAME: '${{ secrets.NEXUS_USERNAME }}'
-      NEXUS_PASSWORD: '${{ secrets.NEXUS_PASSWORD }}'
+      # Sonatype Credentials & GitHub token
+      SONATYPE_USERNAME: '${{ secrets.SONATYPE_USERNAME }}'
+      SONATYPE_PASSWORD: '${{ secrets.SONATYPE_PASSWORD }}'
       GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
       # Set environment
       env: 'prod'

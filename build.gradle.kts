@@ -1,10 +1,9 @@
+import com.github.jengelman.gradle.plugins.shadow.ShadowExtension
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import groovy.util.Node
-import groovy.util.NodeList
 
 plugins {
-    signing
     `maven-publish`
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("cl.franciscosolis.blossom-extended") version "1.3.1"
 
@@ -26,7 +25,7 @@ if(project.rootProject.file(".env").exists()) {
             .associate { it[0] to it[1] }
     )
 }
-val projectVersion = env["VERSION"] ?: "0.6.0-SNAPSHOT"
+val projectVersion = env["VERSION"] ?: "0.6.1-SNAPSHOT"
 
 group = "xyz.theprogramsrc"
 version = projectVersion.replaceFirst("v", "").replace("/", "")
@@ -130,10 +129,16 @@ configurations {
     }
 }
 
+val dokkaJavadocJar by tasks.register<Jar>("dokkaJavadocJar") {
+    dependsOn(tasks.dokkaJavadoc)
+    from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
+    archiveClassifier.set("javadoc")
+}
+
 publishing {
     repositories {
-        if(env["env"] == "prod") {
-            if(env.containsKey("GITHUB_ACTOR") && env.containsKey("GITHUB_TOKEN")) {
+        if (env["env"] == "prod") {
+            if (env.containsKey("GITHUB_ACTOR") && env.containsKey("GITHUB_TOKEN")) {
                 maven {
                     name = "GithubPackages"
                     url = uri("https://maven.pkg.github.com/TheProgramSrc/SimpleCoreAPI")
@@ -143,42 +148,39 @@ publishing {
                     }
                 }
             }
-
-            if(env.containsKey("SONATYPE_USERNAME") && env.containsKey("SONATYPE_PASSWORD")) {
-                maven {
-                    url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-                    credentials {
-                        username = env["SONATYPE_USERNAME"]
-                        password = env["SONATYPE_PASSWORD"]
-                    }
-                }
-            }
         } else {
             mavenLocal()
         }
     }
 
     publications {
-        create<MavenPublication>("mavenKotlin") {
-            artifactId = "simplecoreapi"
+        create<MavenPublication>("shadow") {
 
-            from(components["java"])
+            project.extensions.configure<ShadowExtension> {
+                artifactId = "simplecoreapi"
 
-            artifact(tasks.dokkaJavadoc)
-            artifact(tasks.kotlinSourcesJar)
+                component(this@create)
+                artifact(dokkaJavadocJar)
+                artifact(tasks.kotlinSourcesJar)
 
-            pom {
-                licenses {
-                    license {
-                        name.set("GNU GPL v3")
-                        url.set("https://github.com/TheProgramSrc/SimpleCoreAPI/blob/master/LICENSE")
+                pom {
+                    licenses {
+                        license {
+                            name.set("GNU GPL v3")
+                            url.set("https://github.com/TheProgramSrc/SimpleCoreAPI/blob/master/LICENSE")
+                        }
                     }
-                }
 
-                withXml {
-                    asNode().appendNode("packaging", "jar")
-                    ((asNode().get("dependencies") as NodeList?)?.firstOrNull() as Node?)?.let { node ->
-                        asNode().remove(node)
+                    developers {
+                        developer {
+                            id.set("ImFran")
+                            name.set("Francisco Solis")
+                            email.set("imfran@duck.com")
+                        }
+                    }
+
+                    scm {
+                        url.set("https://github.com/TheProgramSrc/SimpleCoreAPI")
                     }
                 }
             }
@@ -186,6 +188,30 @@ publishing {
     }
 }
 
-tasks.publish {
-    dependsOn(tasks.clean, tasks.test, tasks.jar, tasks.kotlinSourcesJar, tasks.dokkaJavadoc, tasks.shadowJar)
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+
+            username.set(env["SONATYPE_USERNAME"])
+            password.set(env["SONATYPE_PASSWORD"])
+        }
+    }
+}
+
+tasks.withType<PublishToMavenRepository> {
+    dependsOn(tasks.clean, tasks.test, tasks.kotlinSourcesJar, dokkaJavadocJar, tasks.jar, tasks.shadowJar)
+}
+
+tasks.withType<PublishToMavenLocal> {
+    dependsOn(tasks.test, tasks.kotlinSourcesJar, tasks.jar, dokkaJavadocJar, tasks.shadowJar)
+}
+
+tasks.register("env-test") {
+    doLast {
+        println("env: ${env["env"]}")
+        println("SONATYPE_USERNAME: ${env["SONATYPE_USERNAME"]}")
+        println("SONATYPE_PASSWORD: ${env["SONATYPE_PASSWORD"]}")
+    }
 }
