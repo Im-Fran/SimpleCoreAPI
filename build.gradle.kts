@@ -130,7 +130,7 @@ configurations {
 }
 
 val dokkaJavadocJar by tasks.register<Jar>("dokkaJavadocJar") {
-    dependsOn(tasks.dokkaJavadoc)
+    dependsOn(tasks.dokkaJavadoc, tasks.dokkaHtml)
     from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
     archiveClassifier.set("javadoc")
 }
