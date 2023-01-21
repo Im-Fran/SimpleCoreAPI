@@ -1,0 +1,19 @@
+$dokka.format:javadoc-v1
+$dokka.linkExtension:html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.bungee/BungeeLoader.Companion///PointingToDeclaration/xyz/theprogramsrc/simplecoreapi/bungee/BungeeLoader.Companion.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleManager.Companion///PointingToDeclaration/xyz/theprogramsrc/simplecoreapi/global/module/ModuleManager.Companion.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI.Companion///PointingToDeclaration/xyz/theprogramsrc/simplecoreapi/global/SimpleCoreAPI.Companion.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.spigot/SpigotLoader.Companion///PointingToDeclaration/xyz/theprogramsrc/simplecoreapi/spigot/SpigotLoader.Companion.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.standalone/StandaloneLoader.Companion///PointingToDeclaration/xyz/theprogramsrc/simplecoreapi/standalone/StandaloneLoader.Companion.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.velocity/VelocityLoader.Companion///PointingToDeclaration/xyz/theprogramsrc/simplecoreapi/velocity/VelocityLoader.Companion.html
+xyz.theprogramsrc.simplecoreapi.bungee
+xyz.theprogramsrc.simplecoreapi.global
+xyz.theprogramsrc.simplecoreapi.global.exceptions
+xyz.theprogramsrc.simplecoreapi.global.module
+xyz.theprogramsrc.simplecoreapi.global.utils
+xyz.theprogramsrc.simplecoreapi.global.utils.logger
+xyz.theprogramsrc.simplecoreapi.global.utils.update
+xyz.theprogramsrc.simplecoreapi.spigot
+xyz.theprogramsrc.simplecoreapi.standalone
+xyz.theprogramsrc.simplecoreapi.velocity
+
