@@ -37,7 +37,7 @@ jobs:
         run: chmod +x gradlew
       # Clean, Test, Publish and Build (in that order to save the artifact to the action)
       - name: Test, Deploy and Build with Gradle
-        run: ./gradlew clean test shadowJar dokkaHtml publish publishToSonatype closeAndReleaseSonatypeStagingRepository
+        run: ./gradlew clean test shadowJar dokkaHtml publish publishToSonatype closeAndReleaseSonatypeStagingRepository -no-daemon
       # Now we store the artifact in the action
       - name: Upload the artifact
         uses: actions/upload-artifact@v3
