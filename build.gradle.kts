@@ -51,7 +51,7 @@ dependencies {
     implementation("org.jetbrains:annotations:24.0.0")
     implementation("commons-io:commons-io:2.11.0")
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("net.lingala.zip4j:zip4j:2.11.2")
+    implementation("net.lingala.zip4j:zip4j:2.11.4")
 
     annotationProcessor("com.velocitypowered:velocity-api:3.1.1")
 
