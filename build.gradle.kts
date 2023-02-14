@@ -148,13 +148,17 @@ publishing {
         create<MavenPublication>("shadow") {
 
             project.extensions.configure<ShadowExtension> {
-                artifactId = "simplecoreapi"
+                artifactId = rootProject.name.lowercase()
 
                 component(this@create)
                 artifact(dokkaJavadocJar)
                 artifact(tasks.kotlinSourcesJar)
 
                 pom {
+                    name.set(rootProject.name)
+                    description.set(project.description)
+                    url.set("https://github.com/TheProgramSrc/SimpleCoreAPI")
+
                     licenses {
                         license {
                             name.set("GNU GPL v3")
@@ -192,7 +196,7 @@ nexusPublishing {
 }
 
 tasks.withType<PublishToMavenRepository> {
-    dependsOn(tasks.clean, tasks.test, tasks.kotlinSourcesJar, dokkaJavadocJar, tasks.jar, tasks.shadowJar)
+    dependsOn(tasks.test, tasks.kotlinSourcesJar, dokkaJavadocJar, tasks.jar, tasks.shadowJar)
 }
 
 tasks.withType<PublishToMavenLocal> {
