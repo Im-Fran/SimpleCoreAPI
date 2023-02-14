@@ -22,6 +22,7 @@ version = projectVersion.replaceFirst("v", "").replace("/", "")
 description = "The best way to create a plugin"
 
 repositories {
+    mavenLocal()
     mavenCentral()
 
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
