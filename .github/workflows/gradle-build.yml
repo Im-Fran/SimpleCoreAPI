@@ -12,7 +12,7 @@ jobs:
       SONATYPE_PASSWORD: '${{ secrets.SONATYPE_PASSWORD }}'
       GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
       # Set environment
-      env: 'prod'
+      ENV: 'prod'
     steps:
       # Checkout the Code
       - name: Checkout Code

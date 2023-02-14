@@ -1,3 +1,13 @@
+## v0.6.2 - Snapshot
+* Improved .env loader
+* Fixed "ENV" variable to be uppercase
+* Fixed dokkaJavadocJar task dependency
+* Fixed CHANGELOG.md
+
+## v0.6.1 - Snapshot
+* Added Maven Central Repository
+* Updated SECURITY.md
+
 ## v0.6.0 - Snapshot
 * Added Standalone support
 * Improved velocity SoftwareType check
