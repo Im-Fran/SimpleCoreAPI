@@ -11,7 +11,9 @@ plugins {
     id("org.jetbrains.dokka") version "1.7.20"
 }
 
-val env = project.rootProject.file(".env").readLines().filter { it.isNotBlank() && !it.startsWith("#") && it.split("=").size == 2 }.associate { it.split("=")[0] to it.split("=")[1] }.toMutableMap().apply { putAll(System.getenv()) }
+val env = project.rootProject.file(".env").let { file ->
+    if(file.exists()) file.readLines().filter { it.isNotBlank() && !it.startsWith("#") && it.split("=").size == 2 }.associate { it.split("=")[0] to it.split("=")[1] } else emptyMap()
+}.toMutableMap().apply { putAll(System.getenv()) }
 
 val projectVersion = env["VERSION"] ?: "0.6.2-SNAPSHOT"
 
@@ -32,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.19.3-R0.1-SNAPSHOT")
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
     compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
 
