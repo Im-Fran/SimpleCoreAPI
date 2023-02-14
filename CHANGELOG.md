@@ -1,4 +1,6 @@
 ## v0.6.2 - Snapshot
+* Improved .env loader
+* Fixed "ENV" variable to be uppercase
 * Fixed dokkaJavadocJar task dependency
 * Fixed CHANGELOG.md
 

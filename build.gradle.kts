@@ -11,21 +11,9 @@ plugins {
     id("org.jetbrains.dokka") version "1.7.20"
 }
 
-val env = emptyMap<String, String>().toMutableMap()
-env.putAll(System.getenv())
-if(project.rootProject.file(".env").exists()) {
-    env.putAll(
-        project.rootProject
-            .file(".env")
-            .inputStream()
-            .bufferedReader()
-            .readLines()
-            .filter { it.isNotBlank() && !it.startsWith("#") }
-            .map { it.split("=") }
-            .associate { it[0] to it[1] }
-    )
-}
-val projectVersion = env["VERSION"] ?: "0.6.1-SNAPSHOT"
+val env = project.rootProject.file(".env").readLines().filter { it.isNotBlank() && !it.startsWith("#") && it.split("=").size == 2 }.associate { it.split("=")[0] to it.split("=")[1] }.toMutableMap().apply { putAll(System.getenv()) }
+
+val projectVersion = env["VERSION"] ?: "0.6.2-SNAPSHOT"
 
 group = "xyz.theprogramsrc"
 version = projectVersion.replaceFirst("v", "").replace("/", "")
@@ -137,7 +125,7 @@ val dokkaJavadocJar by tasks.register<Jar>("dokkaJavadocJar") {
 
 publishing {
     repositories {
-        if (env["env"] == "prod") {
+        if (env["ENV"] == "prod") {
             if (env.containsKey("GITHUB_ACTOR") && env.containsKey("GITHUB_TOKEN")) {
                 maven {
                     name = "GithubPackages"
