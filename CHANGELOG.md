@@ -3,6 +3,8 @@
 * Fixed "ENV" variable to be uppercase
 * Fixed dokkaJavadocJar task dependency
 * Fixed CHANGELOG.md
+* Add maven local to repos
+* Remove jitpack from repos
 
 ## v0.6.1 - Snapshot
 * Added Maven Central Repository
