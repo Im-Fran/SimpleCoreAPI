@@ -1,5 +1,6 @@
 [![](https://jitci.com/gh/TheProgramSrc/SimpleCoreAPI/svg)](https://jitci.com/gh/TheProgramSrc/SimpleCoreAPI)
 [![](https://jitpack.io/v/TheProgramSrc/SimpleCoreAPI.svg)](https://jitpack.io/#TheProgramSrc/SimpleCoreAPI)
+[![](https://img.shields.io/nexus/s/xyz.theprogramsrc/simplecoreapi?server=https%3A%2F%2Fs01.oss.sonatype.org)]()
 
 # SimpleCoreAPI
 _The best way to create a plugin_<br>
