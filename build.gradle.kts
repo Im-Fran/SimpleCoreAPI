@@ -3,7 +3,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     `maven-publish`
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+    id("io.github.gradle-nexus.publish-plugin") version "1.2.0"
     id("com.github.johnrengelman.shadow") version "8.1.0"
     id("cl.franciscosolis.blossom-extended") version "1.3.1"
 
