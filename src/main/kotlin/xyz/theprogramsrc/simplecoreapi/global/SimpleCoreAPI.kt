@@ -4,7 +4,8 @@ import xyz.theprogramsrc.simplecoreapi.global.module.ModuleManager
 import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
 import xyz.theprogramsrc.simplecoreapi.global.utils.SoftwareType
 import xyz.theprogramsrc.simplecoreapi.global.utils.update.GitHubUpdateChecker
-import java.util.*
+import xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader
+import java.io.File
 
 /**
  * Class used to initialize SimpleCoreAPI (DO NOT CALL IT FROM EXTERNAL PLUGINS, IT MAY CRASH)
@@ -19,6 +20,14 @@ class SimpleCoreAPI(logger: ILogger) {
          */
         lateinit var instance: SimpleCoreAPI
             private set
+
+        /**
+         * Gets a file relative to the data folder.
+         * If running in standalone mode the data folder will be ./SimpleCoreAPI, otherwise it will be the plugins/SimpleCoreAPI folder
+         *
+         * @return The file relative to the data folder
+         */
+        fun dataFolder(path: String = ""): File = File(if (StandaloneLoader.isRunning) "./SimpleCoreAPI" else "plugins/SimpleCoreAPI", path)
     }
 
     /**

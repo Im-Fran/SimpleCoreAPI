@@ -4,6 +4,10 @@ import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
 import xyz.theprogramsrc.simplecoreapi.global.utils.logger.JavaLogger
 import java.util.logging.Logger
 
+fun main() {
+    StandaloneLoader()
+}
+
 class StandaloneLoader {
 
     companion object {

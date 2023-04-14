@@ -15,7 +15,7 @@ val env = project.rootProject.file(".env").let { file ->
     if(file.exists()) file.readLines().filter { it.isNotBlank() && !it.startsWith("#") && it.split("=").size == 2 }.associate { it.split("=")[0] to it.split("=")[1] } else emptyMap()
 }.toMutableMap().apply { putAll(System.getenv()) }
 
-val projectVersion = env["VERSION"] ?: "0.6.2-SNAPSHOT"
+val projectVersion = env["VERSION"] ?: "0.6.3-SNAPSHOT"
 
 group = "xyz.theprogramsrc"
 version = projectVersion.replaceFirst("v", "").replace("/", "")
@@ -59,6 +59,10 @@ blossom {
 
 tasks {
     named<ShadowJar>("shadowJar") {
+        manifest {
+            attributes["Main-Class"] = "xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoaderKt"
+        }
+
         relocate("org.apache.commons", "xyz.theprogramsrc.simplecoreapi.libs.apache.commons")
         relocate("org.checkerframework", "xyz.theprogramsrc.simplecoreapi.libs.checkerframework")
         relocate("org.intellij", "xyz.theprogramsrc.simplecoreapi.libs.intellij")
@@ -183,14 +187,16 @@ publishing {
     }
 }
 
-nexusPublishing {
-    repositories {
-        sonatype {
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+if(env["ENV"] == "prod") {
+    nexusPublishing {
+        repositories {
+            sonatype {
+                nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+                snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
 
-            username.set(env["SONATYPE_USERNAME"])
-            password.set(env["SONATYPE_PASSWORD"])
+                username.set(env["SONATYPE_USERNAME"])
+                password.set(env["SONATYPE_PASSWORD"])
+            }
         }
     }
 }

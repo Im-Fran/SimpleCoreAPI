@@ -1,6 +1,7 @@
 package xyz.theprogramsrc.simplecoreapi.global.module
 
 import org.apache.commons.io.FileUtils
+import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
 import xyz.theprogramsrc.simplecoreapi.global.exceptions.*
 import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
 import xyz.theprogramsrc.simplecoreapi.global.utils.update.GitHubUpdateChecker
@@ -15,8 +16,12 @@ import java.util.jar.JarInputStream
 
 class ModuleManager(private val logger: ILogger) {
 
-    private val modulesFolder = File("plugins/SimpleCoreAPI/modules")
-    private val updatesFolder = File("plugins/SimpleCoreAPI/update")
+    private val modulesFolder = SimpleCoreAPI.dataFolder("modules").apply {
+        !exists() && mkdirs()
+    }
+    private val updatesFolder = SimpleCoreAPI.dataFolder("update").apply {
+        !exists() && mkdirs()
+    }
     private var loadedModules = LinkedHashMap<String, Module>()
 
     init {
@@ -40,7 +45,7 @@ class ModuleManager(private val logger: ILogger) {
 
     private fun loadConfig(){
         logger.info("Loading config...")
-        val file = File("plugins/SimpleCoreAPI/Settings.yml").apply {
+        val file = SimpleCoreAPI.dataFolder("Settings.yml").apply {
             if(!exists()){
                 parentFile.mkdirs()
                 createNewFile()
@@ -50,7 +55,7 @@ class ModuleManager(private val logger: ILogger) {
     }
 
     private fun saveConfig(){
-        val file = File("plugins/SimpleCoreAPI/Settings.yml").apply {
+        val file = SimpleCoreAPI.dataFolder("Settings.yml").apply {
             if(!exists()){
                 parentFile.mkdirs()
                 createNewFile()
@@ -99,7 +104,7 @@ class ModuleManager(private val logger: ILogger) {
 
         // Now we load and save all the module descriptions from the available modules
         val updatedModules = mutableListOf<String>()
-        files.map { file ->
+        files.mapNotNull { file ->
             try {
                 // Validate that this file is a module
                 val props = loadDescription(file) ?: throw InvalidModuleDescriptionException("Failed to load module description for " + file!!.name)
@@ -131,7 +136,7 @@ class ModuleManager(private val logger: ILogger) {
                 e.printStackTrace()
                 null
             }
-        }.filterNotNull().filter { !(it.second.disableStandalone && StandaloneLoader.isRunning) }.forEach { // Filter not null descriptions and filter to only run available modules
+        }.filter { !(it.second.disableStandalone && StandaloneLoader.isRunning) }.forEach { // Filter not null descriptions and filter to only run available modules
             val file = it.first
             val description = it.second
 
@@ -147,7 +152,7 @@ class ModuleManager(private val logger: ILogger) {
                         logger.error("Failed to update the module ${description.name}. Please download manually from ${if(description.githubRepository.isBlank()) "https://github.com/${description.githubRepository}/releases/latest" else " the module page."}")
                     } else {
                         val repo = if(meta.has("repository")) meta.get("repository").asString else "TheProgramSrc/SimpleCore-${description.moduleId}" // Generate default repo if not found
-                        if(ModuleHelper.downloadModule(repo, meta.get("file_name").asString, File("plugins/SimpleCoreAPI/update/").apply { if(!exists()) mkdirs() })){
+                        if(ModuleHelper.downloadModule(repo, meta.get("file_name").asString, updatesFolder.apply { if(!exists()) mkdirs() })){
                             logger.info("Successfully updated the module ${description.name}")
                             updatedModules.add(description.name)
                         } else {
@@ -204,7 +209,7 @@ class ModuleManager(private val logger: ILogger) {
             moduleDependencies[it.moduleId] = it.dependencies.toList()
         }
 
-        val urlClassLoader = URLClassLoader(modules.map { it.key }.map { it.toURI().toURL() }.toTypedArray(), this::class.java.classLoader)
+        val urlClassLoader = URLClassLoader(modules.map { it.key }.map { it.toURI().toURL() }.toTypedArray(), SimpleCoreAPI::class.java.classLoader)
         val sorted = ModuleHelper.sortModuleDependencies(moduleDependencies).filter { it.isNotBlank() }
 
         sorted.forEach { moduleName ->
@@ -255,12 +260,11 @@ class ModuleManager(private val logger: ILogger) {
     private fun loadIntoClasspath(loader: URLClassLoader, file: File, description: ModuleDescription) {
         try {
             JarInputStream(FileInputStream(file)).use {
-                val mainClass = loader.loadClass(description.mainClass)
-                if(!Module::class.java.isAssignableFrom(mainClass)){
-                    throw InvalidModuleException("The class ${description.mainClass} must be extended to the Module class!")
-                }
-
                 try {
+                    val mainClass = loader.loadClass(description.mainClass)
+                    if(!Module::class.java.isAssignableFrom(mainClass)){
+                        throw InvalidModuleException("The class ${description.mainClass} must be extended to the Module class!")
+                    }
                     logger.info("Loading module ${description.name} v${description.version}")
                     val start = System.currentTimeMillis()
                     val moduleClass = mainClass.asSubclass(Module::class.java)

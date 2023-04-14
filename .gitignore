@@ -75,6 +75,7 @@ Temporary Items
 build/
 bin/
 *.pom.xml
-modules/
-plugins/
+./modules/
+./plugins/
+./SimpleCoreAPI/
 !gradle-wrapper.jar
