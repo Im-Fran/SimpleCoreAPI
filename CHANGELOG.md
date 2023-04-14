@@ -1,3 +1,9 @@
+## v0.6.3 - Snapshot
+* Improved dependency load sorter
+* Improved folder system for Standalone software
+* Fixed modules not working for Standalone software
+* Improved gradle-test workflow
+
 ## v0.6.2 - Snapshot
 * Improved .env loader
 * Fixed "ENV" variable to be uppercase
