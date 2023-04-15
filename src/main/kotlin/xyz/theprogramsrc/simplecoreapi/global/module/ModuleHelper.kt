@@ -2,6 +2,7 @@ package xyz.theprogramsrc.simplecoreapi.global.module
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -19,10 +20,10 @@ object ModuleHelper {
      * Downloads a Module from the database
      * @param repository Repository of a module to download. (Must be in GitHub format 'User/Repository'. Example: 'TheProgramSrc/SimpleCore-UIsModule')
      * @param fileName The name of the file. This can be fetched using the repository metadata.
-     * @param downloadLocation Location to download the module. (Defaults to plugins/SimpleCoreAPI/modules/)
+     * @param downloadLocation Location to download the module. (Defaults to SimpleCoreAPI/modules/)
      * @return true if the module was downloaded, false otherwise
      */
-    fun downloadModule(repository: String, fileName: String, downloadLocation: File = File("plugins/SimpleCoreAPI/modules/")): Boolean{
+    fun downloadModule(repository: String, fileName: String, downloadLocation: File = SimpleCoreAPI.dataFolder("modules/")): Boolean{
         if(!downloadLocation.exists()) downloadLocation.mkdirs()
         val releases = JsonParser.parseString(URL("https://api.github.com/repos/$repository/releases").readText()).asJsonArray // Get the repo releases list
         if(releases.isEmpty) // If empty stop
@@ -46,23 +47,27 @@ object ModuleHelper {
      * @return List of the sorted modules to load
      */
     fun sortModuleDependencies(dependencies: Map<String, Collection<String>>): List<String> {
-        val sorted = mutableListOf<String>()
-        // First add the modules that don't have dependencies
-        sorted.addAll(dependencies.filter { it.value.isEmpty() }.keys)
+        val visited = mutableSetOf<String>()
+        val result = mutableListOf<String>()
 
-        // Now add the modules that have dependencies
-        dependencies.filter { !sorted.contains(it.key) }.forEach { (moduleName, moduleDepends) ->
-            moduleDepends.forEach { dependency ->
-                if(sorted.contains(dependency) && sorted.indexOf(moduleName) > sorted.indexOf(dependency)) {
-                    sorted.remove(dependency)
-                    sorted.add(sorted.indexOf(moduleName), dependency)
-                }else if(!sorted.contains(dependency)){
-                    sorted.add(dependency)
+        fun dfs(node: String) {
+            visited.add(node)
+            for (neighbor in dependencies[node] ?: emptySet()) {
+                if (neighbor !in visited) {
+                    dfs(neighbor)
                 }
             }
-            if(!sorted.contains(moduleName)) sorted.add(moduleName)
+
+            result.add(node)
         }
-        return sorted.filter { it.isNotBlank() && it.isNotEmpty() }
+
+        for (node in dependencies.keys) {
+            if (node !in visited) {
+                dfs(node)
+            }
+        }
+
+        return result
     }
 
     /**
@@ -87,7 +92,7 @@ object ModuleHelper {
 
         val now = System.currentTimeMillis()
         if(lastRepoUpdate == 0L || (lastRepoUpdate - now) > 30000L){
-            val file = File("plugins/SimpleCoreAPI/modules-repository.json")
+            val file = SimpleCoreAPI.dataFolder("modules-repository.json")
             val onlineBytes = URL("https://github.com/TheProgramSrc/GlobalDatabase/raw/master/SimpleCoreAPI/modules-repository.json").readBytes() // Get the online version
             if(!file.exists()) file.createNewFile() // Create the file
             file.writeBytes(onlineBytes) // Overwrite file
@@ -102,7 +107,7 @@ object ModuleHelper {
      */
     fun getModuleMeta(moduleId: String): JsonObject? {
         updateRepository() // First we update the repo
-        val json = JsonParser.parseString(File("plugins/SimpleCoreAPI/modules-repository.json").readText()).asJsonObject
+        val json = JsonParser.parseString(SimpleCoreAPI.dataFolder("modules-repository.json").readText()).asJsonObject
         return if(json.has(moduleId)) json.getAsJsonObject(moduleId) else null
     }
 
@@ -110,9 +115,9 @@ object ModuleHelper {
      * Scans the given [File] for the simplecoreapi.modules
      * file and loads the required modules if any
      * @param file File to scan.
-     * @param downloadLocation Location to download the modules. (Defaults to plugins/SimpleCoreAPI/modules/)
+     * @param downloadLocation Location to download the modules. (Defaults to SimpleCoreAPI/modules/)
      */
-    fun downloadRequiredModules(file: File, downloadLocation: File = File("plugins/SimpleCoreAPI/modules/")){
+    fun downloadRequiredModules(file: File, downloadLocation: File = SimpleCoreAPI.dataFolder("modules/")){
         updateRepository() // First we update the repository
         if(file.extension != "jar") return
         try {
