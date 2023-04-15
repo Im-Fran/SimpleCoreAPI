@@ -139,6 +139,7 @@ $dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType/valueO
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global.utils/SoftwareType/values/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global.utils/-software-type/values.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global////PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI.Companion///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/-companion/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI.Companion/dataFolder/#kotlin.String/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/-companion/data-folder.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI.Companion/instance/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/-companion/instance.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI/SimpleCoreAPI/#xyz.theprogramsrc.simplecoreapi.global.utils.ILogger/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.global/-simple-core-a-p-i/-simple-core-a-p-i.html
@@ -157,6 +158,7 @@ $dokka.location:xyz.theprogramsrc.simplecoreapi.spigot/SpigotLoader/onDisable/#/
 $dokka.location:xyz.theprogramsrc.simplecoreapi.spigot/SpigotLoader/onEnable/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.spigot/-spigot-loader/on-enable.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.spigot/SpigotLoader/onLoad/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.spigot/-spigot-loader/on-load.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.standalone////PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.standalone/index.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.standalone//main/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.standalone/main.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.standalone/StandaloneLoader.Companion///PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.standalone/-standalone-loader/-companion/index.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.standalone/StandaloneLoader.Companion/instance/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.standalone/-standalone-loader/-companion/instance.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.standalone/StandaloneLoader.Companion/isRunning/#/PointingToDeclaration/-simple-core-a-p-i/xyz.theprogramsrc.simplecoreapi.standalone/-standalone-loader/-companion/is-running.html
