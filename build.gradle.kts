@@ -7,8 +7,8 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("cl.franciscosolis.blossom-extended") version "1.3.1"
 
-    kotlin("jvm") version "1.8.20"
-    id("org.jetbrains.dokka") version "1.8.20"
+    kotlin("jvm") version "1.9.0"
+    id("org.jetbrains.dokka") version "1.8.10"
 }
 
 val env = project.rootProject.file(".env").let { file ->
@@ -36,17 +36,17 @@ repositories {
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.19.3-R0.1-SNAPSHOT")
-    compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
+    compileOnly("net.md-5:bungeecord-api:1.20-R0.1")
     compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
 
     implementation("org.jetbrains:annotations:24.0.1")
-    implementation("commons-io:commons-io:2.11.0")
+    implementation("commons-io:commons-io:2.13.0")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("net.lingala.zip4j:zip4j:2.11.5")
 
     annotationProcessor("com.velocitypowered:velocity-api:3.1.1")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
 }
 
 blossom {
