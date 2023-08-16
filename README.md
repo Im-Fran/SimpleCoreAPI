@@ -22,3 +22,17 @@ _The best way to create a plugin_<br>
 
 ## Where is the documentation?
 This can be found [here](https://docs.theprogramsrc.xyz/SimpleCoreAPI/) (it's a Dokka Resource), everything is documented through the Kotlin Docs (Similar to JavaDocs but for Kotlin :p )
+
+## How does this work?
+Ok, so we have multiple types of initializers for different software, Spigot, Bungee, Velocity and Standalone.
+
+The Standalone system works by loading all jars under the modules/ folder into the current classpath.<br/>
+The other kinds of software will use their embedded plugin system to avoid difficult tasks, like sorting modules to be loaded.
+
+## Ok, and how do I use the Standalone mode?
+In the Standalone system you will naturally shade SimpleCoreAPI and use the `xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader` as your main class.<br/>
+Later you will mark your main class with the `@EntryPoint` annotation. Then SimpleCoreAPI will load all modules, then execute the `@EntryPoint` class.
+
+## How do I use the other modes?
+Depending on the software you're using you'll need to mark SimpleCoreAPI and the modules you need as `dependency` (NOT `soft-dependency`) so the system will load all 
+modules and files you need before your plugin is loaded.

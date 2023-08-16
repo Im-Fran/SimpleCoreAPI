@@ -1,6 +1,5 @@
 package xyz.theprogramsrc.simplecoreapi.global
 
-import xyz.theprogramsrc.simplecoreapi.global.module.ModuleManager
 import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
 import xyz.theprogramsrc.simplecoreapi.global.utils.SoftwareType
 import xyz.theprogramsrc.simplecoreapi.global.utils.update.GitHubUpdateChecker
@@ -11,7 +10,7 @@ import java.io.File
  * Class used to initialize SimpleCoreAPI (DO NOT CALL IT FROM EXTERNAL PLUGINS, IT MAY CRASH)
  * @param logger The logger to use
  */
-class SimpleCoreAPI(logger: ILogger) {
+class SimpleCoreAPI(private val logger: ILogger) {
 
     companion object {
         /**
@@ -31,12 +30,6 @@ class SimpleCoreAPI(logger: ILogger) {
     }
 
     /**
-     * The Module Manager
-     * @return The [ModuleManager]
-     */
-    val moduleManager: ModuleManager?
-
-    /**
      * The [SoftwareType] type running on the server
      * @return The [SoftwareType] the server is running
      */
@@ -50,13 +43,18 @@ class SimpleCoreAPI(logger: ILogger) {
             GitHubUpdateChecker(logger, "TheProgramSrc/SimpleCoreAPI", getVersion()).checkWithPrint()
         }
 
-        softwareType = SoftwareType.values().firstOrNull { it.check() } ?: SoftwareType.UNKNOWN
+        softwareType = SoftwareType.entries.firstOrNull { it.check() } ?: SoftwareType.UNKNOWN
         if(softwareType != SoftwareType.UNKNOWN && softwareType.display != null) {
             logger.info("Running API with software ${softwareType.display}")
         } else {
             logger.info("Running on unknown server software. Some features might not work as expected!")
         }
-        moduleManager = ModuleManager.init(logger)
+    }
+
+    fun measureLoad(message: String, block: () -> Unit) {
+        val now = System.currentTimeMillis()
+        block()
+        logger.info("$message in ${System.currentTimeMillis() - now}ms")
     }
 
     /**
