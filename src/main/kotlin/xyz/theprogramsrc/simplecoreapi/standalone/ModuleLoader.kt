@@ -3,8 +3,10 @@ package xyz.theprogramsrc.simplecoreapi.standalone
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
 import java.io.File
 import java.net.URLClassLoader
+import java.util.Properties
 import java.util.Stack
 import java.util.jar.JarFile
+import java.util.jar.JarInputStream
 
 data class ModuleDescription(
     val name: String,
@@ -36,10 +38,9 @@ class ModuleLoader {
             val moduleProperties = jarFile.getJarEntry("module.properties")?.let { entry ->
                 jarFile.getInputStream(entry).use { stream ->
                     stream.bufferedReader().use { reader ->
-                        reader.readLines().filter { line -> !line.startsWith("#") && line.isNotBlank() }.associate { line ->
-                            val split = line.split("=")
-                            split[0] to split[1]
-                        }
+                        val props = Properties()
+                        props.load(reader)
+                        props
                     }
                 }
             } ?: return@forEach
@@ -49,20 +50,20 @@ class ModuleLoader {
 
             // Add the file to the files map
             files[it] = ModuleDescription(
-                name = (moduleProperties["name"]!!).let { name ->
+                name = moduleProperties.getProperty("name").let { name ->
                     if(name.startsWith('"') && name.endsWith('"')) name.substring(1, name.length - 1) else name
                 },
-                version = (moduleProperties["version"]!!).let { version ->
+                version = moduleProperties.getProperty("version").let { version ->
                     if(version.startsWith('"') && version.endsWith('"')) version.substring(1, version.length - 1) else version
                 },
-                author = (moduleProperties["author"]!!).let { author ->
+                author = moduleProperties.getProperty("author").let { author ->
                     if(author.startsWith('"') && author.endsWith('"')) author.substring(1, author.length - 1) else author
                 },
-                main = (moduleProperties["main"]!!).let { main ->
+                main = moduleProperties.getProperty("main").let { main ->
                     if(main.startsWith('"') && main.endsWith('"')) main.substring(1, main.length - 1) else main
                 },
-                dependencies = moduleProperties["dependencies"]?.let { dependencies ->
-                    if (dependencies.startsWith('"') && dependencies.endsWith('"')) dependencies.substring(1, dependencies.length - 1) else dependencies
+                dependencies = moduleProperties.getProperty("dependencies")?.let { dependencies ->
+                    if(dependencies.startsWith('"') && dependencies.endsWith('"')) dependencies.substring(1, dependencies.length - 1) else dependencies
                 }?.split(",") ?: emptyList()
             )
         }
@@ -89,25 +90,25 @@ class ModuleLoader {
         files.keys.forEach { topologicalSort(it) }
 
         val loadedModules = mutableListOf<Module>()
-        val loader = URLClassLoader(stack.map { it.toURI().toURL() }.toTypedArray(), ClassLoader.getSystemClassLoader())
+        val loader = URLClassLoader(stack.map { it.toURI().toURL() }.toTypedArray(), this.javaClass.classLoader)
 
         // Finally we need to load the modules by loading the jar files into the classpath and then one by one calling their main class #onEnable method
-        stack.forEach { file ->
-            val description = files[file] ?: return@forEach
+        for (file in stack) {
+            val description = files[file] ?: continue
             // Load the main class
-            val jarFile = JarFile(file)
-            jarFile.entries().asSequence()
-                .filter { it.name.endsWith(".class") && !it.name.startsWith("META-INF/") }
-                .map { it.name.removeSuffix(".class").replace('/', '.') }
-                .forEach {
-                    val clazz = loader.loadClass(it)
-                    if(clazz.interfaces.contains(Module::class.java) && it == description.main) {
+            JarInputStream(file.inputStream()).use {
+                try {
+                    val mainClass = loader.loadClass(description.main)
+                    if(mainClass.interfaces.contains(Module::class.java)) {
                         // Load module
-                        val instance = clazz.getDeclaredConstructor().newInstance() as Module
+                        val instance = mainClass.getDeclaredConstructor().newInstance() as Module
                         instance.onEnable()
                         loadedModules.add(instance)
                     }
+                }catch (e: Exception) {
+                    e.printStackTrace()
                 }
+            }
         }
 
         // Finally we need to add a shutdown hook to disable all modules
