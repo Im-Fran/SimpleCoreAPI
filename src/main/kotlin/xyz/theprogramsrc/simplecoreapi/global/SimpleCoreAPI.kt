@@ -26,7 +26,10 @@ class SimpleCoreAPI(private val logger: ILogger) {
          *
          * @return The file relative to the data folder
          */
-        fun dataFolder(path: String = ""): File = File(if (StandaloneLoader.isRunning) "./SimpleCoreAPI" else "plugins/SimpleCoreAPI", path)
+        fun dataFolder(path: String = ""): File = File(if (StandaloneLoader.isRunning) "./SimpleCoreAPI" else "plugins/SimpleCoreAPI", path).apply {
+            if(!exists())
+                mkdirs()
+        }
     }
 
     /**
