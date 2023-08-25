@@ -8,7 +8,7 @@ plugins {
     id("cl.franciscosolis.blossom-extended") version "1.3.1"
 
     kotlin("jvm") version "1.9.0"
-    id("org.jetbrains.dokka") version "1.8.10"
+    id("org.jetbrains.dokka") version "1.8.20"
 }
 
 val env = project.rootProject.file(".env").let { file ->
