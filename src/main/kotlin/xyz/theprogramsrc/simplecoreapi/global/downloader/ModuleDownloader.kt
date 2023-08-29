@@ -4,91 +4,28 @@ import com.google.gson.JsonParser
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
 import java.io.File
 import java.net.URL
+import java.security.MessageDigest
 
 object ModuleDownloader {
 
-    private val modules = mutableListOf<RemoteModule>()
-
-    init {
-        // First we fetch the modules-repository.json from our global database (https://raw.githubusercontent.com/TheProgramSrc/GlobalDatabase/master/SimpleCoreAPI/modules-repository.json)
-        val dataFolder = SimpleCoreAPI.dataFolder()
-        val modulesRepository = File(dataFolder, "modules-repository.json")
-        if(!modulesRepository.exists()){
-            modulesRepository.createNewFile()
+    fun download(repositoryId: String, version: String? = null): File? = try {
+        val releaseManifest = URL(if (version == null) "https://api.github.com/repos/$repositoryId/releases/latest" else "https://api.github.com/repos/$repositoryId/releases/tags/$version" ).let {
+            JsonParser.parseReader(it.openStream().reader()).asJsonObject
         }
 
-        val remoteBytes = URL("https://raw.githubusercontent.com/TheProgramSrc/GlobalDatabase/master/SimpleCoreAPI/modules-repository.json").readBytes()
-        val localBytes = modulesRepository.readBytes()
-        // If they're not the same, we update the local file
-        if(!remoteBytes.contentEquals(localBytes)){
-            modulesRepository.writeBytes(remoteBytes)
+        val assets = releaseManifest.get("assets").asJsonArray
+        // Sort by created_at (newest first) and filter by file name ending with .jar
+        val asset = assets.sortedByDescending { it.asJsonObject.get("created_at").asString }.firstOrNull { it.asJsonObject.get("name").asString.endsWith(".jar") } ?: throw NullPointerException("No jar file found in the latest release of $repositoryId")
+        val downloadUrl = asset.asJsonObject.get("browser_download_url").asString
+        val file = File(SimpleCoreAPI.dataFolder(), asset.asJsonObject.get("name").asString)
+        if(!file.exists()){
+            file.createNewFile()
         }
 
-        // Read as json
-        val json = JsonParser.parseReader(modulesRepository.reader()).asJsonObject
-
-        json.keySet().forEach { moduleId ->
-            val module = json.get(moduleId).asJsonObject
-            val display = module.get("display").asString
-            val fileName = module.get("file_name").asString
-
-            val source = module.get("source").asJsonObject
-            val sourceType = RemoteModuleSourceType.valueOf(source.get("type").asString)
-            val sourceLocation = source.get("location").asString
-
-            modules.add(RemoteModule(moduleId, display, fileName, RemoteModuleSource(sourceType, sourceLocation)))
-        }
+        file.writeBytes(URL(downloadUrl).readBytes())
+        file
+    } catch(e: Exception) {
+        e.printStackTrace()
+        null
     }
-
-    fun download(moduleId: String){
-        val module = modules.firstOrNull { it.id == moduleId } ?: throw NullPointerException("Module with id '$moduleId' not found")
-        val source = module.source
-        val sourceType = source.type
-        val sourceLocation = source.location
-        val sourceFormat = source.format
-
-        when(sourceType){
-            RemoteModuleSourceType.GIT -> {
-                // If it's from git we're using github's api to download the file
-                val latestReleaseManifest = URL("https://api.github.com/repos/$sourceLocation/releases/latest").let {
-                    JsonParser.parseReader(it.openStream().reader()).asJsonObject
-                }
-
-                val assets = latestReleaseManifest.get("assets").asJsonArray
-                val asset = if (sourceFormat != null) {
-                    val regexPattern = "^${sourceFormat.replace("*", "[^.]+")}.jar$"
-                    assets.firstOrNull {
-                        it.asJsonObject.get("name").asString.matches(regexPattern.toRegex())
-                    } ?: throw NullPointerException("No asset found for module '$moduleId' with format '$sourceFormat'")
-                } else {
-                    assets.firstOrNull() ?: throw NullPointerException("No assets found for module '$moduleId'")
-                }
-
-            }
-            RemoteModuleSourceType.URL -> {
-
-            }
-            else -> {
-                throw NullPointerException("Unknown source type: $sourceType")
-            }
-        }
-    }
-}
-
-data class RemoteModule(
-    val id: String,
-    val display: String,
-    val fileName: String,
-    val source: RemoteModuleSource,
-)
-
-data class RemoteModuleSource(
-    val type: RemoteModuleSourceType,
-    val location: String,
-    val format: String? = null, // For example, if there's a file called "module-1.0.0-snapshot.jar" we can use the format "module-*-snapshot.jar" to get the latest version. If null, we'll use the file name as it is
-)
-
-enum class RemoteModuleSourceType(val id: String){
-    GIT("git"),
-    URL("url"),
 }

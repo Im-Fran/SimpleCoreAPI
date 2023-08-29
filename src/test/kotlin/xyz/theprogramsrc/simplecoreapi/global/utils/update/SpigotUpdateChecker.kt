@@ -1,8 +1,10 @@
 package xyz.theprogramsrc.simplecoreapi.global.utils.update
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import xyz.theprogramsrc.simplecoreapi.global.utils.logger.*
+import xyz.theprogramsrc.simplecoreapi.global.utils.logger.JavaLogger
+import xyz.theprogramsrc.simplecoreapi.global.utils.logger.SLF4JLogger
 import java.util.logging.Logger
 
 internal class SpigotUpdateCheckerTest {
