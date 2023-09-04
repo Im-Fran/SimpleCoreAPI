@@ -1,10 +1,12 @@
 package xyz.theprogramsrc.simplecoreapi.global
 
+import xyz.theprogramsrc.simplecoreapi.global.modules.ModuleManager
 import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
 import xyz.theprogramsrc.simplecoreapi.global.utils.SoftwareType
 import xyz.theprogramsrc.simplecoreapi.global.utils.update.GitHubUpdateChecker
 import xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader
 import java.io.File
+import java.lang.RuntimeException
 
 /**
  * Class used to initialize SimpleCoreAPI (DO NOT CALL IT FROM EXTERNAL PLUGINS, IT MAY CRASH)
@@ -29,6 +31,36 @@ class SimpleCoreAPI(private val logger: ILogger) {
         fun dataFolder(path: String = ""): File = File(if (StandaloneLoader.isRunning) "./SimpleCoreAPI" else "plugins/SimpleCoreAPI", path).apply {
             if(!exists())
                 mkdirs()
+        }
+
+        /**
+         * The given module is added to the required modules list.
+         * If the module is not found, it will be downloaded and automatically loaded.
+         *
+         * @param id The module id
+         */
+        fun requireModule(id: String) {
+            assert(id.split("/").size == 2) { "Invalid repositoryId format. It should be <author>/<repo>"}
+            val isStanalone = StandaloneLoader.isRunning
+            val moduleFile = if(isStanalone) {
+                File(dataFolder("modules"), "${id.split("/")[1]}.jar")
+            } else {
+                File(File("plugins/"), "${id.split("/")[1]}.jar")
+            }
+
+            if(moduleFile.exists()) {
+                return
+            }
+
+            val downloaded = ModuleManager.downloadModule(id) ?: throw RuntimeException("Module $id could not be downloaded!")
+            if(isStanalone) {
+                return // Is automatically loaded later
+            }
+
+            // Load the module
+            if(!ModuleManager.loadModule(downloaded)) {
+                throw RuntimeException("Module $id could not be loaded!")
+            }
         }
     }
 

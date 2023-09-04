@@ -1,6 +1,7 @@
 package xyz.theprogramsrc.simplecoreapi.standalone
 
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
+import xyz.theprogramsrc.simplecoreapi.global.modules.ModuleManager
 import java.io.File
 import java.net.URLClassLoader
 import java.util.Properties
@@ -31,7 +32,22 @@ class ModuleLoader {
     }
 
     init {
-        // First we need to load all files from the modules folder
+        // Check for any requirements in the simplecoreapi.properties entry
+        val properties = Properties()
+        // Check if the file exists (in the jar)
+        val propertiesFile = this.javaClass.classLoader.getResourceAsStream("simplecoreapi.properties")
+        if(propertiesFile != null) {
+            properties.load(propertiesFile)
+        }
+
+        if(properties.getProperty("require") != null) {
+            // Load all the required modules
+            properties.getProperty("require").split(",").forEach { repositoryId ->
+                ModuleManager.downloadModule(repositoryId)
+            }
+        }
+
+        // Load all files from the modules folder
         (modulesFolder.listFiles() ?: emptyArray()).filter { it.isFile && it.extension == "jar" }.forEach {
             // Read the file and check if there's a module.properties file
             val jarFile = JarFile(it.absolutePath)
