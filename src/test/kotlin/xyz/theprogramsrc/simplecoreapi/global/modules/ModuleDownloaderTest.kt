@@ -3,7 +3,9 @@ package xyz.theprogramsrc.simplecoreapi.global.modules
 import org.apache.commons.io.FileUtils
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader
 import java.io.File
 import java.security.MessageDigest
 
@@ -18,6 +20,12 @@ internal class ModuleDownloaderTest {
     }
 
     companion object {
+        @BeforeAll
+        @JvmStatic
+        fun setUp() {
+            StandaloneLoader()
+        }
+
         @AfterAll
         @JvmStatic
         fun tearDown() {
