@@ -12,7 +12,7 @@ import java.lang.RuntimeException
  * Class used to initialize SimpleCoreAPI (DO NOT CALL IT FROM EXTERNAL PLUGINS, IT MAY CRASH)
  * @param logger The logger to use
  */
-class SimpleCoreAPI(private val logger: ILogger) {
+class SimpleCoreAPI(val logger: ILogger) {
 
     companion object {
         /**
@@ -86,10 +86,26 @@ class SimpleCoreAPI(private val logger: ILogger) {
         }
     }
 
+    /**
+     * Measures the amount of time in milliseconds it takes to execute the given block. Example:
+     * ```kt
+     * measureLoad("Waited for {time}") {
+     *    // wait for 100 ms
+     *    Thread.sleep(100)
+     * }
+     * ```
+     *
+     * Sample console output:
+     * ```log
+     * Waited for 100ms
+     * ```
+     * @param message The message to print. You can use '{time}' to replace with the amount of time in ms
+     * @param block The block to execute
+     */
     fun measureLoad(message: String, block: () -> Unit) {
         val now = System.currentTimeMillis()
         block()
-        logger.info("$message in ${System.currentTimeMillis() - now}ms")
+        logger.info(message.replace("{time}", "${System.currentTimeMillis() - now}ms"))
     }
 
     /**
