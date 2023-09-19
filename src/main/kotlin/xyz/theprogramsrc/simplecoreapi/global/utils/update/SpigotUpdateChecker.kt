@@ -69,7 +69,7 @@ class SpigotUpdateChecker(val logger: ILogger, val resourceId: String, val curre
                 var page = 1
                 var data: JsonObject? = null
                 while(data == null) {
-                    val versions = JsonParser.parseString(URL("http://api.spiget.org/v2/resources/$resourceId/versions?size=50&page=$page").readText()).asJsonArray
+                    val versions = JsonParser.parseString(URL("https://api.spiget.org/v2/resources/$resourceId/versions?size=50&page=$page").readText()).asJsonArray
                     if(versions.isEmpty) throw RuntimeException("Couldn't find any version for the given id: $id! Make sure you're using a valid version")
                     data = versions.firstOrNull {
                         it.asJsonObject.get("name").asString == id
