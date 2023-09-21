@@ -21,13 +21,19 @@ class StandaloneLoader {
     init {
         instance = this
         isRunning = true
-        SimpleCoreAPI(JavaLogger(Logger.getAnonymousLogger()))
-        SimpleCoreAPI.instance.moduleManager?.enableModules()
+        val simpleCoreAPI = SimpleCoreAPI(JavaLogger(Logger.getAnonymousLogger()))
 
+        val entrypoint = simpleCoreAPI.measureLoad("Loaded entrypoint") {
+            EntrypointLoader()
+        }
+
+        simpleCoreAPI.measureLoad("Loaded modules") {
+            ModuleLoader() // Load modules
+        }
+
+        entrypoint.enable()
         Runtime.getRuntime().addShutdownHook(Thread {
-            SimpleCoreAPI.instance.moduleManager?.disableModules()
-        }.apply {
-            name = "SimpleCoreAPI Shutdown Hook"
+            entrypoint.disable()
         })
     }
 }

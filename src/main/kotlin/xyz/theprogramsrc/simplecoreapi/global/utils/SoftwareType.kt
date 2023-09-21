@@ -90,5 +90,7 @@ enum class SoftwareType(val check: () -> Boolean = { false }, val display: Strin
         StandaloneLoader.isRunning
     }, "Standalone"),
 
-    UNKNOWN;
+    UNKNOWN(check = {
+        true
+    }, "Unknown");
 }

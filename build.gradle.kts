@@ -15,7 +15,7 @@ val env = project.rootProject.file(".env").let { file ->
     if(file.exists()) file.readLines().filter { it.isNotBlank() && !it.startsWith("#") && it.split("=").size == 2 }.associate { it.split("=")[0] to it.split("=")[1] } else emptyMap()
 }.toMutableMap().apply { putAll(System.getenv()) }
 
-val projectVersion = env["VERSION"] ?: "0.6.3-SNAPSHOT"
+val projectVersion = env["VERSION"] ?: "0.7.0-SNAPSHOT"
 
 group = "xyz.theprogramsrc"
 version = projectVersion.replaceFirst("v", "").replace("/", "")
@@ -114,7 +114,8 @@ tasks {
     }
 
     dokkaHtml {
-        outputDirectory.set(file(project.buildDir.absolutePath + "/dokka"))
+        outputDirectory.set(layout.buildDirectory.dir("dokka/"))
+
     }
 }
 
@@ -189,7 +190,7 @@ publishing {
 
 if(env["ENV"] == "prod") {
     nexusPublishing {
-        repositories {
+        this.repositories {
             sonatype {
                 nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
                 snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))

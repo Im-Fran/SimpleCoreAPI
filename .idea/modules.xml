@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/SimpleCoreAPI.main.iml" filepath="$PROJECT_DIR$/.idea/modules/SimpleCoreAPI.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/SimpleCoreAPI.test.iml" filepath="$PROJECT_DIR$/.idea/modules/SimpleCoreAPI.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/xyz.theprogramsrc.SimpleCoreAPI.main.iml" filepath="$PROJECT_DIR$/.idea/modules/xyz.theprogramsrc.SimpleCoreAPI.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/xyz.theprogramsrc.SimpleCoreAPI.test.iml" filepath="$PROJECT_DIR$/.idea/modules/xyz.theprogramsrc.SimpleCoreAPI.test.iml" />
     </modules>
   </component>
 </project>

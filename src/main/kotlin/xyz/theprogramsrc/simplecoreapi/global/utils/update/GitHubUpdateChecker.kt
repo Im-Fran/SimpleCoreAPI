@@ -8,13 +8,35 @@ import java.time.Instant
 import java.time.format.DateTimeFormatter
 
 /**
- * Representation of the GitHub Update Checker
- * @param logger The logger to use, it must be an instance of [ILogger]
- * @param repo The repository to check. The format should be <Holder>/<Repository>, for example TheProgramSrc/SimpleCoreAPI
- * @param currentVersion the current version (tag name) of the product
+ * With this class you can check if there is an update available using the GitHub releases API.
+ * Sample usage:
+ * ```kt
+ * GitHubUpdateChecker(logger, "TheProgramSrc/SimpleCoreAPI", "v0.4.1-SNAPSHOT")
+ *    .checkWithPrint() // This will print the message if there is an update available
+ *
+ * // You can also check if there is an update available without printing a message
+ * val githubUpdateChecker = GitHubUpdateChecker(logger, "TheProgramSrc/SimpleCoreAPI", "v0.4.1-SNAPSHOT")
+ * if(githubUpdateChecker.checkForUpdates()){
+ *    // There is an update available
+ *    // Do something here
+ *    // For example:
+ *    logger.info("Please update! Download it now from here: https://example.com/download")
+ *    // Or
+ *    logger.info("Please update! Download it now from here: ${githubUpdateChecker.getReleaseData().get("url").asString}")
+ * }
+ * ```
+ *
+ * @param logger The logger to use, it must be an instance of [ILogger]. You can get it using [xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI.instance].
+ * @param repo The repository to check. The format should be 'Holder/Repository', for example 'TheProgramSrc/SimpleCoreAPI'
+ * @param currentVersion the current version (tag name) of the product. (Example: "v0.1.0-SNAPSHOT")
  * @param latestReleaseTag The tag name of the latest release. (Defaults to "latest")
  */
-class GitHubUpdateChecker(val logger: ILogger, val repo: String, val currentVersion: String, val latestReleaseTag: String = "latest"): UpdateChecker {
+class GitHubUpdateChecker(
+    val logger: ILogger,
+    val repo: String,
+    val currentVersion: String,
+    val latestReleaseTag: String = "latest"
+): UpdateChecker {
 
     private var lastCheck = 0L
     private var lastCheckResult = false
