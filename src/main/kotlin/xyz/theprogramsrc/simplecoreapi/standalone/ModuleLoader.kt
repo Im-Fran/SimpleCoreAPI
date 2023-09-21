@@ -6,6 +6,7 @@ import java.io.File
 import java.net.URLClassLoader
 import java.util.Properties
 import java.util.Stack
+import java.util.function.Consumer
 import java.util.jar.JarFile
 import java.util.jar.JarInputStream
 
@@ -14,6 +15,7 @@ data class ModuleDescription(
     val version: String,
     val author: String,
     val main: String,
+    val moduleId: String,
     val dependencies: List<String> = emptyList(),
 )
 
@@ -48,40 +50,60 @@ class ModuleLoader {
         }
 
         // Load all files from the modules folder
-        (modulesFolder.listFiles() ?: emptyArray()).filter { it.isFile && it.extension == "jar" }.forEach {
-            // Read the file and check if there's a module.properties file
-            val jarFile = JarFile(it.absolutePath)
-            val moduleProperties = jarFile.getJarEntry("module.properties")?.let { entry ->
-                jarFile.getInputStream(entry).use { stream ->
-                    stream.bufferedReader().use { reader ->
-                        val props = Properties()
-                        props.load(reader)
-                        props
+        fun loadDescriptionFiles() {
+            (modulesFolder.listFiles() ?: emptyArray()).filter { it.isFile && it.extension == "jar" }.forEach {
+                // Read the file and check if there's a module.properties file
+                val jarFile = JarFile(it.absolutePath)
+                val moduleProperties = jarFile.getJarEntry("module.properties")?.let { entry ->
+                    jarFile.getInputStream(entry).use { stream ->
+                        stream.bufferedReader().use { reader ->
+                            val props = Properties()
+                            props.load(reader)
+                            props
+                        }
                     }
+                } ?: return@forEach
+                if(files.containsKey(it)) return@forEach // Already loaded this file
+
+                // Check if the module.properties file contains the required fields
+                for (requiredField in arrayOf("name", "version", "author", "main", "module-id")) {
+                    assert(moduleProperties.containsKey(requiredField)) { "Module ${it.nameWithoutExtension} is missing the required field '$requiredField'." }
                 }
-            } ?: return@forEach
+                // Add the file to the files map
+                files[it] = ModuleDescription(
+                    name = moduleProperties.getProperty("name").let { name ->
+                        if(name.startsWith('"') && name.endsWith('"')) name.substring(1, name.length - 1) else name
+                    },
+                    version = moduleProperties.getProperty("version").let { version ->
+                        if(version.startsWith('"') && version.endsWith('"')) version.substring(1, version.length - 1) else version
+                    },
+                    author = moduleProperties.getProperty("author").let { author ->
+                        if(author.startsWith('"') && author.endsWith('"')) author.substring(1, author.length - 1) else author
+                    },
+                    main = moduleProperties.getProperty("main").let { main ->
+                        if(main.startsWith('"') && main.endsWith('"')) main.substring(1, main.length - 1) else main
+                    },
+                    dependencies = moduleProperties.getProperty("dependencies")?.let { dependencies ->
+                        if(dependencies.startsWith('"') && dependencies.endsWith('"')) dependencies.substring(1, dependencies.length - 1) else dependencies
+                    }?.split(",") ?: emptyList(),
+                    moduleId = moduleProperties.getProperty("module-id").let { moduleId ->
+                        if(moduleId.startsWith('"') && moduleId.endsWith('"')) moduleId.substring(1, moduleId.length - 1) else moduleId
+                    }
+                )
+            }
+        }
 
-            // Check if the module.properties file contains the required fields
-            if(!moduleProperties.containsKey("name") || !moduleProperties.containsKey("version") || !moduleProperties.containsKey("author") || !moduleProperties.containsKey("main")) return@forEach
+        // Load the description files
+        loadDescriptionFiles()
 
-            // Add the file to the files map
-            files[it] = ModuleDescription(
-                name = moduleProperties.getProperty("name").let { name ->
-                    if(name.startsWith('"') && name.endsWith('"')) name.substring(1, name.length - 1) else name
-                },
-                version = moduleProperties.getProperty("version").let { version ->
-                    if(version.startsWith('"') && version.endsWith('"')) version.substring(1, version.length - 1) else version
-                },
-                author = moduleProperties.getProperty("author").let { author ->
-                    if(author.startsWith('"') && author.endsWith('"')) author.substring(1, author.length - 1) else author
-                },
-                main = moduleProperties.getProperty("main").let { main ->
-                    if(main.startsWith('"') && main.endsWith('"')) main.substring(1, main.length - 1) else main
-                },
-                dependencies = moduleProperties.getProperty("dependencies")?.let { dependencies ->
-                    if(dependencies.startsWith('"') && dependencies.endsWith('"')) dependencies.substring(1, dependencies.length - 1) else dependencies
-                }?.split(",") ?: emptyList()
-            )
+        // Now make sure all files have their dependencies
+        files.values.forEach { description ->
+            description.dependencies.forEach { dependencyId ->
+                if(!files.any { it.value.moduleId ==  dependencyId }) {
+                    ModuleManager.downloadModule(dependencyId)
+                    loadDescriptionFiles()
+                }
+            }
         }
 
         // Now we need to order the modules

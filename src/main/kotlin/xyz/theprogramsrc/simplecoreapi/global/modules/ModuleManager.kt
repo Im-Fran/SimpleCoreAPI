@@ -30,7 +30,7 @@ object ModuleManager {
         // Sort by created_at (newest first) and filter by file name ending with .jar
         val asset = assets.sortedByDescending { it.asJsonObject.get("created_at").asString }.firstOrNull { it.asJsonObject.get("name").asString.endsWith(".jar") } ?: throw NullPointerException("No jar file found in the latest release of $moduleId")
         val downloadUrl = asset.asJsonObject.get("browser_download_url").asString
-        val file = File(if(SimpleCoreAPI.instance.let { it.isRunningSoftwareType(SoftwareType.STANDALONE) || it.isRunningSoftwareType(SoftwareType.UNKNOWN) }) SimpleCoreAPI.dataFolder("modules/") else File("plugins/"), moduleId.substringAfterLast("/"))
+        val file = File(if(SimpleCoreAPI.let { it.isRunningSoftwareType(SoftwareType.STANDALONE) || it.isRunningSoftwareType(SoftwareType.UNKNOWN) }) SimpleCoreAPI.dataFolder("modules/") else File("plugins/"), asset.asJsonObject.get("name").asString)
         if(!file.exists()){
             file.createNewFile()
         }

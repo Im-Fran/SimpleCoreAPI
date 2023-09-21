@@ -34,15 +34,22 @@ class SimpleCoreAPI(val logger: ILogger) {
         }
 
         /**
+         * Checks if the current [SoftwareType] is the one specified
+         * @param softwareType The [SoftwareType] to check
+         * @return true if the current [SoftwareType] is the one specified
+         */
+        fun isRunningSoftwareType(softwareType: SoftwareType) = softwareType.check()
+
+        /**
          * The given module is added to the required modules list.
          * If the module is not found, it will be downloaded and automatically loaded.
          *
-         * @param id The module id
+         * @param id The module id. Should be in the format author/repo
          */
         fun requireModule(id: String) {
             assert(id.split("/").size == 2) { "Invalid repositoryId format. It should be <author>/<repo>"}
-            val isStanalone = StandaloneLoader.isRunning
-            val moduleFile = if(isStanalone) {
+            val isStandalone = isRunningSoftwareType(SoftwareType.STANDALONE) || isRunningSoftwareType(SoftwareType.UNKNOWN)
+            val moduleFile = if(isStandalone) {
                 File(dataFolder("modules"), "${id.split("/")[1]}.jar")
             } else {
                 File(File("plugins/"), "${id.split("/")[1]}.jar")
@@ -53,7 +60,7 @@ class SimpleCoreAPI(val logger: ILogger) {
             }
 
             val downloaded = ModuleManager.downloadModule(id) ?: throw RuntimeException("Module $id could not be downloaded!")
-            if(isStanalone) {
+            if(isStandalone) {
                 return // Is automatically loaded later
             }
 
@@ -102,10 +109,11 @@ class SimpleCoreAPI(val logger: ILogger) {
      * @param message The message to print. You can use '{time}' to replace with the amount of time in ms
      * @param block The block to execute
      */
-    fun measureLoad(message: String, block: () -> Unit) {
+    fun <OBJECT> measureLoad(message: String, block: () -> OBJECT): OBJECT {
         val now = System.currentTimeMillis()
-        block()
+        val obj = block()
         logger.info(message.replace("{time}", "${System.currentTimeMillis() - now}ms"))
+        return obj
     }
 
     /**
@@ -125,11 +133,4 @@ class SimpleCoreAPI(val logger: ILogger) {
      * @return The version of SimpleCoreAPI
      */
     fun getVersion(): String = "@version@"
-
-    /**
-     * Checks if the current [SoftwareType] is the one specified
-     * @param softwareType The [SoftwareType] to check
-     * @return true if the current [SoftwareType] is the one specified
-     */
-    fun isRunningSoftwareType(softwareType: SoftwareType) = softwareType.check()
 }
