@@ -1,12 +1,12 @@
 $dokka.format:javadoc-v1
 $dokka.linkExtension:html
-$dokka.location:xyz.theprogramsrc.simplecoreapi.global.module/ModuleManager.Companion///PointingToDeclaration/xyz/theprogramsrc/simplecoreapi/global/module/ModuleManager.Companion.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.global/SimpleCoreAPI.Companion///PointingToDeclaration/xyz/theprogramsrc/simplecoreapi/global/SimpleCoreAPI.Companion.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.spigot/SpigotLoader.Companion///PointingToDeclaration/xyz/theprogramsrc/simplecoreapi/spigot/SpigotLoader.Companion.html
+$dokka.location:xyz.theprogramsrc.simplecoreapi.standalone/EntrypointLoader.Companion///PointingToDeclaration/xyz/theprogramsrc/simplecoreapi/standalone/EntrypointLoader.Companion.html
 $dokka.location:xyz.theprogramsrc.simplecoreapi.standalone/StandaloneLoader.Companion///PointingToDeclaration/xyz/theprogramsrc/simplecoreapi/standalone/StandaloneLoader.Companion.html
 xyz.theprogramsrc.simplecoreapi.bungee
 xyz.theprogramsrc.simplecoreapi.global
-xyz.theprogramsrc.simplecoreapi.global.exceptions
-xyz.theprogramsrc.simplecoreapi.global.module
+xyz.theprogramsrc.simplecoreapi.global.modules
 xyz.theprogramsrc.simplecoreapi.global.utils
 xyz.theprogramsrc.simplecoreapi.global.utils.logger
 xyz.theprogramsrc.simplecoreapi.global.utils.update
