@@ -24,12 +24,6 @@ class StandaloneLoader {
         isRunning = true
         val simpleCoreAPI = SimpleCoreAPI(JavaLogger(Logger.getAnonymousLogger()))
 
-        simpleCoreAPI.measureLoad("Loaded dependencies in {time}") {
-            DependencyDownloader()
-        }.apply {
-            // addDependency(Dependency("xyz.theprogramsrc", "filesmodule", "LATEST"))
-        }
-
         val entrypoint = simpleCoreAPI.measureLoad("Loaded entrypoint in {time}") {
             EntrypointLoader()
         }

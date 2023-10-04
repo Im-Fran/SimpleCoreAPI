@@ -1,10 +1,15 @@
 package xyz.theprogramsrc.simplecoreapi.global
 
+import com.google.gson.JsonParser
+import xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.DependencyDownloader
+import xyz.theprogramsrc.simplecoreapi.global.models.Dependency
+import xyz.theprogramsrc.simplecoreapi.global.models.Repository
 import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
 import xyz.theprogramsrc.simplecoreapi.global.utils.SoftwareType
 import xyz.theprogramsrc.simplecoreapi.global.utils.update.GitHubUpdateChecker
 import xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader
 import java.io.File
+import java.net.URL
 
 /**
  * Class used to initialize SimpleCoreAPI (DO NOT CALL IT FROM EXTERNAL PLUGINS, IT MAY CRASH)
@@ -37,36 +42,6 @@ class SimpleCoreAPI(val logger: ILogger) {
          * @return true if the current [SoftwareType] is the one specified
          */
         fun isRunningSoftwareType(softwareType: SoftwareType) = softwareType.check()
-
-        /**
-         * The given module is added to the required modules list.
-         * If the module is not found, it will be downloaded and automatically loaded.
-         *
-         * @param id The module id. Should be in the format author/repo
-         */
-        fun requireModule(id: String) {
-            assert(id.split("/").size == 2) { "Invalid repositoryId format. It should be <author>/<repo>"}
-            val isStandalone = isRunningSoftwareType(SoftwareType.STANDALONE) || isRunningSoftwareType(SoftwareType.UNKNOWN)
-            val moduleFile = if(isStandalone) {
-                File(dataFolder("modules"), "${id.split("/")[1]}.jar")
-            } else {
-                File(File("plugins/"), "${id.split("/")[1]}.jar")
-            }
-
-            if(moduleFile.exists()) {
-                return
-            }
-
-            /*val downloaded = ModuleManager.downloadModule(id) ?: throw RuntimeException("Module $id could not be downloaded!")
-            if(isStandalone) {
-                return // Is automatically loaded later
-            }
-
-            // Load the module
-            if(!ModuleManager.loadModule(downloaded)) {
-                throw RuntimeException("Module $id could not be loaded!")
-            }*/
-        }
     }
 
     /**
@@ -89,6 +64,40 @@ class SimpleCoreAPI(val logger: ILogger) {
         } else {
             logger.info("Running on unknown server software. Some features might not work as expected!")
         }
+
+        // Now we'll download the module repository to automate the dependency downloader.
+        val dependencyDownloader = measureLoad("Dependency Downloader loaded in {time}") {
+            DependencyDownloader()
+        }
+
+        val modulesRepo = measureLoad("Downloaded module repository in {time}") {
+            // Download the repo
+            val destination = File(dataFolder(), "modules-repository.json")
+            val content = URL("https://raw.githubusercontent.com/TheProgramSrc/GlobalDatabase/master/SimpleCoreAPI/modules-repository.json").readBytes()
+            destination.writeBytes(content)
+
+            JsonParser.parseString(String(content)).asJsonObject
+        }
+
+        measureLoad("Repositories and Dependencies loaded in {time}") {
+            modulesRepo.getAsJsonArray("repositories").forEach { repo ->
+                dependencyDownloader.addRepository(Repository(
+                    url = repo.asString
+                ))
+            }
+
+            modulesRepo.getAsJsonArray("dependencies").forEach { dependency ->
+                val depend = Dependency (
+                    group = dependency.asJsonObject.get("group").asString,
+                    artifactId = dependency.asJsonObject.get("artifact").asString,
+                    version = dependency.asJsonObject.get("version").asString
+                )
+
+                dependencyDownloader.addDependency(depend)
+            }
+
+            dependencyDownloader.loadDependencies()
+        }
     }
 
     /**
@@ -107,11 +116,11 @@ class SimpleCoreAPI(val logger: ILogger) {
      * @param message The message to print. You can use '{time}' to replace with the amount of time in ms
      * @param block The block to execute
      */
-    fun <OBJECT> measureLoad(message: String, block: () -> OBJECT): OBJECT {
+    fun <T> measureLoad(message: String, block: () -> T): T {
         val now = System.currentTimeMillis()
-        val obj = block()
+        val response = block()
         logger.info(message.replace("{time}", "${System.currentTimeMillis() - now}ms"))
-        return obj
+        return response
     }
 
     /**

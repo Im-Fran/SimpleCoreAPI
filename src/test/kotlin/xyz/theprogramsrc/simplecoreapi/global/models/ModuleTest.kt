@@ -5,6 +5,11 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
+import xyz.theprogramsrc.simplecoreapi.global.models.module.Module
+import xyz.theprogramsrc.simplecoreapi.global.models.module.ModuleDescription
+import xyz.theprogramsrc.simplecoreapi.global.models.module.isModuleLoaded
+import xyz.theprogramsrc.simplecoreapi.global.models.module.requireModule
 import xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader
 import java.io.File
 
@@ -12,11 +17,16 @@ class ModuleTest {
 
     @Test
     fun `test require() method`() {
-        val mathModule = requireModule<MathModule>()
+        assertFalse(isModuleLoaded<SumModule>()) // Validate that the module is not loaded
 
-        assertEquals(1, MathModule.loaded)
-        assertEquals(3, mathModule.sum(1, 2))
+        val sumModule = requireModule<SumModule>() // Load the module
+        assertTrue(isModuleLoaded<SumModule>()) // Validate that the module is loaded
+        assertEquals(3, sumModule.sum(1, 2)) // Validate that the module is working
+
+        assertEquals(3, requireModule<SumModule>().previous) // Validate that the module works even if it's loaded again
     }
+
+
 
     companion object {
         @BeforeAll
@@ -33,45 +43,29 @@ class ModuleTest {
     }
 }
 
-class MathModule: Module() {
+class SumModule: Module {
 
-    companion object {
-        var loaded = 0
-    }
+    override val description: ModuleDescription =
+        ModuleDescription(
+            name = "SumModule",
+            version = "1.0",
+            authors = listOf("TheProgramSrc")
+        )
+
+    var previous: Int = 0
 
     override fun onEnable() {
-        logger.info("Enabled DummyModule")
-        loaded++
+        SimpleCoreAPI.instance.logger.info("Enabled DummyModule")
     }
 
     override fun onDisable() {
-        logger.info("Disabled DummyModule")
+        SimpleCoreAPI.instance.logger.info("Disabled DummyModule")
     }
 
-    fun sum(a: Int, b: Int) =
-        a + b
-
-}
-
-class AlgebraModule: Module() {
-
-    override fun onEnable() {
-        logger.info("Enabled AlgebraModule")
-    }
-
-    override fun onDisable() {
-        logger.info("Disabled AlgebraModule")
-    }
-
-    fun solveEquation(a: Int, b: Int, c: Int): Int {
-        val delta = b * b - 4 * a * c
-        return if (delta < 0) {
-            -1
-        } else if (delta == 0) {
-            0
-        } else {
-            1
-        }
+    fun sum(a: Int, b: Int): Int {
+        val sum = a + b
+        previous = sum
+        return sum
     }
 
 }
