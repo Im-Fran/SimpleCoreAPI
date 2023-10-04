@@ -1,5 +1,6 @@
 package xyz.theprogramsrc.simplecoreapi.global.dependencydownloader
 
+import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
 import xyz.theprogramsrc.simplecoreapi.global.models.Dependency
 import xyz.theprogramsrc.simplecoreapi.global.models.Repository
 import xyz.theprogramsrc.simplecoreapi.global.utils.extensions.folder
@@ -16,13 +17,16 @@ class DependencyDownloader {
 
     private val logger = Logger.getLogger("DependencyDownloader")
     private val dependencies = mutableListOf<Dependency>()
-    private val librariesFolder = File("libraries/DependencyDownloader/").folder()
+    private val librariesFolder = SimpleCoreAPI.dataFolder("libraries/")
     private val repositories = mutableListOf<Repository>()
     private val loadedDependencies = mutableListOf<String>()
     private val digest = MessageDigest.getInstance("MD5")
 
     init {
         instance = this
+        dependencies.clear()
+        repositories.clear()
+        loadedDependencies.clear()
     }
 
     /**

@@ -84,5 +84,7 @@ inline fun <reified T : Module> requireModule(): T {
  * @param T The module class
  * @return True if the module is loaded, false otherwise
  */
-inline fun <reified T : Module> isModuleLoaded(): Boolean =
-    Module.loadedModules.containsKey(UUID.nameUUIDFromBytes(("${T::class.java.name}${T::class.java.classLoader}${T::class.java.`package`.name}").toByteArray()).toString())
+inline fun <reified T : Module> isModuleLoaded(): Boolean {
+    val name = UUID.nameUUIDFromBytes(("${T::class.java.name}${T::class.java.classLoader}${T::class.java.`package`.name}").toByteArray()).toString()
+    return Module.loadedModules.containsKey(name)
+}

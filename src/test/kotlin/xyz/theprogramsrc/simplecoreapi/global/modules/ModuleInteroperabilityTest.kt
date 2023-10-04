@@ -39,6 +39,7 @@ internal class ModuleInteroperabilityTest {
         @AfterAll
         @JvmStatic
         fun tearDown() {
+            Module.loadedModules.clear()
             arrayOf("SimpleCoreAPI/", "plugins/").map { File(it) }.filter{ it.exists() }.forEach { FileUtils.forceDelete(it) }
         }
     }

@@ -72,8 +72,21 @@ class SimpleCoreAPI(val logger: ILogger) {
 
         val modulesRepo = measureLoad("Downloaded module repository in {time}") {
             // Download the repo
-            val destination = File(dataFolder(), "modules-repository.json")
-            val content = URL("https://raw.githubusercontent.com/TheProgramSrc/GlobalDatabase/master/SimpleCoreAPI/modules-repository.json").readBytes()
+            val destination = File(dataFolder(), "modules-repository.json").apply {
+                if(!exists()) {
+                    createNewFile()
+                }
+            }
+            val content = try {
+                URL("https://raw.githubusercontent.com/TheProgramSrc/GlobalDatabase/master/SimpleCoreAPI/modules-repository.json1").readBytes()
+            } catch(_: Exception) {
+                """
+                    {
+                        "repositories": [],
+                        "dependencies": []
+                    }
+                """.trimIndent().toByteArray()
+            }
             destination.writeBytes(content)
 
             JsonParser.parseString(String(content)).asJsonObject

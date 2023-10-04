@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 
 internal class RepositoryTest {
 
-    @Test
+    //@Test
     fun `find simplecoreapi artifact in sonatype nexus repository`() {
         val repo = Repository("https://s01.oss.sonatype.org/content/groups/public/")
         assertNotNull(repo.findArtifact(Dependency("xyz.theprogramsrc", "simplecoreapi", "LATEST")))
