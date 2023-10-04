@@ -1,4 +1,4 @@
-package xyz.theprogramsrc.simplecoreapi.global.modules
+package xyz.theprogramsrc.simplecoreapi.global.models
 
 import org.apache.commons.io.FileUtils
 import org.junit.jupiter.api.AfterAll
@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
-import xyz.theprogramsrc.simplecoreapi.global.models.SumModule
 import xyz.theprogramsrc.simplecoreapi.global.models.module.Module
 import xyz.theprogramsrc.simplecoreapi.global.models.module.ModuleDescription
 import xyz.theprogramsrc.simplecoreapi.global.models.module.isModuleLoaded
@@ -14,20 +13,20 @@ import xyz.theprogramsrc.simplecoreapi.global.models.module.requireModule
 import xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader
 import java.io.File
 
-
-// This will test if modules are able to call methods from other modules.
-internal class ModuleInteroperabilityTest {
+class ModuleTest {
 
     @Test
-    fun `test module interoperability`() {
+    fun `test require() method`() {
         assertFalse(isModuleLoaded<SumModule>()) // Validate that the module is not loaded
-        val mathModule = requireModule<MathModule>()
-        assertTrue(isModuleLoaded<SumModule>()) // Validate that the module is loaded
-        assertEquals(0, mathModule.prev()) // Validate that the module is working
-        assertEquals(3, mathModule.sum(1, 2)) // Validate that the module is working
-        assertEquals(3, mathModule.prev()) // Validate that the module is working
 
+        val sumModule = requireModule<SumModule>() // Load the module
+        assertTrue(isModuleLoaded<SumModule>()) // Validate that the module is loaded
+        assertEquals(3, sumModule.sum(1, 2)) // Validate that the module is working
+
+        assertEquals(3, requireModule<SumModule>().previous) // Validate that the module works even if it's loaded again
     }
+
+
 
     companion object {
         @BeforeAll
@@ -69,31 +68,5 @@ class SumModule: Module {
         previous = sum
         return sum
     }
-
-}
-
-class MathModule: Module {
-    override val description: ModuleDescription =
-        ModuleDescription(
-            name = "MathModule",
-            version = "1.0",
-            authors = listOf("TheProgramSrc")
-        )
-
-    val sum = requireModule<SumModule>()
-
-    override fun onEnable() {
-
-    }
-
-    override fun onDisable() {
-
-    }
-
-    fun sum(a: Int, b: Int) =
-        sum.sum(a, b)
-
-    fun prev() =
-        sum.previous
 
 }

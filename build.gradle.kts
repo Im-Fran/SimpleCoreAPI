@@ -15,7 +15,7 @@ val env = project.rootProject.file(".env").let { file ->
     if(file.exists()) file.readLines().filter { it.isNotBlank() && !it.startsWith("#") && it.split("=").size == 2 }.associate { it.split("=")[0] to it.split("=")[1] } else emptyMap()
 }.toMutableMap().apply { putAll(System.getenv()) }
 
-val projectVersion = env["VERSION"] ?: "0.7.0-SNAPSHOT"
+val projectVersion = env["VERSION"] ?: "0.8.0-SNAPSHOT"
 
 group = "xyz.theprogramsrc"
 version = projectVersion.replaceFirst("v", "").replace("/", "")
@@ -25,6 +25,7 @@ repositories {
     mavenLocal()
     mavenCentral()
 
+    maven("https://s01.oss.sonatype.org/content/groups/public/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://oss.sonatype.org/content/repositories/releases/")
     maven("https://oss.sonatype.org/content/groups/public/")
@@ -42,6 +43,7 @@ dependencies {
     implementation("org.jetbrains:annotations:24.0.1")
     implementation("commons-io:commons-io:2.14.0")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("org.json:json:20230227")
     implementation("net.lingala.zip4j:zip4j:2.11.5")
 
     annotationProcessor("com.velocitypowered:velocity-api:3.1.1")

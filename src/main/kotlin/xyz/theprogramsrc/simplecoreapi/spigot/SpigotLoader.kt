@@ -11,15 +11,6 @@ class SpigotLoader: JavaPlugin() {
     companion object {
         lateinit var instance: SpigotLoader
             private set
-
-        /**
-         * **INTERNAL USE ONLY**
-         * Loads the given file using bukkit plugin manager.
-         */
-        fun loadFile(file: File) = Bukkit.getPluginManager().loadPlugin(file)?.apply {
-            onLoad()
-            Bukkit.getPluginManager().enablePlugin(this@apply)
-        }
     }
 
     override fun onLoad() {
