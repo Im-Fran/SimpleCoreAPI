@@ -1,12 +1,10 @@
 package xyz.theprogramsrc.simplecoreapi.global
 
-import xyz.theprogramsrc.simplecoreapi.global.modules.ModuleManager
 import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
 import xyz.theprogramsrc.simplecoreapi.global.utils.SoftwareType
 import xyz.theprogramsrc.simplecoreapi.global.utils.update.GitHubUpdateChecker
 import xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader
 import java.io.File
-import java.lang.RuntimeException
 
 /**
  * Class used to initialize SimpleCoreAPI (DO NOT CALL IT FROM EXTERNAL PLUGINS, IT MAY CRASH)
@@ -59,7 +57,7 @@ class SimpleCoreAPI(val logger: ILogger) {
                 return
             }
 
-            val downloaded = ModuleManager.downloadModule(id) ?: throw RuntimeException("Module $id could not be downloaded!")
+            /*val downloaded = ModuleManager.downloadModule(id) ?: throw RuntimeException("Module $id could not be downloaded!")
             if(isStandalone) {
                 return // Is automatically loaded later
             }
@@ -67,7 +65,7 @@ class SimpleCoreAPI(val logger: ILogger) {
             // Load the module
             if(!ModuleManager.loadModule(downloaded)) {
                 throw RuntimeException("Module $id could not be loaded!")
-            }
+            }*/
         }
     }
 
