@@ -15,7 +15,7 @@ val env = project.rootProject.file(".env").let { file ->
     if(file.exists()) file.readLines().filter { it.isNotBlank() && !it.startsWith("#") && it.split("=").size == 2 }.associate { it.split("=")[0] to it.split("=")[1] } else emptyMap()
 }.toMutableMap().apply { putAll(System.getenv()) }
 
-val projectVersion = env["VERSION"] ?: "0.7.0-SNAPSHOT"
+val projectVersion = env["VERSION"] ?: "0.8.0-SNAPSHOT"
 
 group = "xyz.theprogramsrc"
 version = projectVersion.replaceFirst("v", "").replace("/", "")
@@ -25,6 +25,7 @@ repositories {
     mavenLocal()
     mavenCentral()
 
+    maven("https://s01.oss.sonatype.org/content/groups/public/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://oss.sonatype.org/content/repositories/releases/")
     maven("https://oss.sonatype.org/content/groups/public/")

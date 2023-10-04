@@ -1,7 +1,6 @@
 package xyz.theprogramsrc.simplecoreapi.standalone
 
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
-import xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.Dependency
 import xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.DependencyDownloader
 import xyz.theprogramsrc.simplecoreapi.global.utils.logger.JavaLogger
 import java.util.logging.Logger
@@ -28,7 +27,7 @@ class StandaloneLoader {
         simpleCoreAPI.measureLoad("Loaded dependencies in {time}") {
             DependencyDownloader()
         }.apply {
-            addDependency(Dependency("xyz.theprogramsrc", "SimpleCore-FilesModule", ""))
+            // addDependency(Dependency("xyz.theprogramsrc", "filesmodule", "LATEST"))
         }
 
         val entrypoint = simpleCoreAPI.measureLoad("Loaded entrypoint in {time}") {

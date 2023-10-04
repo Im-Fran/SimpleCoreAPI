@@ -1,5 +1,7 @@
 package xyz.theprogramsrc.simplecoreapi.global.dependencydownloader
 
+import xyz.theprogramsrc.simplecoreapi.global.models.Dependency
+import xyz.theprogramsrc.simplecoreapi.global.models.Repository
 import xyz.theprogramsrc.simplecoreapi.global.utils.folder
 import java.io.File
 import java.net.URL
@@ -15,7 +17,16 @@ class DependencyDownloader {
     private val logger = Logger.getLogger("DependencyDownloader")
     private val dependencies = mutableListOf<Dependency>()
     private val librariesFolder = File("libraries/DependencyDownloader/").folder()
-    private val repositories = mutableListOf<Repository>()
+    private val repositories = mutableListOf(
+        Repository("https://s01.oss.sonatype.org/content/groups/public/"),
+        Repository("https://oss.sonatype.org/content/repositories/snapshots/"),
+        Repository("https://oss.sonatype.org/content/repositories/releases/"),
+        Repository("https://oss.sonatype.org/content/groups/public/"),
+        Repository("https://hub.spigotmc.org/nexus/content/repositories/snapshots/"),
+        Repository("https://repo.papermc.io/repository/maven-public/"),
+        Repository("https://repo.codemc.org/repository/maven-public/"),
+        Repository("https://jitpack.io/")
+    )
     private val loadedDependencies = mutableListOf<String>()
     private val digest = MessageDigest.getInstance("MD5")
 
