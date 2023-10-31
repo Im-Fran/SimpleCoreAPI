@@ -1,145 +1,128 @@
 package xyz.theprogramsrc.simplecoreapi.global.dependencydownloader
 
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
+import org.apache.commons.io.FileUtils
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
 import xyz.theprogramsrc.simplecoreapi.global.models.Dependency
 import xyz.theprogramsrc.simplecoreapi.global.models.Repository
-import xyz.theprogramsrc.simplecoreapi.global.utils.extensions.folder
+import xyz.theprogramsrc.simplecoreapi.global.utils.extensions.file
 import java.io.File
 import java.net.URL
-import java.net.URLClassLoader
-import java.security.MessageDigest
-import java.util.jar.JarFile
-import java.util.logging.Logger
 
 class DependencyDownloader {
 
-    companion object { lateinit var instance: DependencyDownloader }
-
-    private val logger = Logger.getLogger("DependencyDownloader")
-    private val dependencies = mutableListOf<Dependency>()
+    private val logger = SimpleCoreAPI.logger
     private val librariesFolder = SimpleCoreAPI.dataFolder("libraries/")
-    private val repositories = mutableListOf<Repository>()
-    private val loadedDependencies = mutableListOf<String>()
-    private val digest = MessageDigest.getInstance("MD5")
+    private val modulesRepositoryFile = SimpleCoreAPI.dataFolder(path = "modules-repository.json", asFolder = false)
 
     init {
-        instance = this
-        dependencies.clear()
-        repositories.clear()
-        loadedDependencies.clear()
-    }
+        // Download and update the modules repository file
+        updateModulesRepository()
 
-    /**
-     * Adds a dependency to load
-     * @param dependency The [Dependency] to load
-     */
-    fun addDependency(dependency: Dependency) {
-        val found = dependencies.find { it.group == dependency.group && it.artifactId == dependency.artifactId }
-        if(found == null) {
-            dependencies.add(dependency)
-            return
-        }
-
-        if(found.version != dependency.version){
-            logger.warning("Dependency '${found.group}:${found.artifactId}' already exists with version '${found.version}'!")
+        // Downloads the pending dependencies
+        val pendingDependencies = Dependency.dependencies.filter { !it.asFile().exists() }
+        if(pendingDependencies.isNotEmpty()) {
+            logger.info("Downloading ${pendingDependencies.size} pending dependencies...")
+            pendingDependencies.forEach { dependency ->
+                logger.info("Downloading ${dependency.group}:${dependency.artifact}:${dependency.version}...")
+                downloadDependency(dependency)
+            }
         }
     }
 
     /**
-     * Adds a [Repository] to the list of repositories.
-     * @param repository The [Repository] to add. (Must be a valid [Repository] with the Sonatype Nexus Repository Manager Software)
+     * Downloads a dependency
+     * @param dependency The dependency to download
      */
-    fun addRepository(repository: Repository) {
-        val add = try {
-            URL(repository.url)
-            true
-        } catch (e: Exception) {
-            false
+    private fun downloadDependency(dependency: Dependency) {
+        val destination = dependency.asFile()                           // Where to save the dependency
+        val artifactUri = Repository.findArtifact(dependency)           // Get the repository where the dependency is located
+        val url = URL(artifactUri)                                      // Create the URL to download the dependency
+        val connection = url.openConnection()                           // Open the connection
+        connection.setRequestProperty("User-Agent", "SimpleCoreAPI")    // Set the user agent
+        connection.connect()                                            // Connect to the URL
+        val contentLength = connection.contentLengthLong                // Get the content length
+        val inputStream = connection.getInputStream()                   // Get the input stream
+        val outputStream = destination.outputStream()                   // Get the output stream
+        val buffer = ByteArray(1024)                              // Create a buffer
+        var read: Int                                                   // Variable to store the read bytes
+        var downloaded: Long = 0                                        // Variable to store the downloaded bytes
+        while (inputStream.read(buffer).also { read = it } > 0) {       // While there are bytes to read
+            outputStream.write(buffer, 0, read)                         // Write the bytes to the output stream
+            downloaded += read                                          // Add the read bytes to the downloaded bytes
+            val percentage = downloaded * 100 / contentLength            // Calculate the percentage
+            logger.info("Downloading ${dependency.group}:${dependency.artifact}:${dependency.version}... $percentage%") // Log the percentage
         }
-
-        if(!add) {
-            logger.severe("Repository ${repository.url} must hava a valid url!")
-            return
-        }
-
-        if(repositories.any { it.url == repository.url }) {
-            logger.warning("Repository ${repository.url} already exists!")
-            return
-        }
-
-        repositories.add(repository)
+        outputStream.close()                                            // Close the output stream
+        inputStream.close()                                             // Close the input stream
+        logger.info("Downloaded ${dependency.group}:${dependency.artifact}:${dependency.version} to ${destination.relativeTo(File(".")).path}") // Log the download
     }
 
     /**
-     * Loads a [Dependency] into the classpath if it is not already loaded
-     *
-     * @param dependency The [Dependency] to load
-     * @return The [Dependency] file if is successfully loaded, null otherwise
+     * Checks for updates and removes any old dependency from the
+     * libraries folder
      */
-    fun loadDependency(dependency: Dependency): File? {
-        addDependency(dependency)
-        val file = File(File(librariesFolder, dependency.group.replace(".", "/")).folder(), "${dependency.artifactId}-${dependency.version}.jar")
-        if(isLoaded(dependency)) return file
-        if(!file.exists()){
-            val repo = repositories.firstOrNull { it.findArtifact(dependency) != null } ?: return null
-            val artifactUrl = repo.findArtifact(dependency) ?: return null
-            digest.reset()
-            val downloadBytes = URL(artifactUrl).readBytes()
-            if(dependency.md5Hash != null){
-                val downloadMd5 = digest.digest(downloadBytes).joinToString("") { "%02x".format(it) }
-                if(downloadMd5 != dependency.md5Hash){
-                    logger.severe("MD5 mismatch for ${dependency.group}:${dependency.artifactId}! Expected: '${dependency.md5Hash}', Got: '$downloadMd5'")
-                    return null
+    private fun updateModulesRepository() {
+        fun jsonDependToMap(json: JsonObject, map: MutableMap<String, String>) {
+            json["dependencies"].asJsonArray.forEach { dependency ->
+                val dependencyObject = dependency.asJsonObject
+                map["${dependencyObject["group"].asString}:${dependencyObject["artifact"].asString}"] = dependencyObject["version"].asString
+            }
+        }
+
+        val cachedDependencies = mutableMapOf<String, String>()
+        val onlineDependencies = mutableMapOf<String, String>()
+        if(modulesRepositoryFile.exists() && modulesRepositoryFile.readText().isNotBlank()) {
+            val cachedJson = JsonParser.parseString(modulesRepositoryFile.readText()).asJsonObject
+            jsonDependToMap(cachedJson, cachedDependencies)
+        }
+
+        downloadModulesRepository()
+
+        val downloadedJson = JsonParser.parseString(modulesRepositoryFile.readText()).asJsonObject
+        jsonDependToMap(downloadedJson, onlineDependencies)
+
+        cachedDependencies.forEach { (key, version) ->
+            val newVersion = onlineDependencies[key]
+            if(newVersion != null && newVersion != version) {
+                logger.info("Found update for dependency $key from $version to $newVersion. Removing old file to download update...")
+                val (group, artifact) = key.split(":")
+                val file = File(librariesFolder, "$group-$artifact-$version.jar")
+                if(file.exists()) {
+                    FileUtils.forceDelete(file)
                 }
             }
-
-            file.writeBytes(downloadBytes)
         }
-
-        if(ClasspathLoader.loadIntoClasspath(file)){
-            loadedDependencies.add(dependency.group + ":" + dependency.artifactId)
-            logger.info("Loaded dependency ${dependency.group}:${dependency.artifactId}")
-            return file
-        } else {
-            logger.severe("Failed to load dependency ${dependency.group}:${dependency.artifactId} into the classpath!")
-        }
-        return null
     }
 
     /**
-     * Load all the dependencies into the classpath.
-     * If any dependency is already loaded it'll be skipped
+     * Downloads the modules repository file from the GitHub repository.
+     * If the download fails, it will create a new file with the default content (empty repositories and dependencies)
      */
-    fun loadDependencies(): Unit = dependencies.forEach(this::loadDependency)
-
-    /**
-     * Checks if the given [Dependency] is already loaded
-     * @return True if the dependency is loaded, false otherwise
-     */
-    fun isLoaded(dependency: Dependency): Boolean = loadedDependencies.contains(dependency.group + ":" + dependency.artifactId)
-}
-
-object ClasspathLoader {
-
-    /**
-     * Loads a jar file into the classpath
-     * @param file The jar file to load
-     */
-    fun loadIntoClasspath(file: File): Boolean = try {
-        require(file.isFile && file.extension == "jar") {
-            "The input file must be a JAR file."
+    private fun downloadModulesRepository() {
+        val destination = modulesRepositoryFile.file()
+        val content = try {
+            URL("https://raw.githubusercontent.com/TheProgramSrc/GlobalDatabase/master/SimpleCoreAPI/modules-repository.json").readBytes()
+        } catch (_: Exception) {
+            JsonObject().apply {
+                add("repositories", JsonArray().apply {
+                    add("repositories", JsonArray().apply {
+                        add("https://s01.oss.sonatype.org/content/groups/public/")
+                        add("https://oss.sonatype.org/content/groups/public")
+                        add("https://oss.sonatype.org/content/repositories/snapshots/")
+                        add("https://oss.sonatype.org/content/repositories/releases/")
+                        add("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+                        add("https://repo.papermc.io/repository/maven-public/")
+                        add("https://repo.codemc.io/repository/maven-public/")
+                        add("https://jitpack.io/")
+                    })
+                })
+                add("dependencies", JsonArray())
+            }.toString().toByteArray()
         }
-
-        URLClassLoader(arrayOf(file.toURI().toURL()), this.javaClass.classLoader).use { loader ->
-            val jarFile = JarFile(file)
-            jarFile.entries().asSequence()
-                .filter { it.name.endsWith(".class") && !it.name.startsWith("META-INF/") }
-                .map { it.name.removeSuffix(".class").replace('/', '.') }
-                .forEach { loader.loadClass(it) }
-        }
-        true
-    } catch (e: Exception) {
-        e.printStackTrace()
-        false
+        destination.writeBytes(content)
     }
+
 }

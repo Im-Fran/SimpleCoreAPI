@@ -56,11 +56,11 @@ class SumModule: Module {
     var previous: Int = 0
 
     override fun onEnable() {
-        SimpleCoreAPI.instance.logger.info("Enabled DummyModule")
+        SimpleCoreAPI.logger.info("Enabled DummyModule")
     }
 
     override fun onDisable() {
-        SimpleCoreAPI.instance.logger.info("Disabled DummyModule")
+        SimpleCoreAPI.logger.info("Disabled DummyModule")
     }
 
     fun sum(a: Int, b: Int): Int {

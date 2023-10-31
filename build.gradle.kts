@@ -7,7 +7,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("cl.franciscosolis.blossom-extended") version "1.3.1"
 
-    kotlin("jvm") version "1.9.10"
+    kotlin("jvm") version "1.9.20"
     id("org.jetbrains.dokka") version "1.9.0"
 }
 
@@ -15,7 +15,7 @@ val env = project.rootProject.file(".env").let { file ->
     if(file.exists()) file.readLines().filter { it.isNotBlank() && !it.startsWith("#") && it.split("=").size == 2 }.associate { it.split("=")[0] to it.split("=")[1] } else emptyMap()
 }.toMutableMap().apply { putAll(System.getenv()) }
 
-val projectVersion = env["VERSION"] ?: "0.8.0-SNAPSHOT"
+val projectVersion = env["VERSION"] ?: "0.8.1"
 
 group = "xyz.theprogramsrc"
 version = projectVersion.replaceFirst("v", "").replace("/", "")
@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.19.3-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
     compileOnly("net.md-5:bungeecord-api:1.20-R0.1")
     compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
 
@@ -45,6 +45,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.json:json:20230618")
     implementation("net.lingala.zip4j:zip4j:2.11.5")
+    implementation("org.slf4j:slf4j-api:2.0.9")
+    implementation("org.slf4j:slf4j-simple:2.0.9")
 
     annotationProcessor("com.velocitypowered:velocity-api:3.1.1")
 
@@ -71,6 +73,7 @@ tasks {
         relocate("org.jetbrains", "xyz.theprogramsrc.simplecoreapi.libs.jetbrains")
         relocate("javax.annotation", "xyz.theprogramsrc.simplecoreapi.libs.annotation")
         relocate("net.lingala.zip4j", "xyz.theprogramsrc.simplecoreapi.libs.zip4j")
+        relocate("org.slf4j", "xyz.theprogramsrc.simplecoreapi.libs.sl4fj")
 
         mergeServiceFiles()
         exclude("**/*.kotlin_metadata")

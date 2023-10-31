@@ -1,16 +1,15 @@
 package xyz.theprogramsrc.simplecoreapi.global.utils.update
 
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
+import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
 import java.net.URL
 import java.time.Instant
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
 
-class SpigotUpdateChecker(val logger: ILogger, val resourceId: String, val currentVersion: String): UpdateChecker {
+class SpigotUpdateChecker(val resourceId: String, val currentVersion: String): UpdateChecker {
 
+    private val logger = SimpleCoreAPI.logger
     private var lastCheck = 0L
     private var lastCheckResult = false
     private val requestedData = mutableMapOf<String, Pair<JsonObject, Long>>()

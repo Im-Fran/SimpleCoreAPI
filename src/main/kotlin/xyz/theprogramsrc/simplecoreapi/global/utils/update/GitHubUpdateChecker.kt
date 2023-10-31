@@ -2,7 +2,7 @@ package xyz.theprogramsrc.simplecoreapi.global.utils.update
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
+import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
 import java.net.URL
 import java.time.Instant
 import java.time.format.DateTimeFormatter
@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter
  * With this class you can check if there is an update available using the GitHub releases API.
  * Sample usage:
  * ```kt
- * GitHubUpdateChecker(logger, "TheProgramSrc/SimpleCoreAPI", "v0.4.1-SNAPSHOT")
+ * GitHubUpdateChecker("TheProgramSrc/SimpleCoreAPI", "v0.4.1-SNAPSHOT")
  *    .checkWithPrint() // This will print the message if there is an update available
  *
  * // You can also check if there is an update available without printing a message
@@ -26,18 +26,17 @@ import java.time.format.DateTimeFormatter
  * }
  * ```
  *
- * @param logger The logger to use, it must be an instance of [ILogger]. You can get it using [xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI.instance].
  * @param repo The repository to check. The format should be 'Holder/Repository', for example 'TheProgramSrc/SimpleCoreAPI'
  * @param currentVersion the current version (tag name) of the product. (Example: "v0.1.0-SNAPSHOT")
  * @param latestReleaseTag The tag name of the latest release. (Defaults to "latest")
  */
 class GitHubUpdateChecker(
-    val logger: ILogger,
     val repo: String,
     val currentVersion: String,
     val latestReleaseTag: String = "latest"
 ): UpdateChecker {
 
+    private val logger = SimpleCoreAPI.logger
     private var lastCheck = 0L
     private var lastCheckResult = false
     private val requestedData = mutableMapOf<String, Pair<JsonObject, Long>>()

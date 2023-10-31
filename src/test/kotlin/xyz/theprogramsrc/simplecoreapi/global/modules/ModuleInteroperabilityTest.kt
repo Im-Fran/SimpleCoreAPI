@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
+import xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.DependencyDownloader
 import xyz.theprogramsrc.simplecoreapi.global.models.SumModule
 import xyz.theprogramsrc.simplecoreapi.global.models.module.Module
 import xyz.theprogramsrc.simplecoreapi.global.models.module.ModuleDescription
@@ -57,11 +58,11 @@ class SumModule: Module {
     var previous: Int = 0
 
     override fun onEnable() {
-        SimpleCoreAPI.instance.logger.info("Enabled DummyModule")
+        SimpleCoreAPI.logger.info("Enabled DummyModule")
     }
 
     override fun onDisable() {
-        SimpleCoreAPI.instance.logger.info("Disabled DummyModule")
+        SimpleCoreAPI.logger.info("Disabled DummyModule")
     }
 
     fun sum(a: Int, b: Int): Int {

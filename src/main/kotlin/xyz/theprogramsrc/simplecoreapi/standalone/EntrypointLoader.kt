@@ -1,7 +1,10 @@
 package xyz.theprogramsrc.simplecoreapi.standalone
 
+import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
+import java.io.File
 import java.util.Properties
-import java.util.zip.ZipInputStream
+import java.util.jar.JarFile
+import kotlin.system.exitProcess
 
 /**
  * Interface that will be used to load the entry point of the app.
@@ -28,56 +31,53 @@ interface EntryPoint {
  * Class that manages the entry point of the app. It will be in charge of running the onLoad, onEnable and onDisable methods of the class importing [EntryPoint].
  */
 class EntrypointLoader {
-    companion object {
-        private var entryPoint: EntryPoint? = null
-
-        /**
-         * Manually register the entrypoint.
-         * Currently, this is used for testing purposes, but if you have issues with the entrypoint not being loaded, you can use this method to register it manually.
-         *
-         * @param clazz The entrypoint class. It must implement [EntryPoint]
-         */
-        fun registerEntrypoint(clazz: Class<out EntryPoint>) {
-            entryPoint = clazz.getConstructor().newInstance() as EntryPoint
-        }
-    }
-    private var enabled: Boolean = false
 
     init {
-        if(entryPoint == null) {
-            // First get the resource 'module.properties' located at the root of the jar file
-            val moduleProperties = EntrypointLoader::class.java.getResourceAsStream("/module.properties")
-            if(moduleProperties != null) {
-                // Now read the 'entrypoint' property
-                val entrypoint = (Properties().let {
-                    it.load(moduleProperties)
-                    it.getProperty("entrypoint")
-                } ?: "").replace("\"", "")
+        load()
+    }
 
-                assert(entrypoint.isNotBlank()) { "Entrypoint cannot be blank!" }
+    /**
+     * Method in charge of loading the entrypoint
+     */
+    private fun load() {
+        val logger = SimpleCoreAPI.logger
 
-                // Now load the class
-                val clazz = this::class.java.classLoader.loadClass(entrypoint)
-
-                // Now check if the class itself is an entrypoint, if it is, initialize it, if not check for the first method that is an entrypoint
-                if(clazz.isAssignableFrom(EntryPoint::class.java)){
-                    entryPoint = clazz.getConstructor().newInstance() as EntryPoint
-                }
-            }
+        logger.debug("Loading entrypoint...")
+        val entrypointFolder = SimpleCoreAPI.dataFolder(path = "entrypoint/")
+        // Check if the folder is empty
+        if (entrypointFolder.listFiles()?.isEmpty() == true) {
+            // Ask the user to put the entrypoint jar file inside the entrypoint folder and wait until the user does it
+            logger.info("Please put the entrypoint jar file inside the ${entrypointFolder.relativeTo(File(".")).path} folder, then press enter to continue.")
+            readlnOrNull()
         }
 
-        entryPoint?.onLoad()
+        // Check if the folder is still empty
+        if (entrypointFolder.listFiles()?.isEmpty() == true) {
+            // If it's still empty, then exit the app
+            logger.info("Entrypoint not found. Exiting...")
+            exitProcess(0)
+        }
+
+        // Check if there's a jar file inside the entrypoint folder
+        val entrypointFile = entrypointFolder.listFiles()?.firstOrNull { it.extension == "jar" } ?: return logger.info("No entrypoint found. Skipping...")
+        // Check for the file module.properties inside the jar file
+        val jarFile = JarFile(entrypointFile)
+        val moduleProperties = jarFile.getJarEntry("module.properties")?.let { entry ->
+            val properties = Properties()
+            jarFile.getInputStream(entry).use { properties.load(it) }
+            properties
+        } ?: return logger.info("No module.properties found in the entrypoint jar. Skipping...")
+        // Check if the module.properties has the entrypoint property to load the entrypoint class
+        val entrypointClass = moduleProperties.getProperty("entrypoint") ?: return logger.info("No entrypoint class found in the module.properties. Skipping...")
+        logger.debug("Loading entrypoint class $entrypointClass...")
+//        val loader = ModuleClassLoader(entrypointFile)
+//        val entrypoint = loader.loadClass(entrypointClass).getDeclaredConstructor().newInstance() as? EntryPoint ?: return logger.info("Entrypoint class does not implement EntryPoint interface. Skipping...")
+//        // Call the onLoad method
+//        entrypoint.onLoad()
+//        // Call the onEnable method
+//        entrypoint.onEnable()
+//        // Register the onDisable method to be called when the app is disabled
+//        Runtime.getRuntime().addShutdownHook(Thread { entrypoint.onDisable() })
     }
 
-    fun enable() {
-        assert(!enabled) { "App already enabled! Please avoid calling this method more than once." }
-        entryPoint?.onEnable()
-        enabled = true
-    }
-
-    fun disable() {
-        assert(enabled) { "App already disabled! Please avoid calling this method more than once." }
-        entryPoint?.onDisable()
-        enabled = false
-    }
 }

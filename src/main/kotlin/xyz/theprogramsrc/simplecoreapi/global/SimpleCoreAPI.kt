@@ -1,23 +1,37 @@
 package xyz.theprogramsrc.simplecoreapi.global
 
-import com.google.gson.JsonParser
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.slf4j.simple.SimpleLogger
 import xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.DependencyDownloader
-import xyz.theprogramsrc.simplecoreapi.global.models.Dependency
-import xyz.theprogramsrc.simplecoreapi.global.models.Repository
-import xyz.theprogramsrc.simplecoreapi.global.utils.ILogger
+import xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.DependencyLoader
+import xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.interfaces.DependencyLoader
 import xyz.theprogramsrc.simplecoreapi.global.utils.SoftwareType
+import xyz.theprogramsrc.simplecoreapi.global.utils.extensions.file
+import xyz.theprogramsrc.simplecoreapi.global.utils.extensions.folder
 import xyz.theprogramsrc.simplecoreapi.global.utils.update.GitHubUpdateChecker
 import xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader
 import java.io.File
-import java.net.URL
 
 /**
  * Class used to initialize SimpleCoreAPI (DO NOT CALL IT FROM EXTERNAL PLUGINS, IT MAY CRASH)
- * @param logger The logger to use
+ * @param dependencyClassLoader The [DependencyLoader] to use to load the dependencies
  */
-class SimpleCoreAPI(val logger: ILogger) {
+class SimpleCoreAPI(
+    private val dependencyClassLoader: xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.interfaces.DependencyLoader
+){
 
     companion object {
+        /**
+         * Instance of SLF4 [Logger] used by [SimpleCoreAPI].
+         * In order to change the log level you must use the system properties command, for example `-Dorg.slf4j.simpleLogger.defaultLogLevel=debug`
+         * @return The instance of SLF4 [Logger]
+         */
+        val logger: Logger = let {
+            System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, System.getenv()["LOG_LEVEL"]?.lowercase() ?: "info")
+            LoggerFactory.getLogger("")
+        }
+
         /**
          * Instance of SimpleCoreAPI. Use it to retrieve the module manager
          * @return The instance of SimpleCoreAPI
@@ -29,11 +43,16 @@ class SimpleCoreAPI(val logger: ILogger) {
          * Gets a file relative to the data folder.
          * If running in standalone mode the data folder will be ./SimpleCoreAPI, otherwise it will be the plugins/SimpleCoreAPI folder
          *
+         * @param path The path of the file relative to the data folder
+         * @param asFolder If true, it will return a folder, otherwise it will return a file
          * @return The file relative to the data folder
          */
-        fun dataFolder(path: String = ""): File = File(if (StandaloneLoader.isRunning) "./SimpleCoreAPI" else "plugins/SimpleCoreAPI", path).apply {
-            if(!exists())
-                mkdirs()
+        fun dataFolder(path: String = "", asFolder: Boolean = true): File = File(if (StandaloneLoader.isRunning) "./SimpleCoreAPI" else "plugins/SimpleCoreAPI", path).let {
+            if(asFolder) {
+                it.folder()
+            } else {
+                it.file()
+            }
         }
 
         /**
@@ -55,7 +74,7 @@ class SimpleCoreAPI(val logger: ILogger) {
 
         logger.info("SimpleCoreAPI v${getVersion()} - Git Commit: ${getShortHash()}")
         if (getFullHash() != "unknown") {
-            GitHubUpdateChecker(logger, "TheProgramSrc/SimpleCoreAPI", getVersion()).checkWithPrint()
+            GitHubUpdateChecker("TheProgramSrc/SimpleCoreAPI", getVersion()).checkWithPrint()
         }
 
         softwareType = SoftwareType.entries.firstOrNull { it.check() } ?: SoftwareType.UNKNOWN
@@ -65,51 +84,14 @@ class SimpleCoreAPI(val logger: ILogger) {
             logger.info("Running on unknown server software. Some features might not work as expected!")
         }
 
-        // Now we'll download the module repository to automate the dependency downloader.
-        val dependencyDownloader = measureLoad("Dependency Downloader loaded in {time}") {
+        // Now we'll download the dependencies
+        measureLoad("Downloaded dependencies in {time}") {
             DependencyDownloader()
         }
 
-        val modulesRepo = measureLoad("Downloaded module repository in {time}") {
-            // Download the repo
-            val destination = File(dataFolder(), "modules-repository.json").apply {
-                if(!exists()) {
-                    createNewFile()
-                }
-            }
-            val content = try {
-                URL("https://raw.githubusercontent.com/TheProgramSrc/GlobalDatabase/master/SimpleCoreAPI/modules-repository.json1").readBytes()
-            } catch(_: Exception) {
-                """
-                    {
-                        "repositories": [],
-                        "dependencies": []
-                    }
-                """.trimIndent().toByteArray()
-            }
-            destination.writeBytes(content)
-
-            JsonParser.parseString(String(content)).asJsonObject
-        }
-
-        measureLoad("Repositories and Dependencies loaded in {time}") {
-            modulesRepo.getAsJsonArray("repositories").forEach { repo ->
-                dependencyDownloader.addRepository(Repository(
-                    url = repo.asString
-                ))
-            }
-
-            modulesRepo.getAsJsonArray("dependencies").forEach { dependency ->
-                val depend = Dependency (
-                    group = dependency.asJsonObject.get("group").asString,
-                    artifactId = dependency.asJsonObject.get("artifact").asString,
-                    version = dependency.asJsonObject.get("version").asString
-                )
-
-                dependencyDownloader.addDependency(depend)
-            }
-
-            dependencyDownloader.loadDependencies()
+        // Now we load the downloaded dependencies
+        measureLoad("Loaded dependencies in {time}") {
+            DependencyLoader(dependencyClassLoader = dependencyClassLoader)
         }
     }
 

@@ -4,7 +4,6 @@ import com.google.inject.Inject
 import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.proxy.ProxyServer
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
-import xyz.theprogramsrc.simplecoreapi.global.utils.logger.JavaLogger
 import java.util.logging.Logger
 
 @Plugin(
@@ -23,6 +22,6 @@ class VelocityLoader @Inject constructor(val server: ProxyServer, val logger: Lo
 
     init {
         instance = this
-        SimpleCoreAPI(JavaLogger(this.logger))
+        SimpleCoreAPI()
     }
 }

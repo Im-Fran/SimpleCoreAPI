@@ -1,21 +1,29 @@
 package xyz.theprogramsrc.simplecoreapi.spigot
 
-import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
-import xyz.theprogramsrc.simplecoreapi.global.utils.logger.JavaLogger
-import java.io.File
+import xyz.theprogramsrc.simplecoreapi.spigot.classloader.SpigotDependencyLoader
 
+/**
+ * Representation of the Spigot plugin loader.
+ */
 class SpigotLoader: JavaPlugin() {
 
     companion object {
+
+        /**
+         * Instance of the SpigotLoader, useful for accessing some spigot specific methods.
+         */
         lateinit var instance: SpigotLoader
             private set
     }
 
     override fun onLoad() {
         instance = this
-        SimpleCoreAPI(JavaLogger(this.logger))
+
+        SimpleCoreAPI(
+            dependencyClassLoader = SpigotDependencyLoader()
+        )
     }
 
 }

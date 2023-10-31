@@ -1,9 +1,7 @@
 package xyz.theprogramsrc.simplecoreapi.standalone
 
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
-import xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.DependencyDownloader
-import xyz.theprogramsrc.simplecoreapi.global.utils.logger.JavaLogger
-import java.util.logging.Logger
+import xyz.theprogramsrc.simplecoreapi.standalone.classloader.StandaloneDependencyLoader
 
 fun main() {
     StandaloneLoader()
@@ -22,15 +20,12 @@ class StandaloneLoader {
     init {
         instance = this
         isRunning = true
-        val simpleCoreAPI = SimpleCoreAPI(JavaLogger(Logger.getAnonymousLogger()))
+        val simpleCoreAPI = SimpleCoreAPI(
+            dependencyClassLoader = StandaloneDependencyLoader(),
+        )
 
-        val entrypoint = simpleCoreAPI.measureLoad("Loaded entrypoint in {time}") {
+        simpleCoreAPI.measureLoad("Loaded entrypoint in {time}") {
             EntrypointLoader()
         }
-
-        entrypoint.enable()
-        Runtime.getRuntime().addShutdownHook(Thread {
-            entrypoint.disable()
-        })
     }
 }
