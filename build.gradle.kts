@@ -8,7 +8,7 @@ plugins {
     id("cl.franciscosolis.blossom-extended") version "1.3.1"
 
     kotlin("jvm") version "1.9.20"
-    id("org.jetbrains.dokka") version "1.9.0"
+    id("org.jetbrains.dokka") version "1.9.10"
 }
 
 val env = project.rootProject.file(".env").let { file ->
@@ -41,9 +41,9 @@ dependencies {
     compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
 
     implementation("org.jetbrains:annotations:24.0.1")
-    implementation("commons-io:commons-io:2.14.0")
+    implementation("commons-io:commons-io:2.15.0")
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("org.json:json:20230618")
+    implementation("org.json:json:20231013")
     implementation("net.lingala.zip4j:zip4j:2.11.5")
     implementation("org.slf4j:slf4j-api:2.0.9")
     implementation("org.slf4j:slf4j-simple:2.0.9")
