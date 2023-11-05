@@ -48,7 +48,7 @@ dependencies {
 
     annotationProcessor("com.velocitypowered:velocity-api:3.1.1")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
 }
 
 blossom {
