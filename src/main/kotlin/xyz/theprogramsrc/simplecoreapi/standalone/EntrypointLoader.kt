@@ -2,7 +2,7 @@ package xyz.theprogramsrc.simplecoreapi.standalone
 
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
 import java.io.File
-import java.util.Properties
+import java.util.*
 import java.util.jar.JarFile
 import kotlin.system.exitProcess
 
@@ -70,14 +70,18 @@ class EntrypointLoader {
         // Check if the module.properties has the entrypoint property to load the entrypoint class
         val entrypointClass = moduleProperties.getProperty("entrypoint") ?: return logger.info("No entrypoint class found in the module.properties. Skipping...")
         logger.debug("Loading entrypoint class $entrypointClass...")
-//        val loader = ModuleClassLoader(entrypointFile)
-//        val entrypoint = loader.loadClass(entrypointClass).getDeclaredConstructor().newInstance() as? EntryPoint ?: return logger.info("Entrypoint class does not implement EntryPoint interface. Skipping...")
-//        // Call the onLoad method
-//        entrypoint.onLoad()
-//        // Call the onEnable method
-//        entrypoint.onEnable()
-//        // Register the onDisable method to be called when the app is disabled
-//        Runtime.getRuntime().addShutdownHook(Thread { entrypoint.onDisable() })
+        val entrypoint = Class.forName(entrypointClass).getConstructor().newInstance() as? EntryPoint ?: return logger.info("Entrypoint class $entrypointClass does not implement EntryPoint. Skipping...")
+        // Call the onLoad method
+        logger.debug("Calling onLoad method...")
+        entrypoint.onLoad()
+        // Call the onEnable method
+        logger.debug("Calling onEnable method...")
+        entrypoint.onEnable()
+        // Add a shutdown hook to call the onDisable method
+        Runtime.getRuntime().addShutdownHook(Thread {
+            logger.debug("Calling onDisable method...")
+            entrypoint.onDisable()
+        })
     }
 
 }

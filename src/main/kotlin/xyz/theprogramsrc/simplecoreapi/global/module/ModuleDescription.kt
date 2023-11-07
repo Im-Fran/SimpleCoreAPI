@@ -1,4 +1,4 @@
-package xyz.theprogramsrc.simplecoreapi.global.models.module
+package xyz.theprogramsrc.simplecoreapi.global.module
 
 data class ModuleDescription(
     val name: String,

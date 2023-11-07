@@ -2,7 +2,6 @@ package xyz.theprogramsrc.simplecoreapi.spigot
 
 import org.bukkit.plugin.java.JavaPlugin
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
-import xyz.theprogramsrc.simplecoreapi.spigot.classloader.SpigotDependencyLoader
 
 /**
  * Representation of the Spigot plugin loader.
@@ -21,9 +20,7 @@ class SpigotLoader: JavaPlugin() {
     override fun onLoad() {
         instance = this
 
-        SimpleCoreAPI(
-            dependencyClassLoader = SpigotDependencyLoader()
-        )
+        SimpleCoreAPI()
     }
 
 }

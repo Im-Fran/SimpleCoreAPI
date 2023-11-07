@@ -40,6 +40,14 @@ dependencies {
     compileOnly("net.md-5:bungeecord-api:1.20-R0.1")
     compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
 
+    /* Logging Module */
+    implementation("org.apache.logging.log4j:log4j-api:2.21.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.21.0")
+
+    /* Files Module */
+    implementation("me.carleslc.Simple-YAML:Simple-Yaml:1.8.4")
+
+    /* Global Depends */
     implementation("org.jetbrains:annotations:24.0.1")
     implementation("commons-io:commons-io:2.15.0")
     implementation("com.google.code.gson:gson:2.10.1")

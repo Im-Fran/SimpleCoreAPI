@@ -3,23 +3,17 @@ package xyz.theprogramsrc.simplecoreapi.global
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.slf4j.simple.SimpleLogger
-import xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.DependencyDownloader
-import xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.DependencyLoader
-import xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.interfaces.DependencyLoader
+import xyz.theprogramsrc.simplecoreapi.global.modules.filesmodule.extensions.file
+import xyz.theprogramsrc.simplecoreapi.global.modules.filesmodule.extensions.folder
 import xyz.theprogramsrc.simplecoreapi.global.utils.SoftwareType
-import xyz.theprogramsrc.simplecoreapi.global.utils.extensions.file
-import xyz.theprogramsrc.simplecoreapi.global.utils.extensions.folder
 import xyz.theprogramsrc.simplecoreapi.global.utils.update.GitHubUpdateChecker
 import xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader
 import java.io.File
 
 /**
  * Class used to initialize SimpleCoreAPI (DO NOT CALL IT FROM EXTERNAL PLUGINS, IT MAY CRASH)
- * @param dependencyClassLoader The [DependencyLoader] to use to load the dependencies
  */
-class SimpleCoreAPI(
-    private val dependencyClassLoader: xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.interfaces.DependencyLoader
-){
+class SimpleCoreAPI {
 
     companion object {
         /**
@@ -83,39 +77,6 @@ class SimpleCoreAPI(
         } else {
             logger.info("Running on unknown server software. Some features might not work as expected!")
         }
-
-        // Now we'll download the dependencies
-        measureLoad("Downloaded dependencies in {time}") {
-            DependencyDownloader()
-        }
-
-        // Now we load the downloaded dependencies
-        measureLoad("Loaded dependencies in {time}") {
-            DependencyLoader(dependencyClassLoader = dependencyClassLoader)
-        }
-    }
-
-    /**
-     * Measures the amount of time in milliseconds it takes to execute the given block. Example:
-     * ```kt
-     * measureLoad("Waited for {time}") {
-     *    // wait for 100 ms
-     *    Thread.sleep(100)
-     * }
-     * ```
-     *
-     * Sample console output:
-     * ```log
-     * Waited for 100ms
-     * ```
-     * @param message The message to print. You can use '{time}' to replace with the amount of time in ms
-     * @param block The block to execute
-     */
-    fun <T> measureLoad(message: String, block: () -> T): T {
-        val now = System.currentTimeMillis()
-        val response = block()
-        logger.info(message.replace("{time}", "${System.currentTimeMillis() - now}ms"))
-        return response
     }
 
     /**

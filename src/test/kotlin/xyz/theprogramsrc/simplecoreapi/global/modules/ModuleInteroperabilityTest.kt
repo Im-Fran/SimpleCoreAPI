@@ -6,12 +6,11 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
-import xyz.theprogramsrc.simplecoreapi.global.dependencydownloader.DependencyDownloader
 import xyz.theprogramsrc.simplecoreapi.global.models.SumModule
-import xyz.theprogramsrc.simplecoreapi.global.models.module.Module
-import xyz.theprogramsrc.simplecoreapi.global.models.module.ModuleDescription
-import xyz.theprogramsrc.simplecoreapi.global.models.module.isModuleLoaded
-import xyz.theprogramsrc.simplecoreapi.global.models.module.requireModule
+import xyz.theprogramsrc.simplecoreapi.global.module.Module
+import xyz.theprogramsrc.simplecoreapi.global.module.ModuleDescription
+import xyz.theprogramsrc.simplecoreapi.global.module.isModuleLoaded
+import xyz.theprogramsrc.simplecoreapi.global.module.requireModule
 import xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader
 import java.io.File
 

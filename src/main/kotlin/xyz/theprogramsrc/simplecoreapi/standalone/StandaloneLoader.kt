@@ -1,7 +1,7 @@
 package xyz.theprogramsrc.simplecoreapi.standalone
 
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
-import xyz.theprogramsrc.simplecoreapi.standalone.classloader.StandaloneDependencyLoader
+import xyz.theprogramsrc.simplecoreapi.global.utils.measureLoad
 
 fun main() {
     StandaloneLoader()
@@ -20,11 +20,9 @@ class StandaloneLoader {
     init {
         instance = this
         isRunning = true
-        val simpleCoreAPI = SimpleCoreAPI(
-            dependencyClassLoader = StandaloneDependencyLoader(),
-        )
+        SimpleCoreAPI()
 
-        simpleCoreAPI.measureLoad("Loaded entrypoint in {time}") {
+        measureLoad("Loaded entrypoint in {time}") {
             EntrypointLoader()
         }
     }

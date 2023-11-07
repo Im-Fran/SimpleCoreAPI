@@ -1,4 +1,4 @@
-package xyz.theprogramsrc.simplecoreapi.global.utils.extensions
+package xyz.theprogramsrc.simplecoreapi.global.modules.filesmodule.extensions
 
 import java.io.File
 

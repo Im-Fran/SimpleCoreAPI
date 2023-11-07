@@ -1,7 +1,7 @@
-package xyz.theprogramsrc.simplecoreapi.global.models.module
+package xyz.theprogramsrc.simplecoreapi.global.module
 
-import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
-import java.util.UUID
+import xyz.theprogramsrc.simplecoreapi.global.utils.measureLoad
+import java.util.*
 
 /**
  * This interface represents a module.
@@ -58,12 +58,12 @@ inline fun <reified T : Module> requireModule(): T {
 
     val moduleInstance = T::class.java.getConstructor().newInstance()
     Module.loadedModules[id] = moduleInstance
-    SimpleCoreAPI.instance.measureLoad("Module ${moduleInstance.description.name} enabled in {time}") {
+    measureLoad("Module ${moduleInstance.description.name} enabled in {time}") {
         moduleInstance.onEnable()
     }
 
     Runtime.getRuntime().addShutdownHook(Thread {
-        SimpleCoreAPI.instance.measureLoad("Module ${moduleInstance.description.name} disabled in {time}") {
+        measureLoad("Module ${moduleInstance.description.name} disabled in {time}") {
             moduleInstance.onDisable()
         }
     })
