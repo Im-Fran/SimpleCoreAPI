@@ -40,7 +40,7 @@ dependencies {
     compileOnly("net.md-5:bungeecord-api:1.20-R0.1")
     compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
 
-    implementation("org.jetbrains:annotations:24.0.1")
+    implementation("org.jetbrains:annotations:24.1.0")
     implementation("commons-io:commons-io:2.15.0")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.json:json:20231013")
