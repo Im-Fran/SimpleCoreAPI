@@ -41,7 +41,7 @@ dependencies {
     compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
 
     implementation("org.jetbrains:annotations:24.0.1")
-    implementation("commons-io:commons-io:2.15.0")
+    implementation("commons-io:commons-io:2.15.1")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.json:json:20231013")
     implementation("net.lingala.zip4j:zip4j:2.11.5")
