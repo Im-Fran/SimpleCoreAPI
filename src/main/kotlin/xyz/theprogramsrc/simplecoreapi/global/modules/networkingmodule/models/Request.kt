@@ -1,14 +1,42 @@
 package xyz.theprogramsrc.simplecoreapi.global.modules.networkingmodule.models
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
+import xyz.theprogramsrc.simplecoreapi.global.extensions.prettyJson
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Represents a request method
  * @see Request.method
  */
-enum class RequestMethod {
-    GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS
+enum class RequestMethod(
+    val applyMethod: HttpURLConnection.(Request) -> Unit
+) {
+    GET(applyMethod = {
+        requestMethod = "GET"
+    }),
+    POST(applyMethod = {
+        requestMethod = "POST"
+    }),
+    PUT(applyMethod = {
+        requestMethod = "PUT"
+    }),
+    DELETE(applyMethod = {
+        requestMethod = "DELETE"
+    }),
+    PATCH(applyMethod = {
+        requestMethod = "OPTIONS"
+        it.header("X-HTTP-Method-Override", "PATCH")
+    }),
+    HEAD(applyMethod = {
+        requestMethod = "HEAD"
+    }),
+    OPTIONS(applyMethod = {
+        requestMethod = "OPTIONS"
+    }),
 }
 
 /**
@@ -75,6 +103,7 @@ class Request(url: String) {
     var headers: MutableMap<String, String> = mutableMapOf(
         "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36",
         "Accept" to "*/*",
+        "Content-Type" to "text/plain",
     )
 
     /**
@@ -121,22 +150,29 @@ class Request(url: String) {
     var maxRedirects: Int = -1
 
     init {
-        if(url.contains("://")) {
+        if (url.contains("://")) {
             protocol = RequestProtocol.valueOf(url.split("://")[0].uppercase())
         }
-        val data = if(url.contains("://")) {
+        val data = if (url.contains("://")) {
             url.split("://")[1]
         } else {
             url
         }
         val hostElements = data.split("/")[0]
-        if(hostElements.contains(":")) {
+        if (hostElements.contains(":")) {
             host = hostElements.split(":")[0]
             port = hostElements.split(":")[1].toInt()
         } else {
             host = hostElements
         }
-        path = data.split("/").drop(1).joinToString("/")
+        path = data.split("/").drop(1).joinToString("/").substringBefore("?")
+        (data.split("?").drop(1).firstOrNull() ?: "").split("&").forEach { parameter ->
+            val key = parameter.split("=")[0]
+            val value = parameter.split("=").drop(1).joinToString("=")
+            if (key.isNotBlank() && value.isNotBlank()) {
+                parameters[key] = value
+            }
+        }
     }
 
     /**
@@ -197,6 +233,24 @@ class Request(url: String) {
     }
 
     /**
+     * Sets the given parameters to the request, it also overrides the value if the key already exists
+     * @param parameters The parameters to set
+     * @return The request builder
+     */
+    fun parameters(parameters: Map<String, String>): Request = apply {
+        this.parameters.putAll(parameters)
+    }
+
+    /**
+     * Adds the given parameters to the request, it doesn't override the value if the key already exists
+     * @param parameters The parameters to add
+     * @return The request builder
+     */
+    fun addParameters(parameters: Map<String, String>): Request = apply {
+        parameters.forEach { (key, value) -> if (!this.parameters.containsKey(key)) this.parameters[key] = value }
+    }
+
+    /**
      * Sets a header to the request, it also overrides the value if the key already exists
      * @param key The key of the header
      * @param value The value of the header
@@ -217,12 +271,54 @@ class Request(url: String) {
     }
 
     /**
+     * Sets the given headers to the request, it also overrides the value if the key already exists
+     * @param headers The headers to set
+     * @return The request builder
+     */
+    fun headers(headers: Map<String, String>): Request = apply {
+        this.headers.putAll(headers)
+    }
+
+    /**
+     * Adds the given headers to the request, it doesn't override the value if the key already exists
+     * @param headers The headers to add
+     * @return The request builder
+     */
+    fun addHeaders(headers: Map<String, String>): Request = apply {
+        headers.forEach { (key, value) -> if (!this.headers.containsKey(key)) this.headers[key] = value }
+    }
+
+    /**
      * Sets the body of the request
      * @param body The body of the request
      * @return The request builder
      */
     fun body(body: ByteArray): Request = apply {
         this.body = body
+    }
+
+    /**
+     * Sets the body of the request
+     * @param body The body of the request as string
+     */
+    fun body(body: String): Request = body(body.toByteArray())
+
+    /**
+     * Sets the json body of the request
+     * @param body The body of the request as json
+     */
+    fun jsonBody(body: JsonElement): Request = apply {
+        this.body = body.toString().toByteArray()
+        this.headers["Content-Type"] = "application/json"
+    }
+
+    /**
+     * Sets the form body of the request
+     * @param body A map of the form body
+     */
+    fun formBody(body: Map<String, String>): Request = apply {
+        this.body = body.map { "${it.key}=${it.value}" }.joinToString("&").toByteArray()
+        this.headers["Content-Type"] = "application/x-www-form-urlencoded"
     }
 
     /**
@@ -276,7 +372,7 @@ class Request(url: String) {
      */
     fun get(): Response = let {
         method(RequestMethod.GET)
-        send()
+        sendRequest()
     }
 
     /**
@@ -285,7 +381,7 @@ class Request(url: String) {
      */
     fun post(): Response = let {
         method(RequestMethod.POST)
-        send()
+        sendRequest()
     }
 
     /**
@@ -294,7 +390,7 @@ class Request(url: String) {
      */
     fun put(): Response = let {
         method(RequestMethod.PUT)
-        send()
+        sendRequest()
     }
 
     /**
@@ -303,7 +399,7 @@ class Request(url: String) {
      */
     fun delete(): Response = let {
         method(RequestMethod.DELETE)
-        send()
+        sendRequest()
     }
 
     /**
@@ -312,7 +408,7 @@ class Request(url: String) {
      */
     fun patch(): Response = let {
         method(RequestMethod.PATCH)
-        send()
+        sendRequest()
     }
 
     /**
@@ -321,7 +417,7 @@ class Request(url: String) {
      */
     fun head(): Response = let {
         method(RequestMethod.HEAD)
-        send()
+        sendRequest()
     }
 
     /**
@@ -330,67 +426,181 @@ class Request(url: String) {
      */
     fun options(): Response = let {
         method(RequestMethod.OPTIONS)
-        send()
+        sendRequest()
     }
+
+    /**
+     * Turns this request information (protocol, host, port, path and params) into a url string
+     * @return The url string
+     */
+    fun toUrlString(): String =
+        "${this.protocol.name.lowercase()}://${this.host}${if (this.port != null) ":${this.port}" else ""}${if (this.path != null) "/${this.path}" else ""}${
+            if (this.parameters.isNotEmpty()) "?${
+                this.parameters.filter { it.key.isNotBlank() && it.value.isNotBlank() }.map { "${it.key}=${it.value}" }
+                    .joinToString("&")
+            }" else ""
+        }"
 
     /**
      * Sends the request
      * @return The [Response] for this request
      */
-    fun send(): Response {
-        fun connect(urlString: String): Response {
-            val url = URL(urlString)
-            val connection = url.openConnection() as HttpURLConnection
-            this.headers.forEach { (key, value) -> connection.setRequestProperty(key, value) }
-            connection.requestMethod = this.method.name
-            connection.connectTimeout = this.timeout
-            connection.readTimeout = this.readTimeout
-            if(this.body != null) {
-                connection.doOutput = true
-                connection.outputStream.write(this.body!!)
-            }
-            connection.doInput = true
+    fun sendRequest(): Response =
+        RequestProcessor(this).process()
 
-            val responseCode = connection.responseCode
-            val responseMessage = connection.responseMessage
-            val headers = connection.headerFields
-            val cookies = connection.headerFields["Set-Cookie"]?.map { it.split(";")[0] }?.map { it.split("=") }?.associate { it[0] to it[1] } ?: emptyMap()
-            var error: Exception? = null
+    override fun toString(): String = JsonObject().apply {
+        addProperty("protocol", protocol.name)
+        addProperty("host", host)
+        addProperty("port", port)
+        addProperty("path", path)
 
-            val responseBody = try {
-                connection.inputStream.use {
-                    it.readAllBytes()
-                }
-            } catch (e: Exception) {
-                error = e
-                null
-            }
+        val parameters = JsonObject()
+        this@Request.parameters.forEach { (key, value) -> parameters.addProperty(key, value) }
+        add("parameters", parameters)
 
-            connection.disconnect()
+        val headers = JsonObject()
+        this@Request.headers.forEach { (key, value) -> headers.addProperty(key, value) }
+        add("headers", headers)
 
-            return Response(
-                request = this,
-                code = responseCode,
-                message = responseMessage,
-                responseBody = responseBody,
-                headers = headers,
-                cookies = cookies,
-                error = error
-            )
+        addProperty("body", body?.let { String(it) })
+        addProperty("timeout", timeout)
+        addProperty("read_timeout", readTimeout)
+        addProperty("method", method.name)
+        addProperty("follow_redirects", followRedirects)
+        addProperty("max_redirects", maxRedirects)
+        addProperty("url_string", toUrlString())
+    }.toString()
+
+    /**
+     * Checks if this request is equal to another request
+     * @param other The other request
+     */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Request
+
+        if (protocol != other.protocol) return false
+        if (host != other.host) return false
+        if (port != other.port) return false
+        if (path != other.path) return false
+        if (parameters != other.parameters) return false
+        if (headers != other.headers) return false
+        if (body != null) {
+            if (other.body == null) return false
+            if (!body.contentEquals(other.body)) return false
+        } else if (other.body != null) return false
+        if (timeout != other.timeout) return false
+        if (readTimeout != other.readTimeout) return false
+        if (method != other.method) return false
+        if (followRedirects != other.followRedirects) return false
+        if (maxRedirects != other.maxRedirects) return false
+
+        return true
+    }
+
+    /**
+     * Returns the hash code of this request
+     * @return The hash code of this request
+     */
+    override fun hashCode(): Int {
+        var result = protocol.hashCode()
+        result = 31 * result + host.hashCode()
+        result = 31 * result + (port ?: 0)
+        result = 31 * result + (path?.hashCode() ?: 0)
+        result = 31 * result + parameters.hashCode()
+        result = 31 * result + headers.hashCode()
+        result = 31 * result + (body?.contentHashCode() ?: 0)
+        result = 31 * result + timeout
+        result = 31 * result + readTimeout
+        result = 31 * result + method.hashCode()
+        result = 31 * result + followRedirects.hashCode()
+        result = 31 * result + maxRedirects
+        return result
+    }
+
+
+}
+
+private class RequestProcessor(private val initialRequest: Request) {
+
+    private val redirects = AtomicInteger(0)
+
+    fun process(): Response = process(initialRequest)
+
+    fun process(request: Request): Response {
+        val startTime = System.currentTimeMillis()
+        val url = URL(request.toUrlString())
+        val connection = url.openConnection() as HttpURLConnection
+        connection.instanceFollowRedirects = false // We will manually handle this to offer limited redirects and more control
+        request.method.applyMethod(connection, request)
+        request.headers.forEach { (key, value) -> connection.setRequestProperty(key, value) }
+        connection.connectTimeout = request.timeout
+        connection.readTimeout = request.readTimeout
+        connection.doInput = true
+        if (request.body != null) {
+            connection.doOutput = true
+            connection.outputStream.write(request.body!!)
         }
 
+        val responseCode = connection.responseCode
+        val responseMessage = connection.responseMessage
+        val headers = connection.headerFields.filter { it.key != null && it.value != null }
+        val cookies = headers["Set-Cookie"]?.map { it.split(";")[0] }?.map { it.split("=") }?.associate { it[0] to it[1] } ?: emptyMap()
+        var error: Exception? = null
 
-        var response = connect("${this.protocol.name.lowercase()}://${this.host}${if(this.port != null) ":${this.port}" else ""}${if(this.path != null) "/${this.path}" else ""}${if(this.parameters.isNotEmpty()) "?${this.parameters.map { "${it.key}=${it.value}" }.joinToString("&")}" else ""}")
+        val responseBody = try { connection.inputStream.use {
+            it.readAllBytes()
+        }
+        } catch (e: Exception) {
+            error = e
+            null
+        }
 
-        if (!this.followRedirects || (this.followRedirects && this.maxRedirects == 0)) {
+        connection.disconnect()
+
+        val response = Response(
+            request = request,
+            code = responseCode,
+            message = responseMessage,
+            responseBody = responseBody,
+            headers = headers,
+            cookies = cookies,
+            error = error,
+            time = System.currentTimeMillis() - startTime,
+            redirects = redirects.get()
+        ).also {
+            SimpleCoreAPI.logger.debug("[HTTP -> ${request.method.name} ${request.toUrlString()}]: ${it.code} ${it.message} (${it.time}ms)\n${it.toString().prettyJson()}")
+        }
+        if (!initialRequest.followRedirects || (initialRequest.maxRedirects != -1 && redirects.get() >= initialRequest.maxRedirects)) {
             return response
         }
 
-        var redirects = 0
-        while (response.code in 300..399 && (this.maxRedirects == -1 || redirects < this.maxRedirects)) {
-            val location = response.headers["Location"]?.firstOrNull() ?: break
-            response = connect(location)
-            redirects++
+        if ((response.code in 300..399 || response.headers.containsKey("Location")) && (initialRequest.maxRedirects == -1 || redirects.get() < initialRequest.maxRedirects)) {
+            val location = response.headers["Location"]?.firstOrNull() ?: return response
+            val uri = if (!location.startsWith("http:/") && !location.startsWith("https:/")) { // treat as a relative path
+                "${response.request.protocol.name.lowercase()}://${response.request.host}${if (response.request.port != null) ":${response.request.port}" else ""}${if (location.startsWith("/")) location else "/$location"}"
+            } else {
+                location
+            }
+            redirects.incrementAndGet()
+            return process(
+                Request(uri)
+                    .protocol(response.request.protocol)
+                    .parameters(response.request.parameters)
+                    .headers(response.request.headers)
+                    .apply {
+                        if (response.request.body != null) {
+                            body(response.request.body!!)
+                        }
+                    }
+                    .timeout(response.request.timeout)
+                    .readTimeout(response.request.readTimeout)
+                    .method(response.request.method)
+                    .followRedirects(response.request.followRedirects)
+                    .maxRedirects(initialRequest.maxRedirects)
+            )
         }
 
         return response
