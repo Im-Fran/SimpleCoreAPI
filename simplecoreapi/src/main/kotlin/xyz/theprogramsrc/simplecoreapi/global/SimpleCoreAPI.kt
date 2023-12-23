@@ -3,6 +3,7 @@ package xyz.theprogramsrc.simplecoreapi.global
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.slf4j.simple.SimpleLogger
+import xyz.theprogramsrc.simplecoreapi.*
 import xyz.theprogramsrc.simplecoreapi.global.modules.filesmodule.extensions.file
 import xyz.theprogramsrc.simplecoreapi.global.modules.filesmodule.extensions.folder
 import xyz.theprogramsrc.simplecoreapi.global.utils.SoftwareType
@@ -18,7 +19,8 @@ class SimpleCoreAPI {
     companion object {
         /**
          * Instance of SLF4 [Logger] used by [SimpleCoreAPI].
-         * In order to change the log level you must use the system properties command, for example `-Dorg.slf4j.simpleLogger.defaultLogLevel=debug`
+         * To change the log level, you must use the system properties command.
+         * For example `-Dorg.slf4j.simpleLogger.defaultLogLevel=debug`
          * @return The instance of SLF4 [Logger]
          */
         val logger: Logger = let {
@@ -66,9 +68,10 @@ class SimpleCoreAPI {
     init {
         instance = this
 
-        logger.info("SimpleCoreAPI v${getVersion()} - Git Commit: ${getShortHash()}")
-        if (getFullHash() != "unknown") {
-            GitHubUpdateChecker("TheProgramSrc/SimpleCoreAPI", getVersion()).checkWithPrint()
+        logger.info("$getName v${getVersion} (Git Commit: $getShortHash). $getDescription")
+        if (!getFullHash.contentEquals("unknown")) {
+            GitHubUpdateChecker("TheProgramSrc/SimpleCoreAPI", getVersion)
+                .checkWithPrint()
         }
 
         softwareType = SoftwareType.entries.firstOrNull { it.check() } ?: SoftwareType.UNKNOWN
@@ -78,22 +81,4 @@ class SimpleCoreAPI {
             logger.info("Running on unknown server software. Some features might not work as expected!")
         }
     }
-
-    /**
-     * Gets the short version of the commit hash
-     * @return The short commit hash
-     */
-    fun getShortHash(): String = "@git_short@"
-
-    /**
-     * Gets the full version of the commit hash
-     * @return The full commit hash
-     */
-    fun getFullHash(): String = "@git_full@"
-
-    /**
-     * Gets the version of SimpleCoreAPI
-     * @return The version of SimpleCoreAPI
-     */
-    fun getVersion(): String = "@version@"
 }

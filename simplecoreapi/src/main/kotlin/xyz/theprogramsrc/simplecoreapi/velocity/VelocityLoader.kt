@@ -3,13 +3,14 @@ package xyz.theprogramsrc.simplecoreapi.velocity
 import com.google.inject.Inject
 import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.proxy.ProxyServer
+import xyz.theprogramsrc.simplecoreapi.getVersion
 import xyz.theprogramsrc.simplecoreapi.global.SimpleCoreAPI
 import java.util.logging.Logger
 
 @Plugin(
     id = "simplecoreapi",
     name = "SimpleCoreAPI",
-    version = "@version@",
+    version = getVersion,
     url = "theprogramsrc.xyz",
     authors = ["TheProgramSrc"]
 )

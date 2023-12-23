@@ -1,7 +1,7 @@
 {
     "id": "simplecoreapi",
     "name": "SimpleCoreAPI",
-    "version": "@version@",
+    "version": "{{ version }}",
     "url": "theprogramsrc.xyz",
     "authors": ["TheProgramSrc"],
     "main": "xyz.theprogramsrc.simplecoreapi.velocity.VelocityLoader"
