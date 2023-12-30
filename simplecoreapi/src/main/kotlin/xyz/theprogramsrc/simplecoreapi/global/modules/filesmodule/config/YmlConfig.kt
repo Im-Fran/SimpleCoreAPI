@@ -347,6 +347,26 @@ class YmlConfig(val file: File){
     fun getListOrSet(path: String, default: List<*>): List<*> = if(has(path)) getList(path) else set(path, default).getList(path)
 
     /**
+     * Gets a [Map] from the given path
+     *
+     * @param path The path to get the value of
+     * @return The value of the given path as [Map]
+     */
+    fun getMap(path: String): Map<String, Any> = config.getConfigurationSection(path).let {
+        it.getKeys(true).associateWith { key -> it.get(key) }
+    }
+
+    /**
+     * Gets a [Map] from the given path
+     * or sets the default value if it doesn't exist
+     *
+     * @param path The path to get the value of
+     * @param default The default value to set if the path doesn't exist
+     * @return The value of the given path as [Map]
+     */
+    fun getMapOrSet(path: String, default: Map<String, Any>): Map<String, Any> = if(has(path)) getMap(path) else default.onEach { (key, value) -> set("$path.$key", value) }
+
+    /**
      * Gets the entry set of the [YmlConfig]
      *
      * @param deep If true, the keys will contain all the keys within any child node (and their children, recursively). Otherwise, this will contain only the keys of any direct children, and not their own children.
