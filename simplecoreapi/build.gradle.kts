@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
 
 dependencies {
     /* Api */
@@ -14,6 +15,9 @@ dependencies {
 
     /* Files Module */
     implementation("me.carleslc.Simple-YAML:Simple-Yaml:1.8.4")
+
+    /* UIs Module */
+    implementation("com.github.cryptomorin:XSeries:9.8.0")
 
     /* Global Depends */
     implementation("org.jetbrains:annotations:24.1.0")
