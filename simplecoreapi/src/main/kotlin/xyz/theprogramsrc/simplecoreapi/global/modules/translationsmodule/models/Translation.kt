@@ -39,9 +39,7 @@ data class Translation(
      * @return The translated string.
      */
     fun translate(language: String? = null, placeholders: Map<String, String> = emptyMap(), colorize: Boolean = true): String {
-        val file = YmlConfig(File(
-            File("translations/${if (group.endsWith("/")) group else "$group/"}").folder(), (language
-            ?: TranslationManager.getCurrentLanguage()) + ".lang")) // Get the file of the translation
+        val file = YmlConfig(File(File("SimpleCoreAPI/translations/${if (group.endsWith("/")) group else "$group/"}").folder(), (language ?: TranslationManager.getCurrentLanguage()) + ".lang")) // Get the file of the translation
         val mainColor = this.mainColor ?: "" // Get the main color of the translation
         var translation = mainColor.plus(
             if (file.has(id)) { // If the translation exists

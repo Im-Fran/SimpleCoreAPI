@@ -74,7 +74,7 @@ class TranslationManager {
      * Loads the translations to the cache.
      */
     fun loadTranslations() {
-        val translationsFolder = File("translations/").folder()
+        val translationsFolder = File("SimpleCoreAPI/translations/").folder()
         // First load the default translations
         translationsCache.forEach { (group, translations) ->
             val folder = File(translationsFolder, group).folder()
