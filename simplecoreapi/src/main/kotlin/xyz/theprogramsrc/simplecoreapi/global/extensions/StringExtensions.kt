@@ -30,3 +30,9 @@ fun String.toBase64(): String = Base64.getEncoder().encodeToString(this.toByteAr
  * @return the normal String
  */
 fun String.fromBase64(): String = String(Base64.getDecoder().decode(this))
+
+/**
+ * Capitalize this string (based on kotlin String.capitalize)
+ * @return the capitalized string
+ */
+fun String.capitalize(): String = replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
