@@ -104,13 +104,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets the value of the given path
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [Any]
      */
-    fun getOrSet(path: String, default: Any): Any = if(has(path)) get(path) else set(path, default).get(path)
+    fun getOrAdd(path: String, default: Any): Any = if(has(path)) get(path) else set(path, default).get(path)
 
     /**
      * Gets the value of the given path as a [String]
@@ -122,13 +122,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets the value of the given path as a [String]
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [String]
      */
-    fun getStringOrSet(path: String, default: String): String = if(has(path)) getString(path) else set(path, default).getString(path)
+    fun getStringOrAdd(path: String, default: String): String = if(has(path)) getString(path) else set(path, default).getString(path)
 
     /**
      * Gets the value of the given path as a [Int]
@@ -140,13 +140,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets the value of the given path as a [Int]
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [Int]
      */
-    fun getIntOrSet(path: String, default: Int): Int = if(has(path)) getInt(path) else set(path, default).getInt(path)
+    fun getIntOrAdd(path: String, default: Int): Int = if(has(path)) getInt(path) else set(path, default).getInt(path)
 
     /**
      * Gets the value of the given path as a [Double]
@@ -158,13 +158,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets the value of the given path as a [Double]
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [Double]
      */
-    fun getDoubleOrSet(path: String, default: Double): Double = if(has(path)) getDouble(path) else set(path, default).getDouble(path)
+    fun getDoubleOrAdd(path: String, default: Double): Double = if(has(path)) getDouble(path) else set(path, default).getDouble(path)
 
     /**
      * Gets the value of the given path as a [Float]
@@ -176,13 +176,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets the value of the given path as a [Float]
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [Float]
      */
-    fun getFloatOrSet(path: String, default: Float): Float = if(has(path)) getFloat(path) else set(path, default).getFloat(path)
+    fun getFloatOrAdd(path: String, default: Float): Float = if(has(path)) getFloat(path) else set(path, default).getFloat(path)
 
     /**
      * Gets the value of the given path as a [Long]
@@ -194,13 +194,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets the value of the given path as a [Long]
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [Long]
      */
-    fun getLongOrSet(path: String, default: Long): Long = if(has(path)) getLong(path) else set(path, default).getLong(path)
+    fun getLongOrAdd(path: String, default: Long): Long = if(has(path)) getLong(path) else set(path, default).getLong(path)
 
     /**
      * Gets the value of the given path as a [Boolean]
@@ -212,13 +212,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets the value of the given path as a [Boolean]
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [Boolean]
      */
-    fun getBooleanOrSet(path: String, default: Boolean): Boolean = if(has(path)) getBoolean(path) else set(path, default).getBoolean(path)
+    fun getBooleanOrAdd(path: String, default: Boolean): Boolean = if(has(path)) getBoolean(path) else set(path, default).getBoolean(path)
 
     /**
      * Gets a [List] of [String] from the given path
@@ -230,13 +230,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets a [List] of [String] from the given path
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [List] of [String]
      */
-    fun getStringListOrSet(path: String, default: List<String>): List<String> = if(has(path)) getStringList(path) else set(path, default).getStringList(path)
+    fun getStringListOrAdd(path: String, default: List<String>): List<String> = if(has(path)) getStringList(path) else set(path, default).getStringList(path)
 
     /**
      * Gets a [List] of [Int] from the given path
@@ -248,13 +248,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets a [List] of [Int] from the given path
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [List] of [Int]
      */
-    fun getIntListOrSet(path: String, default: List<Int>): List<Int> = if(has(path)) getIntList(path) else set(path, default).getIntList(path)
+    fun getIntListOrAdd(path: String, default: List<Int>): List<Int> = if(has(path)) getIntList(path) else set(path, default).getIntList(path)
 
     /**
      * Gets a [List] of [Double] from the given path
@@ -266,13 +266,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets a [List] of [Double] from the given path
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [List] of [Double]
      */
-    fun getDoubleListOrSet(path: String, default: List<Double>): List<Double> = if(has(path)) getDoubleList(path) else set(path, default).getDoubleList(path)
+    fun getDoubleListOrAdd(path: String, default: List<Double>): List<Double> = if(has(path)) getDoubleList(path) else set(path, default).getDoubleList(path)
 
     /**
      * Gets a [List] of [Float] from the given path
@@ -284,13 +284,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets a [List] of [Float] from the given path
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [List] of [Float]
      */
-    fun getFloatListOrSet(path: String, default: List<Float>): List<Float> = if(has(path)) getFloatList(path) else set(path, default).getFloatList(path)
+    fun getFloatListOrAdd(path: String, default: List<Float>): List<Float> = if(has(path)) getFloatList(path) else set(path, default).getFloatList(path)
 
     /**
      * Gets a [List] of [Long] from the given path
@@ -302,13 +302,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets a [List] of [Long] from the given path
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [List] of [Long]
      */
-    fun getLongListOrSet(path: String, default: List<Long>): List<Long> = if(has(path)) getLongList(path) else set(path, default).getLongList(path)
+    fun getLongListOrAdd(path: String, default: List<Long>): List<Long> = if(has(path)) getLongList(path) else set(path, default).getLongList(path)
 
     /**
      * Gets a [List] of [Boolean] from the given path
@@ -320,13 +320,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets a [List] of [Boolean] from the given path
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [List] of [Boolean]
      */
-    fun getBooleanListOrSet(path: String, default: List<Boolean>): List<Boolean> = if(has(path)) getBooleanList(path) else set(path, default).getBooleanList(path)
+    fun getBooleanListOrAdd(path: String, default: List<Boolean>): List<Boolean> = if(has(path)) getBooleanList(path) else set(path, default).getBooleanList(path)
 
     /**
      * Gets a [List] from the given path
@@ -338,13 +338,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets a [List] from the given path
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [List]
      */
-    fun getListOrSet(path: String, default: List<*>): List<*> = if(has(path)) getList(path) else set(path, default).getList(path)
+    fun getListOrAdd(path: String, default: List<*>): List<*> = if(has(path)) getList(path) else set(path, default).getList(path)
 
     /**
      * Gets a [Map] from the given path
@@ -358,13 +358,13 @@ class YmlConfig(val file: File){
 
     /**
      * Gets a [Map] from the given path
-     * or sets the default value if it doesn't exist
+     * or adds the default value if it doesn't exist
      *
      * @param path The path to get the value of
      * @param default The default value to set if the path doesn't exist
      * @return The value of the given path as [Map]
      */
-    fun getMapOrSet(path: String, default: Map<String, Any>): Map<String, Any> = if(has(path)) getMap(path) else default.onEach { (key, value) -> set("$path.$key", value) }
+    fun getMapOrAdd(path: String, default: Map<String, Any>): Map<String, Any> = if(has(path)) getMap(path) else default.onEach { (key, value) -> set("$path.$key", value) }
 
     /**
      * Gets the entry set of the [YmlConfig]
