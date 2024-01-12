@@ -7,6 +7,8 @@ kotlin {
         main {
             kotlin.srcDir("src/main/kotlin-templates")
             resources.srcDir("src/main/resources-templates")
+
+            kotlin.exclude("build/**")
         }
     }
 }

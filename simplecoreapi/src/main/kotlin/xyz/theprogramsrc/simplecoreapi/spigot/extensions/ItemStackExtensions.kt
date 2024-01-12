@@ -1,4 +1,4 @@
-package xyz.theprogramsrc.simplecoreapi.spigot.modules.uismodule.items
+package xyz.theprogramsrc.simplecoreapi.spigot.extensions
 
 import com.cryptomorin.xseries.XMaterial
 import org.bukkit.Color
@@ -10,8 +10,7 @@ import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import xyz.theprogramsrc.simplecoreapi.global.extensions.capitalize
-import xyz.theprogramsrc.simplecoreapi.spigot.extensions.*
-import java.util.*
+import xyz.theprogramsrc.simplecoreapi.spigot.modules.uismodule.models.SimpleEnchantment
 
 /* ItemStack Extensions */
 
@@ -276,26 +275,3 @@ fun ItemStack.color(color: Color): ItemStack = this.apply {
  * @return the [XMaterial]
  */
 fun ItemStack.xmaterial(): XMaterial = XMaterial.matchXMaterial(this.type)
-
-/* XMaterial Extensions */
-
-/**
- * Gets the [ItemStack] of this [XMaterial]
- * @return the item stack
- */
-fun XMaterial.itemStack(): ItemStack = this.let {
-    if(this == XMaterial.AIR) {
-        throw IllegalArgumentException("Cannot create an itemstack of air!")
-    }
-    val material = this.parseMaterial() ?: throw IllegalArgumentException("${this.name} is an invalid material!")
-    ItemStack(material)
-}
-
-/* Objects */
-
-/**
- * Represents an enchantment
- * @param enchantment the enchantment
- * @param level the level of the enchantment
- */
-data class SimpleEnchantment(val enchantment: Enchantment, val level: Int = 1)

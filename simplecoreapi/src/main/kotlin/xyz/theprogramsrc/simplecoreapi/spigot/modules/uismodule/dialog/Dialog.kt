@@ -15,6 +15,8 @@ import xyz.theprogramsrc.simplecoreapi.global.modules.translationsmodule.models.
 import xyz.theprogramsrc.simplecoreapi.spigot.SpigotLoader
 import xyz.theprogramsrc.simplecoreapi.spigot.extensions.bukkitColor
 import xyz.theprogramsrc.simplecoreapi.spigot.extensions.bukkitStripColors
+import xyz.theprogramsrc.simplecoreapi.spigot.extensions.itemStack
+import xyz.theprogramsrc.simplecoreapi.spigot.extensions.name
 import xyz.theprogramsrc.simplecoreapi.spigot.modules.tasksmodule.SpigotTasksModule
 import java.util.*
 
@@ -44,6 +46,9 @@ class Dialog(
         defaultValue = "exit",
         group = "UIsModule",
     )
+
+    private val closeItem = XMaterial.BARRIER.itemStack()
+        .name("")
 
     /**
      * Should the player be able to close the dialog?
