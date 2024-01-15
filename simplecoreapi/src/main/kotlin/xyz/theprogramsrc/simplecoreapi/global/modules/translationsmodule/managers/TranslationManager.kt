@@ -15,7 +15,7 @@ class TranslationManager {
         lateinit var instance: TranslationManager
             private set
 
-        fun getCurrentLanguage(): String = translationSettings.getStringOrSet("language", "en")
+        fun getCurrentLanguage(): String = translationSettings.getStringOrAdd("language", "en")
     }
 
     init {

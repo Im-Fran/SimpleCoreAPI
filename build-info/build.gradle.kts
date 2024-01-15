@@ -2,17 +2,6 @@ plugins {
     id("net.kyori.blossom") version "2.1.0"                     // Placeholder injection
 }
 
-kotlin {
-    sourceSets {
-        main {
-            kotlin.srcDir("src/main/kotlin-templates")
-            resources.srcDir("src/main/resources-templates")
-
-            kotlin.exclude("build/**")
-        }
-    }
-}
-
 sourceSets {
     main {
         blossom {
