@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -34,7 +35,25 @@ allprojects {
     }
 }
 
+dependencies {
+    implementation(project(":build-info", "shadow"))
+    implementation(project(":simplecoreapi", "shadow"))
+}
+
 tasks {
+    named<ShadowJar>("shadowJar") {
+        manifest {
+            attributes["Main-Class"] = "xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoaderKt"
+        }
+
+        mergeServiceFiles()
+        exclude("**/*.kotlin_metadata")
+        exclude("**/*.kotlin_builtins")
+
+        archiveBaseName.set("SimpleCoreAPI")
+        archiveClassifier.set("")
+    }
+
     withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "11"

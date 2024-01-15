@@ -9,11 +9,11 @@ import java.io.File
  * Representation of a translation.
  * @param id The id of the translation
  * @param defaultValue The default value of the translation.
- * @param group The group (folder) of the translation. Defaults to "common"
- * @param language The language of the translation. (Defaults to "en")
- * @param mainColor The main color of the translation. (Defaults to null)
- * @param colors The colors to use in the translation replacing strings. Example (using color '&c'): '**test**' should return '&ctest'. Defaults to empty array.
- * @param autoRegister If the translation should be automatically registered. (Defaults to true) It is recommended to disable if you're going to initialize the same translation multiple times (for example inside a loop)
+ * @param group The group (folder) where to store this translation. Defaults to "common"
+ * @param language The language of the translation. (Default to "en")
+ * @param mainColor The main color of the translation. (Default to null)
+ * @param colors The colors to use in the translation replacing strings. Example (using color '&c'): '**test**' should return '&ctest'. Default to an empty array.
+ * @param autoRegister If the translation should be automatically registered. (Default to true) It is recommended to disable if you're going to initialize the same translation multiple times (for example, inside a loop)
  */
 data class Translation(
     val id: String,
@@ -33,9 +33,9 @@ data class Translation(
 
     /**
      * Translates this [Translation] to the current language.
-     * @param language The language of the translation. Set to null to use the default language. Defaults to null
+     * @param language The language of the translation. Set to null to use the default language. Default to null
      * @param placeholders The placeholders to use in the translation replacing strings. Example (using placeholder id 'test' and value 'test_value'): '{test}' should return 'test_value'.
-     *                      You can use '{}' or '%%' as placeholder identifiers like '{test}' or '%test%'. Defaults to empty map.
+     *                      You can use '{}' or '%%' as placeholder identifiers like '{test}' or '%test%'. Defaults to an empty map.
      * @return The translated string.
      */
     fun translate(language: String? = null, placeholders: Map<String, String> = emptyMap(), colorize: Boolean = true): String {
@@ -68,6 +68,17 @@ data class Translation(
         }
     }
 
+    /**
+     * Translates this [Translation] to the current language.
+     * @return The translated string.
+     */
+    override fun toString(): String = translate()
+
+    /**
+     * Checks if this [Translation] is equals to another [Translation].
+     * @param other The other [Translation] to compare.
+     * @return True if the [Translation]s are equals, false otherwise.
+     */
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -85,6 +96,10 @@ data class Translation(
         return true
     }
 
+    /**
+     * Gets the hash code of this [Translation].
+     * @return The hash code of this [Translation].
+     */
     override fun hashCode(): Int {
         var result = id.hashCode()
         result = 31 * result + defaultValue.hashCode()
