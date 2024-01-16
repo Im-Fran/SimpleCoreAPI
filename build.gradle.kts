@@ -17,6 +17,7 @@ allprojects {
         plugin("com.github.johnrengelman.shadow")
         plugin("cl.franciscosolis.gradledotenv")
         plugin("org.jetbrains.kotlin.jvm")
+        plugin("org.jetbrains.dokka")
     }
 
     /*
@@ -43,6 +44,21 @@ allprojects {
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://repo.codemc.org/repository/maven-public/")
         maven("https://jitpack.io/")
+    }
+}
+
+subprojects {
+    java {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+        withSourcesJar()
+        withJavadocJar()
+    }
+
+    tasks {
+        jar {
+            dependsOn(dokkaJavadoc)
+        }
     }
 }
 
