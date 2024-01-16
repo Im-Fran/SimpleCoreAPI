@@ -1,10 +1,10 @@
-name: "Build and Deploy"
+name: "Build and Deploy [production]"
 on:
   release:
     types: [published,edited]
 jobs:
   build:
-    name: "Build and Deploy"
+    name: "Build and Deploy [production]"
     # Set up the OS
     runs-on: ubuntu-latest
     env:

@@ -2,7 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 dependencies {
     /* Api */
-    implementation(project(":build-info"))
+    compileOnly(project(":build-info"))
 
     /* Runtimes */
     compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
@@ -59,27 +59,23 @@ tasks {
         useJUnitPlatform()
     }
 
+    compileKotlin {
+        kotlinOptions.jvmTarget = "11"
+    }
+
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = "11"
+    }
+
+    compileJava {
+        options.encoding = "UTF-8"
+    }
+
     java {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
         withSourcesJar()
         withJavadocJar()
-    }
-
-    compileKotlin {
-        kotlinOptions {
-            jvmTarget = "11"
-        }
-    }
-
-    compileTestKotlin {
-        kotlinOptions {
-            jvmTarget = "11"
-        }
-    }
-
-    compileJava {
-        options.encoding = "UTF-8"
     }
 
     jar {
