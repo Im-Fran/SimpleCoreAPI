@@ -1,5 +1,9 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
+plugins {
+    id("org.jetbrains.dokka")
+}
+
 dependencies {
     /* Api */
     compileOnly(project(":build-info"))

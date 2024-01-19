@@ -1,3 +1,5 @@
+import org.jetbrains.dokka.gradle.DokkaTask
+
 plugins {
     id("net.kyori.blossom") version "2.1.0"                     // Placeholder injection
 }
@@ -20,6 +22,14 @@ sourceSets {
             resources {
                 variables.forEach(this::property)
             }
+        }
+    }
+}
+
+tasks.withType<DokkaTask>().configureEach {
+    dokkaSourceSets {
+        configureEach {
+            sourceRoots.from(file("src/"))
         }
     }
 }

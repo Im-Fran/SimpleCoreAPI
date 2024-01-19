@@ -1,6 +1,6 @@
-
 import com.github.jengelman.gradle.plugins.shadow.ShadowExtension
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import java.util.*
 
 plugins {
@@ -12,6 +12,15 @@ plugins {
     id("org.jetbrains.dokka") version "1.9.10"                  // Dokka (Kotlin Docs)
 }
 
+/*
+    The project version can be:
+    - environment variable VERSION or the manually added version
+    - If the environment variable ENV is set to dev, the project
+    version will have appended the git commit short hash + SNAPSHOT
+*/
+val projectVersion = (env["VERSION"] ?: "1.0.0") + (if(env["ENV"] == "dev") "-${env["GIT_COMMIT_SHORT_HASH"] ?: UUID.randomUUID().toString().replace("-", "").split("").shuffled().joinToString("").substring(0,8)}-SNAPSHOT" else "")
+println("This build version was '$projectVersion'")
+
 allprojects {
     apply {
         plugin("com.github.johnrengelman.shadow")
@@ -19,14 +28,6 @@ allprojects {
         plugin("org.jetbrains.kotlin.jvm")
         plugin("org.jetbrains.dokka")
     }
-
-    /*
-    The project version can be:
-    - environment variable VERSION or the manually added version
-    - If the environment variable ENV is set to dev, the project
-    version will have appended the git commit short hash + SNAPSHOT
-     */
-    val projectVersion = (env["VERSION"] ?: "1.0.0") + (if(env["ENV"] == "dev") "-${env["GIT_COMMIT_SHORT_HASH"] ?: UUID.randomUUID().toString().replace("-", "").split("").shuffled().joinToString("").substring(0,8)}-SNAPSHOT" else "")
 
     group = "xyz.theprogramsrc"
     version = projectVersion.replaceFirst("v", "").replace("/", "")
@@ -48,16 +49,18 @@ allprojects {
 }
 
 subprojects {
-    java {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-        withSourcesJar()
-        withJavadocJar()
-    }
+    apply(plugin = "org.jetbrains.dokka")
 
     tasks {
-        jar {
-            dependsOn(dokkaJavadoc)
+        java {
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
+            withSourcesJar()
+            withJavadocJar()
+        }
+
+        named<DokkaTaskPartial>("dokkaHtmlPartial") {
+            outputDirectory = layout.buildDirectory.dir("dokka")
         }
     }
 }
@@ -108,15 +111,25 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
-    dokkaHtml {
-        outputDirectory.set(layout.buildDirectory.dir("dokka/"))
-    }
-}
+    register<Jar>("mergeSourcesJar") {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        archiveClassifier = "sources"
+        from(subprojects.filter { subproject -> subproject.tasks.any { task -> task.name == "sourcesJar" } }.flatMap { subproject -> subproject.sourceSets.map { sourceSet -> sourceSet.allSource } })
 
-val dokkaJavadocJar by tasks.register<Jar>("dokkaJavadocJar") {
-    dependsOn(tasks.dokkaJavadoc, tasks.dokkaHtml)
-    from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
-    archiveClassifier.set("javadoc")
+        copy {
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        }
+    }
+
+    dokkaHtmlMultiModule {
+        outputDirectory = rootProject.layout.buildDirectory.dir("dokka/")
+    }
+
+    register<Jar>("dokkaJavadocJar") {
+        dependsOn(dokkaHtmlMultiModule)
+        from(dokkaHtmlMultiModule.flatMap { dokkaTask -> dokkaTask.outputDirectory })
+        archiveClassifier.set("javadoc")
+    }
 }
 
 publishing {
@@ -157,8 +170,8 @@ publishing {
                 artifactId = rootProject.name.lowercase()
 
                 component(this@create)
-                artifact(dokkaJavadocJar)
-                artifact(tasks.kotlinSourcesJar)
+                artifact(tasks.named("dokkaJavadocJar"))
+                artifact(tasks.named("mergeSourcesJar"))
 
                 pom {
                     name.set(rootProject.name)
