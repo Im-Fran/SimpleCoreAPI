@@ -37,7 +37,7 @@ repositories {
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.19.3-R0.1-SNAPSHOT")
-    compileOnly("net.md-5:bungeecord-api:1.20-R0.1")
+    compileOnly("net.md-5:bungeecord-api:1.20-R0.2")
     compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
 
     implementation("org.jetbrains:annotations:24.0.1")
