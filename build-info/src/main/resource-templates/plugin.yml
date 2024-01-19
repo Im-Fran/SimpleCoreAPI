@@ -1,4 +1,7 @@
 name: 'SimpleCoreAPI'
-main: 'xyz.theprogramsrc.simplecoreapi.spigot.SpigotLoader'
+main: 'cl.franciscosolis.simplecoreapi.spigot.SpigotLoader'
 version: '{{ version }}'
 api-version: '1.13'
+authors: ['FranciscoSolis']
+website: https://franciscosolis.cl
+description: '{{ description }}'

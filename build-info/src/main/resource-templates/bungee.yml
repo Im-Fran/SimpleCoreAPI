@@ -1,3 +1,5 @@
 name: 'SimpleCoreAPI'
-main: 'xyz.theprogramsrc.simplecoreapi.bungee.BungeeLoader'
+main: 'cl.franciscosolis.simplecoreapi.bungee.BungeeLoader'
 version: '{{ version }}'
+author: 'FranciscoSolis'
+description: '{{ description }}'

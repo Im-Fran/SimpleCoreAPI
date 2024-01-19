@@ -29,7 +29,7 @@ allprojects {
         plugin("org.jetbrains.dokka")
     }
 
-    group = "xyz.theprogramsrc"
+    group = "cl.franciscosolis"
     version = projectVersion.replaceFirst("v", "").replace("/", "")
     description = "The best way to create a kotlin project."
 
@@ -149,7 +149,7 @@ publishing {
             if(env["SONATYPE_USERNAME"] != null && env["SONATYPE_PASSWORD"] != null) {
                 maven {
                     name = "Sonatype"
-                    url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                    url = uri("https://central.sonatype.org")
                     credentials {
                         username = env["SONATYPE_USERNAME"]
                         password = env["SONATYPE_PASSWORD"]

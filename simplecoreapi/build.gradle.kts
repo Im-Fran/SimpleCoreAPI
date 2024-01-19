@@ -40,16 +40,16 @@ dependencies {
 tasks {
     named<ShadowJar>("shadowJar") {
         manifest {
-            attributes["Main-Class"] = "xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoaderKt"
+            attributes["Main-Class"] = "cl.franciscosolis.simplecoreapi.standalone.StandaloneLoaderKt"
         }
 
-        relocate("org.apache.commons", "xyz.theprogramsrc.simplecoreapi.libs.apache.commons")
-        relocate("org.checkerframework", "xyz.theprogramsrc.simplecoreapi.libs.checkerframework")
-        relocate("org.intellij", "xyz.theprogramsrc.simplecoreapi.libs.intellij")
-        relocate("org.jetbrains", "xyz.theprogramsrc.simplecoreapi.libs.jetbrains")
-        relocate("javax.annotation", "xyz.theprogramsrc.simplecoreapi.libs.annotation")
-        relocate("net.lingala.zip4j", "xyz.theprogramsrc.simplecoreapi.libs.zip4j")
-        relocate("org.slf4j", "xyz.theprogramsrc.simplecoreapi.libs.sl4fj")
+        relocate("org.apache.commons", "cl.franciscosolis.simplecoreapi.libs.apache.commons")
+        relocate("org.checkerframework", "cl.franciscosolis.simplecoreapi.libs.checkerframework")
+        relocate("org.intellij", "cl.franciscosolis.simplecoreapi.libs.intellij")
+        relocate("org.jetbrains", "cl.franciscosolis.simplecoreapi.libs.jetbrains")
+        relocate("javax.annotation", "cl.franciscosolis.simplecoreapi.libs.annotation")
+        relocate("net.lingala.zip4j", "cl.franciscosolis.simplecoreapi.libs.zip4j")
+        relocate("org.slf4j", "cl.franciscosolis.simplecoreapi.libs.sl4fj")
 
         mergeServiceFiles()
         exclude("**/*.kotlin_metadata")
