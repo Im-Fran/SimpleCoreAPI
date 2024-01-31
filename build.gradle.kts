@@ -1,3 +1,4 @@
+
 import com.github.jengelman.gradle.plugins.shadow.ShadowExtension
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
@@ -6,10 +7,11 @@ import java.util.*
 plugins {
     `maven-publish`
 
-    id("com.github.johnrengelman.shadow") version "8.1.1"       // ShadowJar
-    id("cl.franciscosolis.gradledotenv") version "1.0.1"        // .env support
-    kotlin("jvm") version "1.9.22"                              // Kotlin
-    id("org.jetbrains.dokka") version "1.9.10"                  // Dokka (Kotlin Docs)
+    id("com.github.johnrengelman.shadow") version "8.1.1"           // ShadowJar
+    id("cl.franciscosolis.gradledotenv") version "1.0.1"            // .env support
+    kotlin("jvm") version "1.9.22"                                  // Kotlin
+    id("org.jetbrains.dokka") version "1.9.10"                      // Dokka (Kotlin Docs)
+    id("cl.franciscosolis.sonatype-central-upload") version "1.0.2" // Sonatype Central Upload
 }
 
 /*
@@ -18,8 +20,15 @@ plugins {
     - If the environment variable ENV is set to dev, the project
     version will have appended the git commit short hash + SNAPSHOT
 */
-val projectVersion = (env["VERSION"] ?: "1.0.0") + (if(env["ENV"] == "dev") "-${env["GIT_COMMIT_SHORT_HASH"] ?: UUID.randomUUID().toString().replace("-", "").split("").shuffled().joinToString("").substring(0,8)}-SNAPSHOT" else "")
+val projectVersion = (env["VERSION"] ?: "1.0.0") + (if (env["ENV"] == "dev") "-${env["GIT_COMMIT_SHORT_HASH"] ?: UUID.randomUUID().toString().replace("-", "").split("").shuffled().joinToString("").substring(0, 8)}-SNAPSHOT" else "")
 println("This build version was '$projectVersion'")
+
+val repo = "https://github.com/TheProgramSrc/SimpleCoreAPI"
+val groupId = "cl.franciscosolis"
+
+group = groupId
+version = projectVersion.replaceFirst("v", "").replace("/", "")
+description = "The best way to create a kotlin project."
 
 allprojects {
     apply {
@@ -29,9 +38,9 @@ allprojects {
         plugin("org.jetbrains.dokka")
     }
 
-    group = "cl.franciscosolis"
-    version = projectVersion.replaceFirst("v", "").replace("/", "")
-    description = "The best way to create a kotlin project."
+    group = rootProject.group
+    version = rootProject.version
+    description = rootProject.description
 
     repositories {
         mavenLocal()
@@ -61,6 +70,11 @@ subprojects {
 
         named<DokkaTaskPartial>("dokkaHtmlPartial") {
             outputDirectory = layout.buildDirectory.dir("dokka")
+            val dokkaCache = file("${System.getProperty("user.home")}/.cache/dokka")
+            if (!dokkaCache.exists()) {
+                dokkaCache.mkdirs()
+            }
+            cacheRoot.set(dokkaCache)
         }
     }
 }
@@ -80,8 +94,8 @@ tasks {
         exclude("**/*.kotlin_metadata")
         exclude("**/*.kotlin_builtins")
 
-        archiveBaseName.set("SimpleCoreAPI")
-        archiveClassifier.set("")
+        archiveBaseName = "simplecoreapi"
+        archiveClassifier = ""
     }
 
     compileKotlin {
@@ -114,11 +128,14 @@ tasks {
     register<Jar>("mergeSourcesJar") {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         archiveClassifier = "sources"
-        from(subprojects.filter { subproject -> subproject.tasks.any { task -> task.name == "sourcesJar" } }.flatMap { subproject -> subproject.sourceSets.map { sourceSet -> sourceSet.allSource } })
+        from(subprojects.filter { subproject -> subproject.tasks.any { task -> task.name == "sourcesJar" } }
+            .flatMap { subproject -> subproject.sourceSets.map { sourceSet -> sourceSet.allSource } })
 
         copy {
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         }
+
+        archiveBaseName = "simplecoreapi"
     }
 
     dokkaHtmlMultiModule {
@@ -128,13 +145,29 @@ tasks {
     register<Jar>("dokkaJavadocJar") {
         dependsOn(dokkaHtmlMultiModule)
         from(dokkaHtmlMultiModule.flatMap { dokkaTask -> dokkaTask.outputDirectory })
-        archiveClassifier.set("javadoc")
+        archiveClassifier = "javadoc"
+        archiveBaseName = "simplecoreapi"
+    }
+
+    sonatypeCentralUpload {
+        dependsOn(named("publish"))
+
+        username = env["SONATYPE_USERNAME"]
+        password = env["SONATYPE_PASSWORD"]
+
+        val publication = publishing.publications.named<MavenPublication>("shadow").orNull ?: error("Publication 'shadow' not found")
+        archives = files(publication.artifacts?.map { artifact -> artifact.file })
+        pom = file(layout.buildDirectory.file("publications/shadow/pom-default.xml"))
+
+        signingKey = env["SIGNING_KEY"]
+        signingKeyPassphrase = env["SIGNING_PASSWORD"]
+        publicKey = env["PUBLIC_KEY"]
     }
 }
 
 publishing {
     repositories {
-        if (env["ENV"] == "prod" || env["ENV"] == "dev") {
+        if (env["ENV"] in listOf("prod", "dev")) {
             if (env["GITHUB_ACTOR"] != null && env["GITHUB_TOKEN"] != null) {
                 maven {
                     name = "GithubPackages"
@@ -145,56 +178,43 @@ publishing {
                     }
                 }
             }
-
-            if(env["SONATYPE_USERNAME"] != null && env["SONATYPE_PASSWORD"] != null) {
-                maven {
-                    name = "Sonatype"
-                    url = uri("https://central.sonatype.org")
-                    credentials {
-                        username = env["SONATYPE_USERNAME"]
-                        password = env["SONATYPE_PASSWORD"]
-                    }
-                }
-            }
         }
 
-        if(env["ENV"] != "prod") {
-            mavenLocal()
-        }
+        mavenLocal()
     }
 
     publications {
         create<MavenPublication>("shadow") {
-
-            project.extensions.configure<ShadowExtension> {
+            configure<ShadowExtension> {
                 artifactId = rootProject.name.lowercase()
 
                 component(this@create)
                 artifact(tasks.named("dokkaJavadocJar"))
                 artifact(tasks.named("mergeSourcesJar"))
 
+                // Add contents from pom template
                 pom {
-                    name.set(rootProject.name)
-                    description.set(project.description)
-                    url.set("https://github.com/TheProgramSrc/SimpleCoreAPI")
+                    name = rootProject.name
+                    description = project.description
+                    url = repo
 
                     licenses {
                         license {
-                            name.set("GNU GPL v3")
-                            url.set("https://github.com/TheProgramSrc/SimpleCoreAPI/blob/master/LICENSE")
+                            name = "GNU GPL v3"
+                            url = "${repo}/blob/master/LICENSE"
                         }
                     }
 
                     developers {
                         developer {
-                            id.set("ImFran")
-                            name.set("Francisco Solis")
-                            email.set("imfran@duck.com")
+                            id = "Im-Fran"
+                            name = "Francisco Solís"
+                            email = "imfran@duck.com"
                         }
                     }
 
                     scm {
-                        url.set("https://github.com/TheProgramSrc/SimpleCoreAPI")
+                        url = repo
                     }
                 }
             }
