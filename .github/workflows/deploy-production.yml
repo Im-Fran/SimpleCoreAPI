@@ -42,7 +42,7 @@ jobs:
           arguments: clean test shadowJar dokkaHtml publish publishToSonatype closeAndReleaseSonatypeStagingRepository
       # Now we store the artifact in the action
       - name: Upload the artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: SimpleCoreAPI
           path: ./simplecoreapi/build/libs/simplecoreapi-${{ env.VERSION }}.jar

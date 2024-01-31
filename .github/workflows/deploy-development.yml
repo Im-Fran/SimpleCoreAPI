@@ -35,7 +35,7 @@ jobs:
           arguments: clean test shadowJar dokkaHtml publish sonatypeCentralUpload
       # Now we store the artifact in the action
       - name: Upload the artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: SimpleCoreAPI
           path: ./simplecoreapi/build/libs/simplecoreapi-${{ env.GIT_COMMIT_SHORT_HASH }}.jar
