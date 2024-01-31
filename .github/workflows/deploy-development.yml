@@ -1,7 +1,7 @@
 name: "Build and Deploy [development]"
 on:
   push:
-    paths: [ 'simplecoreapi/**' ]
+    branches: [development]
 jobs:
   build:
     name: "Build and Deploy [development]"
