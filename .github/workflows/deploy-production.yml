@@ -11,6 +11,9 @@ jobs:
       # Sonatype Credentials & GitHub token
       SONATYPE_USERNAME: '${{ secrets.SONATYPE_USERNAME }}'
       SONATYPE_PASSWORD: '${{ secrets.SONATYPE_PASSWORD }}'
+      PUBLIC_KEY: '${{ secrets.PUBLIC_KEY }}'
+      SIGNING_KEY: '${{ secrets.SIGNING_KEY }}'
+      SIGNING_PASSWORD: '${{ secrets.SIGNING_PASSWORD }}'
       GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
       # Set environment
       ENV: 'prod'
@@ -42,12 +45,12 @@ jobs:
         uses: actions/upload-artifact@v5
         with:
           name: SimpleCoreAPI
-          path: ./simplecoreapi/build/libs/SimpleCoreAPI-${{ env.VERSION }}.jar
+          path: ./simplecoreapi/build/libs/simplecoreapi-${{ env.VERSION }}.jar
       # Here we upload the binary to the release
       - name: Upload to release
         uses: JasonEtco/upload-to-release@master
         with:
-          args: ./simplecoreapi/build/libs/SimpleCoreAPI-${{ env.VERSION }}.jar application/java-archive
+          args: ./simplecoreapi/build/libs/simplecoreapi-${{ env.VERSION }}.jar application/java-archive
       # Now we deploy the documents to GitHub pages
       - name: Deploy Dokka
         uses: JamesIves/github-pages-deploy-action@v4.5.0
