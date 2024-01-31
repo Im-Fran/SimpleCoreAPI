@@ -1,16 +1,12 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-plugins {
-    id("org.jetbrains.dokka")
-}
-
 dependencies {
     /* Api */
     compileOnly(project(":build-info"))
 
     /* Runtimes */
     compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
-    compileOnly("net.md-5:bungeecord-api:1.20-R0.1")
+    compileOnly("net.md-5:bungeecord-api:1.20-R0.3")
     compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
 
     /* Logging Module */
