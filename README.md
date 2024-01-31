@@ -1,13 +1,13 @@
 [![](https://jitci.com/gh/TheProgramSrc/SimpleCoreAPI/svg)](https://jitci.com/gh/TheProgramSrc/SimpleCoreAPI)
 [![](https://jitpack.io/v/TheProgramSrc/SimpleCoreAPI.svg)](https://jitpack.io/#TheProgramSrc/SimpleCoreAPI)
-[![](https://img.shields.io/nexus/s/xyz.theprogramsrc/simplecoreapi?server=https%3A%2F%2Fs01.oss.sonatype.org)]()
+![Maven Central Version](https://img.shields.io/maven-central/v/cl.franciscosolis/simplecoreapi?label=Maven+Central)
+[![Dokka](https://javadoc.io/badge2/cl.franciscosolis/simplecoreapi/Dokka.svg?logo=Kotlin&color=7F52FF)](https://javadoc.io/doc/cl.franciscosolis/simplecoreapi)
 
 # SimpleCoreAPI
 _The best way to create a plugin_<br>
 
-[![Discord](https://i.imgur.com/J1XhmMd.png)](https://go.theprogramsrc.xyz/discord)
+[![Discord](https://i.imgur.com/J1XhmMd.png)](https://go.franciscosolis.cl/discord)
 [![Terms of Service](https://i.imgur.com/4tFAGtE.png)](https://go.theprogramsrc.xyz/tos)
-[![Become a Patron](https://i.imgur.com/h9Y1X2X.png)](https://go.theprogramsrc.xyz/patreon)
 
 ## Included Libraries
 * [Kotlin](https://github.com/JetBrains/Kotlin) ([License](https://github.com/JetBrains/Kotlin/blob/master/license/))
