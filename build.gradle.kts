@@ -20,7 +20,7 @@ plugins {
     - If the environment variable ENV is set to dev, the project
     version will have appended the git commit short hash + SNAPSHOT
 */
-val projectVersion = (env["VERSION"] ?: "1.0.0") + (if (env["ENV"] == "dev") "-${env["GIT_COMMIT_SHORT_HASH"] ?: UUID.randomUUID().toString().replace("-", "").split("").shuffled().joinToString("").substring(0, 8)}-SNAPSHOT" else "")
+val projectVersion = (env["VERSION"] ?: "1.0.0") + (if (env["ENV"] == "dev") "-${env["GIT_COMMIT_SHORT_HASH"] ?: UUID.randomUUID().toString().replace("-", "").split("").shuffled().joinToString("").substring(0, 8)}" else "")
 println("This build version was '$projectVersion'")
 
 val repo = "https://github.com/TheProgramSrc/SimpleCoreAPI"
