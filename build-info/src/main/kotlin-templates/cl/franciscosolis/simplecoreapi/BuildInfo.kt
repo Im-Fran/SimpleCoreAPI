@@ -1,4 +1,4 @@
-package xyz.theprogramsrc.simplecoreapi
+package cl.franciscosolis.simplecoreapi
 
 /**
  * Gets the short version of the commit hash

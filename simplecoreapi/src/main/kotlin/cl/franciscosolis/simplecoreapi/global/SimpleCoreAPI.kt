@@ -1,5 +1,6 @@
 package cl.franciscosolis.simplecoreapi.global
 
+import cl.franciscosolis.simplecoreapi.*
 import cl.franciscosolis.simplecoreapi.global.modules.filesmodule.extensions.file
 import cl.franciscosolis.simplecoreapi.global.modules.filesmodule.extensions.folder
 import cl.franciscosolis.simplecoreapi.global.utils.SoftwareType
@@ -67,9 +68,9 @@ class SimpleCoreAPI {
     init {
         instance = this
 
-        logger.info("${cl.franciscosolis.simplecoreapi.getName} v${cl.franciscosolis.simplecoreapi.getVersion} (Git Commit: ${cl.franciscosolis.simplecoreapi.getShortHash}). ${cl.franciscosolis.simplecoreapi.getDescription}")
-        if (!cl.franciscosolis.simplecoreapi.getFullHash.contentEquals("unknown")) {
-            GitHubUpdateChecker("TheProgramSrc/SimpleCoreAPI", cl.franciscosolis.simplecoreapi.getVersion)
+        logger.info("$getName v${getVersion} (Git Commit: ${getShortHash}). $getDescription")
+        if (!getFullHash.contentEquals("unknown")) {
+            GitHubUpdateChecker("TheProgramSrc/SimpleCoreAPI", getVersion)
                 .checkWithPrint()
         }
 
