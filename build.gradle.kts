@@ -7,24 +7,37 @@ import java.util.*
 plugins {
     `maven-publish`
 
-    id("com.github.johnrengelman.shadow") version "8.1.1"           // ShadowJar
-    id("cl.franciscosolis.gradledotenv") version "1.0.1"            // .env support
-    kotlin("jvm") version "1.9.22"                                  // Kotlin
-    id("org.jetbrains.dokka") version "1.9.10"                      // Dokka (Kotlin Docs)
-    id("cl.franciscosolis.sonatype-central-upload") version "1.0.2" // Sonatype Central Upload
+    id("com.github.johnrengelman.shadow") version "8.1.1"                   // ShadowJar
+    id("cl.franciscosolis.gradledotenv") version "1.0.1"                    // .env support
+    kotlin("jvm") version "1.9.22"                                          // Kotlin
+    id("org.jetbrains.dokka") version "1.9.10"                              // Dokka (Kotlin Docs)
+    id("cl.franciscosolis.sonatype-central-upload") version "1.0.2"         // Sonatype Central Upload
+    id("org.cadixdev.licenser") version "0.6.1"                             // License Header
+
 }
 
-/*
-    The project version can be:
-    - environment variable VERSION or the manually added version
-    - If the environment variable ENV is set to dev, the project
-    version will have appended the git commit short hash + SNAPSHOT
-*/
-val projectVersion = (env["VERSION"] ?: "1.0.0") + (if (env["ENV"] == "dev") "-${env["GIT_COMMIT_SHORT_HASH"] ?: UUID.randomUUID().toString().replace("-", "").split("").shuffled().joinToString("").substring(0, 8)}" else "")
+/* Project Build ID is based on GIT_COMMIT_SHORT_HASH if any,
+ * otherwise we generate an UUIDv4 that will randomize its
+ * contents and get the first 8 characters.
+ */
+val projectBuildId = env["GIT_COMMIT_SHORT_HASH"] ?: UUID.randomUUID().toString().replace("-", "").split("").shuffled().joinToString("").substring(0, 8)
+
+/* Project Version will be the environment variable version (or the one specified by us) if it's production,
+ * otherwise it will be added '$projectBuildId'
+ * (no snapshot because maven central does not support it)
+ */
+val projectVersion = "${env["VERSION"] ?: "1.0.0"}${if (env["ENV"] != "prod") "-$projectBuildId" else ""}";
+/* Print out the current version */
 println("This build version was '$projectVersion'")
 
-val repo = "https://github.com/TheProgramSrc/SimpleCoreAPI"
-val groupId = "cl.franciscosolis"
+val repo = "https://github.com/Im-Fran/SimpleCoreAPI"
+
+/*
+ * The groupId will be the package name in lowercase
+ * if the environment is not production, we will add the environment name
+ * (or 'dev' if it's not specified)
+ */
+val groupId = "cl.franciscosolis${if(env["ENV"] != "prod") ".${env["ENV"] ?: "dev"}" else ""}".lowercase()
 
 group = groupId
 version = projectVersion.replaceFirst("v", "").replace("/", "")
@@ -36,6 +49,7 @@ allprojects {
         plugin("cl.franciscosolis.gradledotenv")
         plugin("org.jetbrains.kotlin.jvm")
         plugin("org.jetbrains.dokka")
+        plugin("org.cadixdev.licenser")
     }
 
     group = rootProject.group
@@ -70,12 +84,16 @@ subprojects {
 
         named<DokkaTaskPartial>("dokkaHtmlPartial") {
             outputDirectory = layout.buildDirectory.dir("dokka")
-            val dokkaCache = file("${System.getProperty("user.home")}/.cache/dokka")
-            if (!dokkaCache.exists()) {
-                dokkaCache.mkdirs()
+            cacheRoot = file("${System.getProperty("user.home")}/.cache/dokka").apply {
+                if(!exists()) mkdirs()
             }
-            cacheRoot.set(dokkaCache)
         }
+    }
+
+    license {
+        header(rootProject.file("LICENSE-HEADER"))
+        include("**/*.kt", "**/*.java")
+        newLine(true)
     }
 }
 
@@ -87,7 +105,7 @@ dependencies {
 tasks {
     named<ShadowJar>("shadowJar") {
         manifest {
-            attributes["Main-Class"] = "xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoaderKt"
+            attributes["Main-Class"] = "cl.franciscosolis.simplecoreapi.standalone.StandaloneLoaderKt"
         }
 
         mergeServiceFiles()
@@ -171,7 +189,7 @@ publishing {
             if (env["GITHUB_ACTOR"] != null && env["GITHUB_TOKEN"] != null) {
                 maven {
                     name = "GithubPackages"
-                    url = uri("https://maven.pkg.github.com/TheProgramSrc/SimpleCoreAPI")
+                    url = uri("https://maven.pkg.github.com/Im-Fran/SimpleCoreAPI")
                     credentials {
                         username = env["GITHUB_ACTOR"]
                         password = env["GITHUB_TOKEN"]
@@ -214,7 +232,7 @@ publishing {
                     }
 
                     scm {
-                        url = repo
+                        url = "$repo${if(repo.endsWith(".git")) "" else ".git"}"
                     }
                 }
             }
