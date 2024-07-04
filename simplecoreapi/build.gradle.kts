@@ -5,32 +5,32 @@ dependencies {
     compileOnly(project(":build-info"))
 
     /* Runtimes */
-    compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
-    compileOnly("net.md-5:bungeecord-api:1.20-R0.2")
-    compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.21-R0.1")
+    compileOnly("net.md-5:bungeecord-api:1.21-R0.1")
+    compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
 
     /* Logging Module */
-    implementation("org.apache.logging.log4j:log4j-api:2.21.0")
-    implementation("org.apache.logging.log4j:log4j-core:2.21.0")
+    implementation("org.apache.logging.log4j:log4j-api:2.23.1")
+    implementation("org.apache.logging.log4j:log4j-core:2.23.1")
 
     /* Files Module */
     implementation("me.carleslc.Simple-YAML:Simple-Yaml:1.8.4")
 
     /* UIs Module */
-    implementation("com.github.cryptomorin:XSeries:9.8.0")
+    implementation("com.github.cryptomorin:XSeries:11.2.0")
 
     /* Global Depends */
     implementation("org.jetbrains:annotations:24.1.0")
-    implementation("commons-io:commons-io:2.15.1")
-    implementation("com.google.code.gson:gson:2.10.1")
-    implementation("org.json:json:20231013")
+    implementation("commons-io:commons-io:2.16.1")
+    implementation("com.google.code.gson:gson:2.11.0")
+    implementation("org.json:json:20240303")
     implementation("net.lingala.zip4j:zip4j:2.11.5")
-    implementation("org.slf4j:slf4j-api:2.0.9")
-    implementation("org.slf4j:slf4j-simple:2.0.9")
+    implementation("org.slf4j:slf4j-api:2.0.13")
+    implementation("org.slf4j:slf4j-simple:2.0.13")
 
-    annotationProcessor("com.velocitypowered:velocity-api:3.1.1")
+    annotationProcessor("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
 }
 
 tasks {

@@ -10,19 +10,21 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"                   // ShadowJar
     id("cl.franciscosolis.gradledotenv") version "1.0.1"                    // .env support
     kotlin("jvm") version "1.9.22"                                          // Kotlin
-    id("org.jetbrains.dokka") version "1.9.10"                              // Dokka (Kotlin Docs)
-    id("cl.franciscosolis.sonatype-central-upload") version "1.0.2"         // Sonatype Central Upload
+    id("org.jetbrains.dokka") version "1.9.20"                              // Dokka (Kotlin Docs)
+    id("cl.franciscosolis.sonatype-central-upload") version "1.0.3"         // Sonatype Central Upload
     id("org.cadixdev.licenser") version "0.6.1"                             // License Header
 
 }
 
-/* Project Build ID is based on GIT_COMMIT_SHORT_HASH if any,
+/*
+ * Project Build ID is based on GIT_COMMIT_SHORT_HASH if any,
  * otherwise we generate an UUIDv4 that will randomize its
  * contents and get the first 8 characters.
  */
 val projectBuildId = env["GIT_COMMIT_SHORT_HASH"] ?: UUID.randomUUID().toString().replace("-", "").split("").shuffled().joinToString("").substring(0, 8)
 
-/* Project Version will be the environment variable version (or the one specified by us) if it's production,
+/*
+ * Project Version will be the environment variable version (or the one specified by us) if it's production,
  * otherwise it will be added '$projectBuildId'
  * (no snapshot because maven central does not support it)
  */
