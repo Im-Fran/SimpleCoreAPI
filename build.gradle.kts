@@ -28,7 +28,7 @@ val projectBuildId = env["GIT_COMMIT_SHORT_HASH"] ?: UUID.randomUUID().toString(
  * otherwise it will be added '$projectBuildId'
  * (no snapshot because maven central does not support it)
  */
-val projectVersion = "${env["VERSION"] ?: "1.0.0"}${if (env["ENV"] != "prod") "-$projectBuildId" else ""}";
+val projectVersion = "${env["VERSION"] ?: "1.0.0"}${if (env["ENV"] != "prod") "-$projectBuildId" else ""}"
 /* Print out the current version */
 println("This build version was '$projectVersion'")
 
