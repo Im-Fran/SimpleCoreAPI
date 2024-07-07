@@ -177,13 +177,6 @@ fun ItemStack.removeFlags(vararg flags: ItemFlag): ItemStack = this.apply {
 }
 
 /**
- * Gets the enchantments of this [ItemStack]
- * @return the enchantments of the item
- */
-val ItemStack.enchantments: Map<Enchantment, Int>
-    get() = this.itemMeta?.enchants ?: mapOf()
-
-/**
  * Toggles the given enchantments on this [ItemStack]. If the enchantment is already set, it will be removed.
  * @param enchantments the enchantments to toggle
  * @return this [ItemStack]
@@ -250,12 +243,8 @@ fun ItemStack.removeEnchantments(vararg enchantments: Enchantment): ItemStack = 
  * @return this [ItemStack]
  */
 fun ItemStack.setGlowing(glowing: Boolean = true): ItemStack = this.apply {
-    if(glowing) {
-        this.addFlags(ItemFlag.HIDE_ENCHANTS)
-        this.addEnchantments(SimpleEnchantment(Enchantment.UNBREAKING, 1))
-    } else {
-        this.removeFlags(ItemFlag.HIDE_ENCHANTS)
-        this.removeEnchantments(SimpleEnchantment(Enchantment.UNBREAKING))
+    this.itemMeta = this.itemMeta?.apply {
+        setEnchantmentGlintOverride(glowing)
     }
 }
 

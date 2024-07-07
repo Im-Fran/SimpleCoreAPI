@@ -23,7 +23,7 @@ import com.google.gson.JsonObject
 import cl.franciscosolis.simplecoreapi.global.SimpleCoreAPI
 import cl.franciscosolis.simplecoreapi.global.extensions.prettyJson
 import java.net.HttpURLConnection
-import java.net.URL
+import java.net.URI
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -549,7 +549,7 @@ private class RequestProcessor(private val initialRequest: Request) {
 
     fun process(request: Request): Response {
         val startTime = System.currentTimeMillis()
-        val url = URL(request.toUrlString())
+        val url = URI.create(request.toUrlString()).toURL()
         val connection = url.openConnection() as HttpURLConnection
         connection.instanceFollowRedirects = false // We will manually handle this to offer limited redirects and more control
         request.method.applyMethod(connection, request)

@@ -2,14 +2,15 @@
 import com.github.jengelman.gradle.plugins.shadow.ShadowExtension
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.*
 
 plugins {
     `maven-publish`
 
-    id("com.github.johnrengelman.shadow") version "8.1.1"                   // ShadowJar
+    id("io.github.goooler.shadow") version "8.1.8"                   // ShadowJar
     id("cl.franciscosolis.gradledotenv") version "1.0.1"                    // .env support
-    kotlin("jvm") version "1.9.22"                                          // Kotlin
+    kotlin("jvm") version "2.0.0"                                           // Kotlin
     id("org.jetbrains.dokka") version "1.9.20"                              // Dokka (Kotlin Docs)
     id("cl.franciscosolis.sonatype-central-upload") version "1.0.3"         // Sonatype Central Upload
     id("org.scm-manager.license") version "0.7.1"                           // License Header
@@ -47,11 +48,9 @@ description = "The best way to create a kotlin project."
 
 allprojects {
     apply {
-        plugin("com.github.johnrengelman.shadow")
+        plugin("io.github.goooler.shadow")
         plugin("cl.franciscosolis.gradledotenv")
         plugin("org.jetbrains.kotlin.jvm")
-        plugin("org.jetbrains.dokka")
-        plugin("org.scm-manager.license")
     }
 
     group = rootProject.group
@@ -73,33 +72,42 @@ allprojects {
         mavenLocal()
     }
 
+    kotlin {
+        compilerOptions.jvmTarget = JvmTarget.JVM_21
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+        withSourcesJar()
+        withJavadocJar()
+    }
+
+    tasks {
+        jar {
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        }
+
+        copy {
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        }
+    }
+}
+
+subprojects {
+    apply {
+        plugin("org.scm-manager.license")
+        plugin("org.jetbrains.dokka")
+    }
+
     license {
         header(rootProject.file("LICENSE-HEADER"))
         include("**/src/main/**/*.kt")
         skipExistingHeaders(true)
         newLine(true)
     }
-}
-
-subprojects {
-    apply(plugin = "org.jetbrains.dokka")
 
     tasks {
-        java {
-            sourceCompatibility = JavaVersion.VERSION_21
-            targetCompatibility = JavaVersion.VERSION_21
-            withSourcesJar()
-            withJavadocJar()
-        }
-
-        compileKotlin {
-            kotlinOptions.jvmTarget = "21"
-        }
-
-        compileTestKotlin {
-            kotlinOptions.jvmTarget = "21"
-        }
-
         compileJava {
             options.encoding = "UTF-8"
         }
@@ -130,21 +138,6 @@ tasks {
 
         archiveBaseName = "simplecoreapi"
         archiveClassifier = ""
-    }
-
-    java {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-        withSourcesJar()
-        withJavadocJar()
-    }
-
-    jar {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
-
-    copy {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
     register<Jar>("mergeSourcesJar") {
