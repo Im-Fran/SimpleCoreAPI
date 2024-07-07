@@ -12,7 +12,7 @@ plugins {
     kotlin("jvm") version "1.9.22"                                          // Kotlin
     id("org.jetbrains.dokka") version "1.9.20"                              // Dokka (Kotlin Docs)
     id("cl.franciscosolis.sonatype-central-upload") version "1.0.3"         // Sonatype Central Upload
-    id("org.cadixdev.licenser") version "0.6.1"                             // License Header
+    id("org.scm-manager.license") version "0.7.1"                           // License Header
 
 }
 
@@ -51,7 +51,7 @@ allprojects {
         plugin("cl.franciscosolis.gradledotenv")
         plugin("org.jetbrains.kotlin.jvm")
         plugin("org.jetbrains.dokka")
-        plugin("org.cadixdev.licenser")
+        plugin("org.scm-manager.license")
     }
 
     group = rootProject.group
@@ -59,7 +59,6 @@ allprojects {
     description = rootProject.description
 
     repositories {
-        mavenLocal()
         mavenCentral()
 
         maven("https://s01.oss.sonatype.org/content/groups/public/")
@@ -70,6 +69,15 @@ allprojects {
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://repo.codemc.org/repository/maven-public/")
         maven("https://jitpack.io/")
+
+        mavenLocal()
+    }
+
+    license {
+        header(rootProject.file("LICENSE-HEADER"))
+        include("**/src/main/**/*.kt")
+        skipExistingHeaders(true)
+        newLine(true)
     }
 }
 
@@ -78,10 +86,22 @@ subprojects {
 
     tasks {
         java {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
             withSourcesJar()
             withJavadocJar()
+        }
+
+        compileKotlin {
+            kotlinOptions.jvmTarget = "21"
+        }
+
+        compileTestKotlin {
+            kotlinOptions.jvmTarget = "21"
+        }
+
+        compileJava {
+            options.encoding = "UTF-8"
         }
 
         named<DokkaTaskPartial>("dokkaHtmlPartial") {
@@ -90,12 +110,6 @@ subprojects {
                 if(!exists()) mkdirs()
             }
         }
-    }
-
-    license {
-        header(rootProject.file("LICENSE-HEADER"))
-        include("**/*.kt", "**/*.java")
-        newLine(true)
     }
 }
 
@@ -118,21 +132,9 @@ tasks {
         archiveClassifier = ""
     }
 
-    compileKotlin {
-        kotlinOptions.jvmTarget = "11"
-    }
-
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "11"
-    }
-
-    compileJava {
-        options.encoding = "UTF-8"
-    }
-
     java {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
         withSourcesJar()
         withJavadocJar()
     }

@@ -5,8 +5,8 @@ dependencies {
     compileOnly(project(":build-info"))
 
     /* Runtimes */
-    compileOnly("org.spigotmc:spigot-api:1.21-R0.1")
-    compileOnly("net.md-5:bungeecord-api:1.21-R0.1")
+    compileOnly("org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT")
+    compileOnly("net.md-5:bungeecord-api:1.21-R0.1-SNAPSHOT")
     compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
 
     /* Logging Module */
@@ -57,18 +57,6 @@ tasks {
 
     test {
         useJUnitPlatform()
-    }
-
-    compileKotlin {
-        kotlinOptions.jvmTarget = "11"
-    }
-
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "11"
-    }
-
-    compileJava {
-        options.encoding = "UTF-8"
     }
 
     jar {
