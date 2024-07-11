@@ -21,6 +21,7 @@ package cl.franciscosolis.simplecoreapi.global.modules.networkingmodule.models
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import cl.franciscosolis.simplecoreapi.global.SimpleCoreAPI
+import cl.franciscosolis.simplecoreapi.global.extensions.debug
 import cl.franciscosolis.simplecoreapi.global.extensions.prettyJson
 import java.net.HttpURLConnection
 import java.net.URI

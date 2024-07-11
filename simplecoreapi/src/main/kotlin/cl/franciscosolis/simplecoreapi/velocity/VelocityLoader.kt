@@ -40,6 +40,6 @@ class VelocityLoader @Inject constructor(val server: ProxyServer, val logger: Lo
 
     init {
         instance = this
-        SimpleCoreAPI()
+        SimpleCoreAPI(logger = logger)
     }
 }

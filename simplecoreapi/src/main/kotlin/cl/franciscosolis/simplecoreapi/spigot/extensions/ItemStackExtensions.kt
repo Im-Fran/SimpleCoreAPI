@@ -29,28 +29,9 @@ import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import cl.franciscosolis.simplecoreapi.global.extensions.capitalize
 import cl.franciscosolis.simplecoreapi.spigot.modules.uismodule.models.SimpleEnchantment
+import org.bukkit.Bukkit
 
 /* ItemStack Extensions */
-
-/**
- * Gets the display name of this [ItemStack], if
- * the item doesn't have [ItemMeta] it will return the name of the material.
- * @return the name of the item
- */
-val ItemStack.localized_name: String
-    get() {
-        if(!hasItemMeta()) {
-            return type.name.replace('_', ' ').capitalize()
-        }
-
-        val meta = itemMeta ?: return type.name.replace('_', ' ').capitalize()
-
-        return if(meta.hasDisplayName()) {
-            meta.displayName
-        } else {
-            type.name.replace('_', ' ').capitalize()
-        }
-    }
 
 /**
  * Gets the name of this [ItemStack] (if it has [ItemMeta])
@@ -85,10 +66,11 @@ val ItemStack.lore: List<String>
  */
 fun ItemStack.lore(lore: List<String>, append: Boolean = false): ItemStack = this.apply {
     this.itemMeta = this.itemMeta?.apply {
+        val colored = lore.map { it.bukkitColor() }
         this.lore = if(append){
-            this.lore?.plus(lore.map { it.bukkitColor() })
+            (this.lore ?: emptyList()).plus(colored)
         } else {
-            lore.map { it.bukkitColor() }
+            colored
         }
     }
 }
@@ -100,26 +82,6 @@ fun ItemStack.lore(lore: List<String>, append: Boolean = false): ItemStack = thi
  * @return this [ItemStack]
  */
 fun ItemStack.lore(vararg lore: String, append: Boolean = false): ItemStack = this.lore(lore.toList(), append)
-
-/**
- * Adds a line to the lore of this [ItemStack]
- * @param line the lore of the item
- * @return this [ItemStack]
- */
-fun ItemStack.loreLine(line: String): ItemStack = this.apply {
-    this.itemMeta = this.itemMeta?.apply {
-        lore = this.lore?.plus(line.bukkitColor())
-    }
-}
-
-/**
- * Adds the given lines to the lore of this [ItemStack]
- * @param lines the lore of the item
- * @return this [ItemStack]
- */
-fun ItemStack.loreLines(vararg lines: String): ItemStack = this.apply {
-    lines.forEach(this::loreLine)
-}
 
 /**
  * Sets the amount of this [ItemStack]

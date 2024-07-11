@@ -94,7 +94,7 @@ class Dialog(
                     mainColor = "&c"
                 ).translate()
             )
-            .loreLines(
+            .lore(
                 "&7",
                 Translation(
                     id = "Dialog.CloseItem.Lore",

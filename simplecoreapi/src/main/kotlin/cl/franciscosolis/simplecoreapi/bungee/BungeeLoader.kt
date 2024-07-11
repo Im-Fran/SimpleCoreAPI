@@ -30,7 +30,7 @@ class BungeeLoader: Plugin() {
 
     override fun onLoad() {
         instance = this
-        SimpleCoreAPI()
+        SimpleCoreAPI(logger = logger)
     }
 
 }

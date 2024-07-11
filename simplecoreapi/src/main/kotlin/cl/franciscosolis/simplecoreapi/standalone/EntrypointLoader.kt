@@ -19,6 +19,7 @@
 package cl.franciscosolis.simplecoreapi.standalone
 
 import cl.franciscosolis.simplecoreapi.global.SimpleCoreAPI
+import cl.franciscosolis.simplecoreapi.global.extensions.debug
 import java.io.File
 import java.util.*
 import java.util.jar.JarFile

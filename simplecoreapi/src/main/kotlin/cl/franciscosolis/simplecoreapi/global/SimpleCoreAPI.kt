@@ -24,27 +24,24 @@ import cl.franciscosolis.simplecoreapi.global.modules.filesmodule.extensions.fol
 import cl.franciscosolis.simplecoreapi.global.utils.SoftwareType
 import cl.franciscosolis.simplecoreapi.global.utils.update.GitHubUpdateChecker
 import cl.franciscosolis.simplecoreapi.standalone.StandaloneLoader
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.slf4j.simple.SimpleLogger
 import java.io.File
+import java.util.logging.Logger
 
 /**
  * Class used to initialize SimpleCoreAPI (DO NOT CALL IT FROM EXTERNAL PLUGINS, IT MAY CRASH)
+ * @param logger The logger to use for the API (if null, it will use the default logger)
  */
-class SimpleCoreAPI {
+class SimpleCoreAPI(
+    private var logger: Logger? = null
+){
 
     companion object {
         /**
-         * Instance of SLF4 [Logger] used by [SimpleCoreAPI].
-         * To change the log level, you must use the system properties command.
-         * For example `-Dorg.slf4j.simpleLogger.defaultLogLevel=debug`
-         * @return The instance of SLF4 [Logger]
+         * Instance of [Logger] used by [SimpleCoreAPI].
+         * @return The instance of [Logger]
          */
-        val logger: Logger = let {
-            System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, System.getenv()["LOG_LEVEL"]?.lowercase() ?: "info")
-            LoggerFactory.getLogger("")
-        }
+        var logger: Logger = Logger.getAnonymousLogger()
+            private set
 
         /**
          * Instance of SimpleCoreAPI. Use it to retrieve the module manager
@@ -85,8 +82,9 @@ class SimpleCoreAPI {
 
     init {
         instance = this
+        logger?.let { SimpleCoreAPI.logger = it }
 
-        logger.info("$getName v${getVersion} (Git Commit: ${getShortHash}). $getDescription")
+        SimpleCoreAPI.logger.info("$getName v${getVersion} (Git Commit: ${getShortHash}). $getDescription")
         if (!getFullHash.contentEquals("unknown")) {
             GitHubUpdateChecker("TheProgramSrc/SimpleCoreAPI", getVersion)
                 .checkWithPrint()
@@ -94,9 +92,9 @@ class SimpleCoreAPI {
 
         softwareType = SoftwareType.entries.firstOrNull { it.check() } ?: SoftwareType.UNKNOWN
         if(softwareType != SoftwareType.UNKNOWN && softwareType.display != null) {
-            logger.info("Running API with software ${softwareType.display}")
+            SimpleCoreAPI.logger.info("Running API with software ${softwareType.display}")
         } else {
-            logger.info("Running on unknown server software. Some features might not work as expected!")
+            SimpleCoreAPI.logger.info("Running on unknown server software. Some features might not work as expected!")
         }
     }
 }

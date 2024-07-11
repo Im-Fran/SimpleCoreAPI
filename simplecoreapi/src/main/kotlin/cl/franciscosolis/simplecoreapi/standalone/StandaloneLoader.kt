@@ -20,6 +20,7 @@ package cl.franciscosolis.simplecoreapi.standalone
 
 import cl.franciscosolis.simplecoreapi.global.SimpleCoreAPI
 import cl.franciscosolis.simplecoreapi.global.utils.measureLoad
+import java.util.logging.Logger
 
 fun main() {
     StandaloneLoader()
@@ -38,7 +39,7 @@ class StandaloneLoader {
     init {
         instance = this
         isRunning = true
-        SimpleCoreAPI()
+        SimpleCoreAPI(logger = Logger.getLogger("SimpleCoreAPI"))
 
         measureLoad("Loaded entrypoint in {time}") {
             EntrypointLoader()

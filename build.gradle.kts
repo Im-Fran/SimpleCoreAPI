@@ -128,6 +128,14 @@ dependencies {
 
 tasks {
     named<ShadowJar>("shadowJar") {
+        doLast {
+            copy {
+                from(archiveFile.get().asFile.absolutePath)
+                into(rootProject.layout.buildDirectory.dir("libs"))
+                rename { "simplecoreapi.jar" }
+            }
+        }
+
         manifest {
             attributes["Main-Class"] = "cl.franciscosolis.simplecoreapi.standalone.StandaloneLoaderKt"
         }

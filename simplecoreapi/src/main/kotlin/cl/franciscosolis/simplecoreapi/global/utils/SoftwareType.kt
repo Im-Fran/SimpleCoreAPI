@@ -50,8 +50,10 @@ enum class SoftwareType(val check: () -> Boolean = { false }, val display: Strin
     PAPER(check = {
         try {
             val bukkit = Class.forName("org.bukkit.Bukkit")
-            val version = bukkit.getMethod("getVersion").invoke(bukkit) as String
-            version.contains("-Paper-")
+            val version = if(bukkit.methods.any { it.name == "getVersion" }) bukkit.getMethod("getVersion").invoke(bukkit) as String else ""
+            val name = if(bukkit.methods.any { it.name == "getName" }) bukkit.getMethod("getName").invoke(bukkit) as String else ""
+
+            version.contains("-Paper-") || name == "Paper"
         } catch (e: Exception) {
             false
         }
