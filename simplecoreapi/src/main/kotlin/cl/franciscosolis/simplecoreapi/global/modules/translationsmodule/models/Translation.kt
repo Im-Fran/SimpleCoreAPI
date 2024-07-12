@@ -80,7 +80,7 @@ data class Translation(
         }
 
         return if (colorize) { // Return the translated string
-            translation.replace("&", "§")
+            translation.replace('&', '\u00A7')
         } else {
             translation
         }

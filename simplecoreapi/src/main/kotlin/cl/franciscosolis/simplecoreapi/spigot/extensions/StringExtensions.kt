@@ -18,8 +18,8 @@
 
 package cl.franciscosolis.simplecoreapi.spigot.extensions
 
-import org.bukkit.ChatColor
 import org.bukkit.Color
+import java.util.regex.Pattern
 
 /**
  * Translates the color codes in the string
@@ -27,7 +27,7 @@ import org.bukkit.Color
  *
  * @return The translated string
  */
-fun String.bukkitColor(altColorChar: Char = '&'): String = ChatColor.translateAlternateColorCodes(altColorChar, this)
+fun String.bukkitColor(altColorChar: Char = '&'): String = this.replace(altColorChar, '\u00A7')
 
 /**
  * Translates the color codes in the string and formats it
@@ -48,7 +48,7 @@ fun String.bukkitColorFormat(altColorChar: Char = '&', vararg args: Any): String
  * Strips the colors from the string
  * @return The stripped string
  */
-fun String.bukkitStripColors(): String? = ChatColor.stripColor(this)
+fun String.bukkitStripColors(): String? = Pattern.compile("(?i)" + '\u00A7' + "[0-9A-FK-ORX]").matcher(this).replaceAll("")
 
 /**
  * Turns this hex string into a bukkit [Color]
