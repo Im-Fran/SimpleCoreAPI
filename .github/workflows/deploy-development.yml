@@ -41,4 +41,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: SimpleCoreAPI
-          path: ./simplecoreapi/build/libs/simplecoreapi-${{ env.GIT_COMMIT_SHORT_HASH }}.jar
+          path: ./build/libs/simplecoreapi.jar

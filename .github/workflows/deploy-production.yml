@@ -45,12 +45,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: SimpleCoreAPI
-          path: ./simplecoreapi/build/libs/simplecoreapi-${{ env.VERSION }}.jar
+          path: ./build/libs/simplecoreapi.jar
       # Here we upload the binary to the release
       - name: Upload to release
         uses: JasonEtco/upload-to-release@master
         with:
-          args: ./simplecoreapi/build/libs/simplecoreapi-${{ env.VERSION }}.jar application/java-archive
+          args: ./build/libs/simplecoreapi.jar application/java-archive
       # Now we deploy the documents to GitHub pages
       - name: Deploy Dokka
         uses: JamesIves/github-pages-deploy-action@v4.5.0
