@@ -61,3 +61,4 @@ bin/
 ./plugins/
 ./SimpleCoreAPI/
 !gradle-wrapper.jar
+.kotlin/

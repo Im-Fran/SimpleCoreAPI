@@ -1,9 +1,27 @@
+/*
+ * SimpleCoreAPI - Kotlin Project Library
+ * Copyright (C) 2024 Francisco Solís
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package cl.franciscosolis.simplecoreapi.global.utils.update
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import cl.franciscosolis.simplecoreapi.global.SimpleCoreAPI
-import java.net.URL
+import java.net.URI
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 
@@ -63,12 +81,12 @@ class SpigotUpdateChecker(val resourceId: String, val currentVersion: String): U
         val difference = System.currentTimeMillis() - cached.second
         if(difference > 60000 || cached.second == 0L){
             val json = if(id == "latest"){
-                JsonParser.parseString(URL("https://api.spiget.org/v2/resources/$resourceId/versions/latest").readText()).asJsonObject
+                JsonParser.parseString(URI.create("https://api.spiget.org/v2/resources/$resourceId/versions/latest").toURL().readText()).asJsonObject
             } else {
                 var page = 1
                 var data: JsonObject? = null
                 while(data == null) {
-                    val versions = JsonParser.parseString(URL("https://api.spiget.org/v2/resources/$resourceId/versions?size=50&page=$page").readText()).asJsonArray
+                    val versions = JsonParser.parseString(URI.create("https://api.spiget.org/v2/resources/$resourceId/versions?size=50&page=$page").toURL().readText()).asJsonArray
                     if(versions.isEmpty) throw RuntimeException("Couldn't find any version for the given id: $id! Make sure you're using a valid version")
                     data = versions.firstOrNull {
                         it.asJsonObject.get("name").asString == id
