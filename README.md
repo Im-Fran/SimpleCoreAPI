@@ -1,7 +1,10 @@
-[![](https://jitci.com/gh/TheProgramSrc/SimpleCoreAPI/svg)](https://jitci.com/gh/TheProgramSrc/SimpleCoreAPI)
-[![](https://jitpack.io/v/TheProgramSrc/SimpleCoreAPI.svg)](https://jitpack.io/#TheProgramSrc/SimpleCoreAPI)
-![Maven Central Version](https://img.shields.io/maven-central/v/cl.franciscosolis/simplecoreapi?label=Maven+Central)
+### Production Badges
+![Maven Central Version (Prod)](https://img.shields.io/maven-central/v/cl.franciscosolis/simplecoreapi?label=Maven+Central+(Prod)&color=blue)
 [![Dokka](https://javadoc.io/badge2/cl.franciscosolis/simplecoreapi/Dokka.svg?logo=Kotlin&color=7F52FF)](https://javadoc.io/doc/cl.franciscosolis/simplecoreapi)
+
+### Dev Badges
+![Maven Central Version (Dev)](https://img.shields.io/maven-central/v/cl.franciscosolis.dev/simplecoreapi?label=Maven+Central+(Dev)&color=orange)
+[![Dokka](https://javadoc.io/badge2/cl.franciscosolis.dev/simplecoreapi/Dokka.svg?logo=Kotlin&color=7F52FF)](https://javadoc.io/doc/cl.franciscosolis.dev/simplecoreapi)
 
 # SimpleCoreAPI
 _The best way to create a plugin_<br>
