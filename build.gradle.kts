@@ -162,6 +162,7 @@ tasks {
     }
 
     dokkaHtmlMultiModule {
+        dependsOn("::dokkaHtml")
         outputDirectory = rootProject.layout.buildDirectory.dir("dokka/")
     }
 
