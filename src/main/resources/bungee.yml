@@ -1,3 +1,0 @@
-name: 'SimpleCoreAPI'
-main: 'xyz.theprogramsrc.simplecoreapi.bungee.BungeeLoader'
-version: '@version@'

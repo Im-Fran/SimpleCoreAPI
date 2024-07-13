@@ -1,0 +1,8 @@
+{
+    "id": "simplecoreapi",
+    "name": "SimpleCoreAPI",
+    "version": "{{ version }}",
+    "url": "https://franciscosolis.cl",
+    "authors": ["FranciscoSolis"],
+    "main": "cl.franciscosolis.simplecoreapi.velocity.VelocityLoader"
+}

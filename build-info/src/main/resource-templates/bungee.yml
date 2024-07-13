@@ -1,0 +1,5 @@
+name: 'SimpleCoreAPI'
+main: 'cl.franciscosolis.simplecoreapi.bungee.BungeeLoader'
+version: '{{ version }}'
+author: 'FranciscoSolis'
+description: '{{ description }}'

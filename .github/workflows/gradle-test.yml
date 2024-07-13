@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        java-version: [11,16,17]
+        java-version: [21, 22]
     # Set up OS
     runs-on: ubuntu-latest
     # Set up environment variables
@@ -21,9 +21,9 @@ jobs:
       uses: actions/checkout@v4
     # Setup java and maven
     - name: Set up JDK ${{ matrix.java-version }}
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
-        distribution: adopt
+        distribution: corretto
         java-version: ${{ matrix.java-version }}
         cache: 'gradle'
     # Setup executable gradle
@@ -31,4 +31,4 @@ jobs:
       run: chmod +x gradlew
     # Test building without dokka
     - name: Build Jar with Java ${{ matrix.java-version }}
-      run: ./gradlew clean shadowJar test -x dokkaHtml -no-daemon
+      run: ./gradlew clean shadowJar test -x dokkaHtml -x sonatypeCentralUpload -no-daemon

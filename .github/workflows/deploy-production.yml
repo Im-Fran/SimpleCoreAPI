@@ -1,0 +1,62 @@
+name: "Build and Deploy [production]"
+on:
+  release:
+    types: [published,edited]
+jobs:
+  build:
+    name: "Build and Deploy [production]"
+    # Set up the OS
+    runs-on: ubuntu-latest
+    env:
+      # Sonatype Credentials & GitHub token
+      SONATYPE_USERNAME: '${{ secrets.SONATYPE_USERNAME }}'
+      SONATYPE_PASSWORD: '${{ secrets.SONATYPE_PASSWORD }}'
+      PUBLIC_KEY: '${{ secrets.PUBLIC_KEY }}'
+      SIGNING_KEY: '${{ secrets.SIGNING_KEY }}'
+      SIGNING_PASSWORD: '${{ secrets.SIGNING_PASSWORD }}'
+      GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      # Set environment
+      ENV: 'prod'
+    steps:
+      # Checkout the Code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      # Set up git hashes environment variables
+      - name: Git Hashes
+        uses: Im-Fran/git-hashes-action@v1.0.3
+        # Set up version from tag environment variables
+      - name: Version from Tag Action
+        uses: Im-Fran/version-from-tag-action@v1.0.3
+        with:
+          remove-first-character: 'v'
+        # Set up the JDK
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+      # Clean, Test, Publish and Build (in that order to save the artifact to the action)
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: clean test shadowJar dokkaHtml publish publishToSonatype closeAndReleaseSonatypeStagingRepository
+      # Now we store the artifact in the action
+      - name: Upload the artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SimpleCoreAPI
+          path: ./build/libs/simplecoreapi.jar
+      # Here we upload the binary to the release
+      - name: Upload to release
+        uses: JasonEtco/upload-to-release@master
+        with:
+          args: ./build/libs/simplecoreapi.jar application/java-archive
+      # Now we deploy the documents to GitHub pages
+      - name: Deploy Dokka
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          branch: gh-pages
+          folder: build/dokka
+          clean: true
+          clean-exclude: |
+            CNAME
