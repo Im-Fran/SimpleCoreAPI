@@ -1,3 +1,21 @@
+/*
+ * SimpleCoreAPI - Kotlin Project Library
+ * Copyright (C) 2024 Francisco Solís
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package cl.franciscosolis.simplecoreapi.spigot.extensions
 
 import com.cryptomorin.xseries.XMaterial
@@ -11,30 +29,9 @@ import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import cl.franciscosolis.simplecoreapi.global.extensions.capitalize
 import cl.franciscosolis.simplecoreapi.spigot.modules.uismodule.models.SimpleEnchantment
+import org.bukkit.Bukkit
 
 /* ItemStack Extensions */
-
-/**
- * Gets the display name of this [ItemStack], if
- * the item doesn't have [ItemMeta] it will return the name of the material.
- * @return the name of the item
- */
-val ItemStack.localized_name: String
-    get() {
-        if(!hasItemMeta()) {
-            return type.name.replace('_', ' ').capitalize()
-        }
-
-        val meta = itemMeta ?: return type.name.replace('_', ' ').capitalize()
-
-        return if(meta.hasDisplayName()) {
-            meta.displayName
-        } else if(meta.hasLocalizedName()) {
-            meta.localizedName
-        } else {
-            type.name.replace('_', ' ').capitalize()
-        }
-    }
 
 /**
  * Gets the name of this [ItemStack] (if it has [ItemMeta])
@@ -69,10 +66,11 @@ val ItemStack.lore: List<String>
  */
 fun ItemStack.lore(lore: List<String>, append: Boolean = false): ItemStack = this.apply {
     this.itemMeta = this.itemMeta?.apply {
+        val colored = lore.map { it.bukkitColor() }
         this.lore = if(append){
-            this.lore?.plus(lore.map { it.bukkitColor() })
+            (this.lore ?: emptyList()).plus(colored)
         } else {
-            lore.map { it.bukkitColor() }
+            colored
         }
     }
 }
@@ -84,26 +82,6 @@ fun ItemStack.lore(lore: List<String>, append: Boolean = false): ItemStack = thi
  * @return this [ItemStack]
  */
 fun ItemStack.lore(vararg lore: String, append: Boolean = false): ItemStack = this.lore(lore.toList(), append)
-
-/**
- * Adds a line to the lore of this [ItemStack]
- * @param line the lore of the item
- * @return this [ItemStack]
- */
-fun ItemStack.loreLine(line: String): ItemStack = this.apply {
-    this.itemMeta = this.itemMeta?.apply {
-        lore = this.lore?.plus(line.bukkitColor())
-    }
-}
-
-/**
- * Adds the given lines to the lore of this [ItemStack]
- * @param lines the lore of the item
- * @return this [ItemStack]
- */
-fun ItemStack.loreLines(vararg lines: String): ItemStack = this.apply {
-    lines.forEach(this::loreLine)
-}
 
 /**
  * Sets the amount of this [ItemStack]
@@ -159,13 +137,6 @@ fun ItemStack.removeFlags(vararg flags: ItemFlag): ItemStack = this.apply {
         removeItemFlags(*flags)
     }
 }
-
-/**
- * Gets the enchantments of this [ItemStack]
- * @return the enchantments of the item
- */
-val ItemStack.enchantments: Map<Enchantment, Int>
-    get() = this.itemMeta?.enchants ?: mapOf()
 
 /**
  * Toggles the given enchantments on this [ItemStack]. If the enchantment is already set, it will be removed.
@@ -234,12 +205,8 @@ fun ItemStack.removeEnchantments(vararg enchantments: Enchantment): ItemStack = 
  * @return this [ItemStack]
  */
 fun ItemStack.setGlowing(glowing: Boolean = true): ItemStack = this.apply {
-    if(glowing) {
-        this.addFlags(ItemFlag.HIDE_ENCHANTS)
-        this.addEnchantments(SimpleEnchantment(Enchantment.LUCK, 1))
-    } else {
-        this.removeFlags(ItemFlag.HIDE_ENCHANTS)
-        this.removeEnchantments(SimpleEnchantment(Enchantment.LUCK))
+    this.itemMeta = this.itemMeta?.apply {
+        setEnchantmentGlintOverride(glowing)
     }
 }
 

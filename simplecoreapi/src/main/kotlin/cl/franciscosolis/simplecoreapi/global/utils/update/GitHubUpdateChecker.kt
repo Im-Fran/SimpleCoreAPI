@@ -1,9 +1,27 @@
+/*
+ * SimpleCoreAPI - Kotlin Project Library
+ * Copyright (C) 2024 Francisco Solís
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package cl.franciscosolis.simplecoreapi.global.utils.update
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import cl.franciscosolis.simplecoreapi.global.SimpleCoreAPI
-import java.net.URL
+import java.net.URI
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 
@@ -94,7 +112,7 @@ class GitHubUpdateChecker(
         var cached = requestedData.getOrDefault(id, Pair(JsonObject(), 0L))
         val difference = System.currentTimeMillis() - cached.second
         if(difference > 60000 || cached.second == 0L){
-            val json = JsonParser.parseString(URL(if(id != "latest") "https://api.github.com/repos/$repo/releases/tags/$id" else "https://api.github.com/repos/$repo/releases/latest").readText()).asJsonObject
+            val json = JsonParser.parseString(URI.create(if(id != "latest") "https://api.github.com/repos/$repo/releases/tags/$id" else "https://api.github.com/repos/$repo/releases/latest").toURL().readText()).asJsonObject
             cached = Pair(JsonObject().apply {
                 addProperty("published_at", json.get("published_at").asString)
                 addProperty("version", json.get("tag_name").asString)

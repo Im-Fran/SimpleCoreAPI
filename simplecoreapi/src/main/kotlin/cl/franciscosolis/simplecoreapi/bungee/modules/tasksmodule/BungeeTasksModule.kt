@@ -1,11 +1,28 @@
+/*
+ * SimpleCoreAPI - Kotlin Project Library
+ * Copyright (C) 2024 Francisco Solís
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package cl.franciscosolis.simplecoreapi.bungee.modules.tasksmodule
 
-import net.md_5.bungee.api.scheduler.ScheduledTask
-import net.md_5.bungee.api.scheduler.TaskScheduler
-import cl.franciscosolis.simplecoreapi.bungee.BungeeLoader
 import cl.franciscosolis.simplecoreapi.global.module.Module
 import cl.franciscosolis.simplecoreapi.global.module.ModuleDescription
 import cl.franciscosolis.simplecoreapi.global.modules.tasksmodule.models.RecurringTask
+import net.md_5.bungee.api.scheduler.ScheduledTask
+import net.md_5.bungee.api.scheduler.TaskScheduler
 import java.util.concurrent.TimeUnit
 
 class BungeeTasksModule: Module {
@@ -15,7 +32,7 @@ class BungeeTasksModule: Module {
         /**
          * Instance of the [BungeeTasksModule].
          */
-        lateinit var instance: cl.franciscosolis.simplecoreapi.bungee.modules.tasksmodule.BungeeTasksModule
+        lateinit var instance: BungeeTasksModule
             private set
     }
 
@@ -36,7 +53,7 @@ class BungeeTasksModule: Module {
     private val plugin = cl.franciscosolis.simplecoreapi.bungee.BungeeLoader.instance
 
     override fun onEnable() {
-        cl.franciscosolis.simplecoreapi.bungee.modules.tasksmodule.BungeeTasksModule.Companion.instance = this
+        instance = this
     }
 
     override fun onDisable() {
