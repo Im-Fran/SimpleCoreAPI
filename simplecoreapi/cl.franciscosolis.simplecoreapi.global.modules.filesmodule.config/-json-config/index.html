@@ -1,0 +1,423 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>JsonConfig</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+<a class="library-name--link" href="../../../index.html">
+                            SimpleCoreAPI
+                    </a>            </div>
+            <div class="library-version">1.0.0
+            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":simplecoreapi:dokkaHtmlPartial/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="simplecoreapi::cl.franciscosolis.simplecoreapi.global.modules.filesmodule.config/JsonConfig///PointingToDeclaration//-1446165807">
+  <div class="breadcrumbs"><a href="../../index.html">simplecoreapi</a><span class="delimiter">/</span><a href="../index.html">cl.franciscosolis.simplecoreapi.global.modules.filesmodule.config</a><span class="delimiter">/</span><span class="current">JsonConfig</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Json</span><wbr><span><span>Config</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">JsonConfig</a></div><p class="paragraph">Representation of a json config</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="-954688834%2FConstructors%2F-1446165807" anchor-label="JsonConfig" id="-954688834%2FConstructors%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-json-config.html"><span>Json</span><wbr><span><span>Config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-954688834%2FConstructors%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">jsonObject<span class="token operator">: </span><span data-unresolved-link="com.google.gson/JsonObject///PointingToDeclaration/">JsonObject</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Loads the config from the given object (but not saved to a file)</p></div><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">file<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Loads the config from the given file</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="364111040%2FProperties%2F-1446165807" anchor-label="file" id="364111040%2FProperties%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="file.html"><span><span>file</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="364111040%2FProperties%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="file.html">file</a><span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-358933739%2FProperties%2F-1446165807" anchor-label="jsonObject" id="-358933739%2FProperties%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="json-object.html"><span>json</span><wbr><span><span>Object</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-358933739%2FProperties%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="json-object.html">jsonObject</a><span class="token operator">: </span><span data-unresolved-link="com.google.gson/JsonObject///PointingToDeclaration/">JsonObject</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-366800341%2FFunctions%2F-1446165807" anchor-label="add" id="-366800341%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add.html"><span><span>add</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-366800341%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="index.html">JsonConfig</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Adds a <a href="index.html">JsonConfig</a> to the given key, and if the member already exists, it won't be replaced</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="com.google.gson/JsonArray///PointingToDeclaration/">JsonArray</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Adds a <span data-unresolved-link="com.google.gson/JsonArray///PointingToDeclaration/">JsonArray</span> to the given key, and if the member already exists, it won't be replaced.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">element<span class="token operator">: </span><span data-unresolved-link="com.google.gson/JsonElement///PointingToDeclaration/">JsonElement</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Adds an element to the given key, and if the member already exists, it won't be replaced.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="com.google.gson/JsonObject///PointingToDeclaration/">JsonObject</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Adds a <span data-unresolved-link="com.google.gson/JsonObject///PointingToDeclaration/">JsonObject</span> to the given key, and if the member already exists, it won't be replaced.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Adds a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> to the given key, and if the member already exists, it won't be replaced.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Adds an <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> to the given key, and if the member already exists, it won't be replaced.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Adds a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a> to the given key, and if the member already exists, it won't be replaced.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Adds a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> to the given key, and if the member already exists, it won't be replaced.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2136019913%2FFunctions%2F-1446165807" anchor-label="decrease" id="-2136019913%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="decrease.html"><span><span>decrease</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2136019913%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="decrease.html"><span class="token function">decrease</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">1</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">Decreases an <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> by the given value or by 1 if no value is specified.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-245339740%2FFunctions%2F-1446165807" anchor-label="destroy" id="-245339740%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="destroy.html"><span><span>destroy</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-245339740%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="destroy.html"><span class="token function">destroy</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Destroys the config</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="258429884%2FFunctions%2F-1446165807" anchor-label="get" id="258429884%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get.html"><span><span>get</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="258429884%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.gson/JsonElement///PointingToDeclaration/">JsonElement</span></div><div class="brief "><p class="paragraph">Gets an element from the given key</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1981464198%2FFunctions%2F-1446165807" anchor-label="getBoolean" id="-1981464198%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-boolean.html"><span>get</span><wbr><span><span>Boolean</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1981464198%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-boolean.html"><span class="token function">getBoolean</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Gets a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> from the given key</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-196375167%2FFunctions%2F-1446165807" anchor-label="getInt" id="-196375167%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-int.html"><span>get</span><wbr><span><span>Int</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-196375167%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-int.html"><span class="token function">getInt</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">Gets an <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> from the given key</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-669104605%2FFunctions%2F-1446165807" anchor-label="getJsonArray" id="-669104605%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-json-array.html"><span>get</span><wbr><span>Json</span><wbr><span><span>Array</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-669104605%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-json-array.html"><span class="token function">getJsonArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.gson/JsonArray///PointingToDeclaration/">JsonArray</span></div><div class="brief "><p class="paragraph">Gets a <span data-unresolved-link="com.google.gson/JsonArray///PointingToDeclaration/">JsonArray</span> from the given key</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-53022045%2FFunctions%2F-1446165807" anchor-label="getJsonObject" id="-53022045%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-json-object.html"><span>get</span><wbr><span>Json</span><wbr><span><span>Object</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-53022045%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-json-object.html"><span class="token function">getJsonObject</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Gets a <a href="index.html">JsonConfig</a> from the given key</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1214427301%2FFunctions%2F-1446165807" anchor-label="getNumber" id="1214427301%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-number.html"><span>get</span><wbr><span><span>Number</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1214427301%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-number.html"><span class="token function">getNumber</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a></div><div class="brief "><p class="paragraph">Gets a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a> from the given key</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="531825764%2FFunctions%2F-1446165807" anchor-label="getOrCreateJsonArray" id="531825764%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-or-create-json-array.html"><span>get</span><wbr><span>Or</span><wbr><span>Create</span><wbr><span>Json</span><wbr><span><span>Array</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="531825764%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-or-create-json-array.html"><span class="token function">getOrCreateJsonArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.gson/JsonArray///PointingToDeclaration/">JsonArray</span></div><div class="brief "><p class="paragraph">Gets a <span data-unresolved-link="com.google.gson/JsonArray///PointingToDeclaration/">JsonArray</span> from the given key or creates a new one if it doesn't exist</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1478886270%2FFunctions%2F-1446165807" anchor-label="getOrCreateJsonObject" id="-1478886270%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-or-create-json-object.html"><span>get</span><wbr><span>Or</span><wbr><span>Create</span><wbr><span>Json</span><wbr><span><span>Object</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1478886270%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-or-create-json-object.html"><span class="token function">getOrCreateJsonObject</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Gets a <a href="index.html">JsonConfig</a> from the given key or creates a new one if it doesn't exist</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1675796627%2FFunctions%2F-1446165807" anchor-label="getString" id="-1675796627%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-string.html"><span>get</span><wbr><span><span>String</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1675796627%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-string.html"><span class="token function">getString</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Gets a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> from the given key</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1989067776%2FFunctions%2F-1446165807" anchor-label="has" id="1989067776%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has.html"><span><span>has</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1989067776%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="has.html"><span class="token function">has</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Checks if the config has the specified key</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1199309587%2FFunctions%2F-1446165807" anchor-label="increase" id="1199309587%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="increase.html"><span><span>increase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1199309587%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="increase.html"><span class="token function">increase</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">1</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">Increases an <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> by the given value or by 1 if no value is specified.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="975462550%2FFunctions%2F-1446165807" anchor-label="load" id="975462550%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="load.html"><span><span>load</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="975462550%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="load.html"><span class="token function">load</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Loads the config from the file, and overrides the cache</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-229176052%2FFunctions%2F-1446165807" anchor-label="remove" id="-229176052%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remove.html"><span><span>remove</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-229176052%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="remove.html"><span class="token function">remove</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.gson/JsonElement///PointingToDeclaration/">JsonElement</span><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Removes the given key from the <span data-unresolved-link="com.google.gson/JsonObject///PointingToDeclaration/">JsonObject</span></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-446370849%2FFunctions%2F-1446165807" anchor-label="save" id="-446370849%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="save.html"><span><span>save</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-446370849%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="save.html"><span class="token function">save</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Saves the config to the file</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1519459115%2FFunctions%2F-1446165807" anchor-label="set" id="1519459115%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set.html"><span><span>set</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1519459115%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="index.html">JsonConfig</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Sets a <a href="index.html">JsonConfig</a> to the given key, and if the member already exists, it will be replaced</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="com.google.gson/JsonArray///PointingToDeclaration/">JsonArray</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Sets a <span data-unresolved-link="com.google.gson/JsonArray///PointingToDeclaration/">JsonArray</span> to the given key, and if the member already exists, it will be replaced.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">element<span class="token operator">: </span><span data-unresolved-link="com.google.gson/JsonElement///PointingToDeclaration/">JsonElement</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Sets a <span data-unresolved-link="com.google.gson/JsonElement///PointingToDeclaration/">JsonElement</span> to the given key, and if the member already exists, it will be replaced.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="com.google.gson/JsonObject///PointingToDeclaration/">JsonObject</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Sets a <span data-unresolved-link="com.google.gson/JsonObject///PointingToDeclaration/">JsonObject</span> to the given key, and if the member already exists, it will be replaced.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Sets a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> to the given key, and if the member already exists, it will be replaced.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Sets an <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a> to the given key, and if the member already exists, it will be replaced.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Sets a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-number/index.html">Number</a> to the given key, and if the member already exists, it will be replaced.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">JsonConfig</a></div><div class="brief "><p class="paragraph">Sets a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> to the given key, and if the member already exists, it will be replaced.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1949447132%2FFunctions%2F-1446165807" anchor-label="toggle" id="1949447132%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="toggle.html"><span><span>toggle</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1949447132%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="toggle.html"><span class="token function">toggle</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Toggles a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a> to the given key, and if the member doesn't exist, it will be set to true.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

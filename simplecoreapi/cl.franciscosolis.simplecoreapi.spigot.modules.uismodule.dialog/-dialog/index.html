@@ -1,0 +1,588 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Dialog</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+<a class="library-name--link" href="../../../index.html">
+                            SimpleCoreAPI
+                    </a>            </div>
+            <div class="library-version">1.0.0
+            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":simplecoreapi:dokkaHtmlPartial/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="simplecoreapi::cl.franciscosolis.simplecoreapi.spigot.modules.uismodule.dialog/Dialog///PointingToDeclaration//-1446165807">
+  <div class="breadcrumbs"><a href="../../index.html">simplecoreapi</a><span class="delimiter">/</span><a href="../index.html">cl.franciscosolis.simplecoreapi.spigot.modules.uismodule.dialog</a><span class="delimiter">/</span><span class="current">Dialog</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Dialog</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Dialog</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>player<span class="token operator">: </span><span data-unresolved-link="org.bukkit.entity/Player///PointingToDeclaration/">Player</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>title<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>subtitle<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>actionbar<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>closeAction<span class="token operator">: </span><a href="../-close-action/index.html">CloseAction</a><span class="token operator"> = </span>CloseAction.ANY_CLICK<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>onChat<span class="token operator">: </span><span class="token punctuation">(</span><span data-unresolved-link="org.bukkit.entity/Player///PointingToDeclaration/">Player</span><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span>{ _, _ -&gt; true }<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>allowedActions<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-allowed-actions/index.html">AllowedActions</a><span class="token operator">&gt;</span><span class="token operator"> = </span>listOf(AllowedActions.NONE)</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.bukkit.event/Listener///PointingToDeclaration/">Listener</span></div><p class="paragraph">Represents a Dialog (Title, Subtitle and Actionbar message)</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>player</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The player to send the dialog to</p></div></div></div></div><div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>title</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The title of the dialog. (Optional)</p></div></div></div></div><div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>subtitle</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The subtitle of the dialog. (Optional)</p></div></div></div></div><div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>actionbar</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The actionbar message of the dialog. (Optional)</p></div></div></div></div><div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>close</span><wbr><span><span>Action</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The kind of action needed to close the dialog. (Default to ANY_CLICK)</p></div></div></div></div><div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>on</span><wbr><span><span>Chat</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The action to perform when the player sends a message. If true is returned, the dialog will be closed. (Default to true)</p></div></div></div></div><div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>allowed</span><wbr><span><span>Actions</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The actions that are allowed while the player is in the dialog. (Default to NONE)</p></div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="-253816187%2FConstructors%2F-1446165807" anchor-label="Dialog" id="-253816187%2FConstructors%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-dialog.html"><span><span>Dialog</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-253816187%2FConstructors%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><span data-unresolved-link="org.bukkit.entity/Player///PointingToDeclaration/">Player</span><span class="token punctuation">, </span></span><span class="parameter ">title<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">subtitle<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">actionbar<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">closeAction<span class="token operator">: </span><a href="../-close-action/index.html">CloseAction</a><span class="token operator"> = </span>CloseAction.ANY_CLICK<span class="token punctuation">, </span></span><span class="parameter ">onChat<span class="token operator">: </span><span class="token punctuation">(</span><span data-unresolved-link="org.bukkit.entity/Player///PointingToDeclaration/">Player</span><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span>{ _, _ -&gt; true }<span class="token punctuation">, </span></span><span class="parameter ">allowedActions<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-allowed-actions/index.html">AllowedActions</a><span class="token operator">&gt;</span><span class="token operator"> = </span>listOf(AllowedActions.NONE)</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-343825116%2FProperties%2F-1446165807" anchor-label="actionbar" id="-343825116%2FProperties%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="actionbar.html"><span><span>actionbar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-343825116%2FProperties%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="actionbar.html">actionbar</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="737391812%2FProperties%2F-1446165807" anchor-label="allowedActions" id="737391812%2FProperties%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="allowed-actions.html"><span>allowed</span><wbr><span><span>Actions</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="737391812%2FProperties%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="allowed-actions.html">allowedActions</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-allowed-actions/index.html">AllowedActions</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1678362882%2FProperties%2F-1446165807" anchor-label="canBeClosed" id="1678362882%2FProperties%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="can-be-closed.html"><span>can</span><wbr><span>Be</span><wbr><span><span>Closed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1678362882%2FProperties%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="can-be-closed.html">canBeClosed</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Should the player be able to close the dialog?</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1460780781%2FProperties%2F-1446165807" anchor-label="closeAction" id="-1460780781%2FProperties%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="close-action.html"><span>close</span><wbr><span><span>Action</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1460780781%2FProperties%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="close-action.html">closeAction</a><span class="token operator">: </span><a href="../-close-action/index.html">CloseAction</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-356531659%2FProperties%2F-1446165807" anchor-label="closedByPlayer" id="-356531659%2FProperties%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="closed-by-player.html"><span>closed</span><wbr><span>By</span><wbr><span><span>Player</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-356531659%2FProperties%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="closed-by-player.html">closedByPlayer</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Was this dialog closed manually or programmatically?</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1855195958%2FProperties%2F-1446165807" anchor-label="dialogId" id="1855195958%2FProperties%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dialog-id.html"><span>dialog</span><wbr><span><span>Id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1855195958%2FProperties%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="dialog-id.html">dialogId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="625028962%2FProperties%2F-1446165807" anchor-label="onChat" id="625028962%2FProperties%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-chat.html"><span>on</span><wbr><span><span>Chat</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="625028962%2FProperties%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="on-chat.html">onChat</a><span class="token operator">: </span><span class="token punctuation">(</span><span data-unresolved-link="org.bukkit.entity/Player///PointingToDeclaration/">Player</span><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-274693736%2FProperties%2F-1446165807" anchor-label="player" id="-274693736%2FProperties%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="player.html"><span><span>player</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-274693736%2FProperties%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="player.html">player</a><span class="token operator">: </span><span data-unresolved-link="org.bukkit.entity/Player///PointingToDeclaration/">Player</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1702221121%2FProperties%2F-1446165807" anchor-label="subtitle" id="1702221121%2FProperties%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="subtitle.html"><span><span>subtitle</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1702221121%2FProperties%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="subtitle.html">subtitle</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-729512119%2FProperties%2F-1446165807" anchor-label="title" id="-729512119%2FProperties%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="title.html"><span><span>title</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-729512119%2FProperties%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="title.html">title</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="125954862%2FFunctions%2F-1446165807" anchor-label="close" id="125954862%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="close.html"><span><span>close</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="125954862%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="close.html"><span class="token function">close</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">sendMessage<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Dialog</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1744779715%2FFunctions%2F-1446165807" anchor-label="onBlockBreak" id="1744779715%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-block-break.html"><span>on</span><wbr><span>Block</span><wbr><span><span>Break</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1744779715%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-block-break.html"><span class="token function">onBlockBreak</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.block/BlockPlaceEvent///PointingToDeclaration/">BlockPlaceEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-519007973%2FFunctions%2F-1446165807" anchor-label="onBlockFertilize" id="-519007973%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-block-fertilize.html"><span>on</span><wbr><span>Block</span><wbr><span><span>Fertilize</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-519007973%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-block-fertilize.html"><span class="token function">onBlockFertilize</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.block/BlockFertilizeEvent///PointingToDeclaration/">BlockFertilizeEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1488671931%2FFunctions%2F-1446165807" anchor-label="onBlockIgnite" id="1488671931%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-block-ignite.html"><span>on</span><wbr><span>Block</span><wbr><span><span>Ignite</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1488671931%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-block-ignite.html"><span class="token function">onBlockIgnite</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.block/BlockIgniteEvent///PointingToDeclaration/">BlockIgniteEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-873146181%2FFunctions%2F-1446165807" anchor-label="onBlockPlace" id="-873146181%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-block-place.html"><span>on</span><wbr><span>Block</span><wbr><span><span>Place</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-873146181%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-block-place.html"><span class="token function">onBlockPlace</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.block/BlockPlaceEvent///PointingToDeclaration/">BlockPlaceEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-873649954%2FFunctions%2F-1446165807" anchor-label="onCommand" id="-873649954%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-command.html"><span>on</span><wbr><span><span>Command</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-873649954%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-command.html"><span class="token function">onCommand</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.player/PlayerCommandPreprocessEvent///PointingToDeclaration/">PlayerCommandPreprocessEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-391215789%2FFunctions%2F-1446165807" anchor-label="onDrop" id="-391215789%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-drop.html"><span>on</span><wbr><span><span>Drop</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-391215789%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-drop.html"><span class="token function">onDrop</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.player/PlayerDropItemEvent///PointingToDeclaration/">PlayerDropItemEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1884644695%2FFunctions%2F-1446165807" anchor-label="onEntityDamageByEntity" id="1884644695%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-entity-damage-by-entity.html"><span>on</span><wbr><span>Entity</span><wbr><span>Damage</span><wbr><span>By</span><wbr><span><span>Entity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1884644695%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-entity-damage-by-entity.html"><span class="token function">onEntityDamageByEntity</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.entity/EntityDamageByEntityEvent///PointingToDeclaration/">EntityDamageByEntityEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1450026959%2FFunctions%2F-1446165807" anchor-label="onEntityInteract" id="-1450026959%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-entity-interact.html"><span>on</span><wbr><span>Entity</span><wbr><span><span>Interact</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1450026959%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-entity-interact.html"><span class="token function">onEntityInteract</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.entity/EntityInteractEvent///PointingToDeclaration/">EntityInteractEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="976526326%2FFunctions%2F-1446165807" anchor-label="onHangingBreakByEntityEvent" id="976526326%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-hanging-break-by-entity-event.html"><span>on</span><wbr><span>Hanging</span><wbr><span>Break</span><wbr><span>By</span><wbr><span>Entity</span><wbr><span><span>Event</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="976526326%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-hanging-break-by-entity-event.html"><span class="token function">onHangingBreakByEntityEvent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.hanging/HangingBreakByEntityEvent///PointingToDeclaration/">HangingBreakByEntityEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1940291544%2FFunctions%2F-1446165807" anchor-label="onHangingPlace" id="1940291544%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-hanging-place.html"><span>on</span><wbr><span>Hanging</span><wbr><span><span>Place</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1940291544%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-hanging-place.html"><span class="token function">onHangingPlace</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.hanging/HangingPlaceEvent///PointingToDeclaration/">HangingPlaceEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2003939630%2FFunctions%2F-1446165807" anchor-label="onInteract" id="2003939630%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-interact.html"><span>on</span><wbr><span><span>Interact</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2003939630%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-interact.html"><span class="token function">onInteract</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.player/PlayerInteractEvent///PointingToDeclaration/">PlayerInteractEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-348796596%2FFunctions%2F-1446165807" anchor-label="onInventoryClick" id="-348796596%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-inventory-click.html"><span>on</span><wbr><span>Inventory</span><wbr><span><span>Click</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-348796596%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-inventory-click.html"><span class="token function">onInventoryClick</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.inventory/InventoryClickEvent///PointingToDeclaration/">InventoryClickEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="828500008%2FFunctions%2F-1446165807" anchor-label="onInventoryOpen" id="828500008%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-inventory-open.html"><span>on</span><wbr><span>Inventory</span><wbr><span><span>Open</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="828500008%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-inventory-open.html"><span class="token function">onInventoryOpen</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.inventory/InventoryOpenEvent///PointingToDeclaration/">InventoryOpenEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1666845952%2FFunctions%2F-1446165807" anchor-label="onMessageReceived" id="-1666845952%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-message-received.html"><span>on</span><wbr><span>Message</span><wbr><span><span>Received</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1666845952%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-message-received.html"><span class="token function">onMessageReceived</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.player/AsyncPlayerChatEvent///PointingToDeclaration/">AsyncPlayerChatEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-655793463%2FFunctions%2F-1446165807" anchor-label="onMove" id="-655793463%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-move.html"><span>on</span><wbr><span><span>Move</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-655793463%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-move.html"><span class="token function">onMove</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.player/PlayerInteractEvent///PointingToDeclaration/">PlayerInteractEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1579024083%2FFunctions%2F-1446165807" anchor-label="onPickup" id="-1579024083%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-pickup.html"><span>on</span><wbr><span><span>Pickup</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1579024083%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-pickup.html"><span class="token function">onPickup</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.entity/EntityPickupItemEvent///PointingToDeclaration/">EntityPickupItemEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-511450093%2FFunctions%2F-1446165807" anchor-label="onPlayerBucketEmpty" id="-511450093%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-player-bucket-empty.html"><span>on</span><wbr><span>Player</span><wbr><span>Bucket</span><wbr><span><span>Empty</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-511450093%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-player-bucket-empty.html"><span class="token function">onPlayerBucketEmpty</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.player/PlayerBucketEmptyEvent///PointingToDeclaration/">PlayerBucketEmptyEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-714460707%2FFunctions%2F-1446165807" anchor-label="onPlayerBucketFill" id="-714460707%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-player-bucket-fill.html"><span>on</span><wbr><span>Player</span><wbr><span>Bucket</span><wbr><span><span>Fill</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-714460707%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-player-bucket-fill.html"><span class="token function">onPlayerBucketFill</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.player/PlayerBucketFillEvent///PointingToDeclaration/">PlayerBucketFillEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1723384987%2FFunctions%2F-1446165807" anchor-label="onPlayerInteractAtEntity" id="1723384987%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-player-interact-at-entity.html"><span>on</span><wbr><span>Player</span><wbr><span>Interact</span><wbr><span>At</span><wbr><span><span>Entity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1723384987%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-player-interact-at-entity.html"><span class="token function">onPlayerInteractAtEntity</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.player/PlayerInteractAtEntityEvent///PointingToDeclaration/">PlayerInteractAtEntityEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1646221131%2FFunctions%2F-1446165807" anchor-label="onPlayerInteractEntity" id="-1646221131%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-player-interact-entity.html"><span>on</span><wbr><span>Player</span><wbr><span>Interact</span><wbr><span><span>Entity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1646221131%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-player-interact-entity.html"><span class="token function">onPlayerInteractEntity</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">e<span class="token operator">: </span><span data-unresolved-link="org.bukkit.event.player/PlayerInteractEntityEvent///PointingToDeclaration/">PlayerInteractEntityEvent</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1803953487%2FFunctions%2F-1446165807" anchor-label="open" id="1803953487%2FFunctions%2F-1446165807" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":simplecoreapi:dokkaHtmlPartial/main" data-filterable-set=":simplecoreapi:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="open.html"><span><span>open</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1803953487%2FFunctions%2F-1446165807"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":simplecoreapi:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="open.html"><span class="token function">open</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Dialog</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
