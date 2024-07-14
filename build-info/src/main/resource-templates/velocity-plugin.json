@@ -3,6 +3,6 @@
     "name": "SimpleCoreAPI",
     "version": "{{ version }}",
     "url": "https://franciscosolis.cl",
-    "authors": ["FranciscoSolis"],
+    "authors": ["GitHub/Im-Fran"],
     "main": "cl.franciscosolis.simplecoreapi.velocity.VelocityLoader"
 }

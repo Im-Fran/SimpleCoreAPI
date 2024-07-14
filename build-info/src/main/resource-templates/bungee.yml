@@ -1,5 +1,5 @@
 name: 'SimpleCoreAPI'
 main: 'cl.franciscosolis.simplecoreapi.bungee.BungeeLoader'
 version: '{{ version }}'
-author: 'FranciscoSolis'
+authors: ['GitHub/Im-Fran']
 description: '{{ description }}'
