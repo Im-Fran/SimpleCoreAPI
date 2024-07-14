@@ -103,7 +103,6 @@ subprojects {
     license {
         header(rootProject.file("LICENSE-HEADER"))
         include("**/src/main/**/*.kt")
-        skipExistingHeaders(true)
         newLine(true)
     }
 
