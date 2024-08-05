@@ -15,7 +15,6 @@ plugins {
     id("cl.franciscosolis.sonatype-central-upload") version "1.0.3"         // Sonatype Central Upload
     id("org.scm-manager.license") version "0.7.1"                           // License Header
     id("net.kyori.blossom") version "2.1.0"                                 // Placeholder injection
-
 }
 
 /*
@@ -30,7 +29,7 @@ val projectBuildId = env["GIT_COMMIT_SHORT_HASH"] ?: UUID.randomUUID().toString(
  * otherwise it will be added '$projectBuildId'
  * (no snapshot because maven central does not support it)
  */
-val projectVersion = "${env["VERSION"] ?: "1.0.1"}${if (env["ENV"] != "prod") "-$projectBuildId" else ""}"
+val projectVersion = "${env["VERSION"] ?: "1.1.0"}${if (env["ENV"] != "prod") "-$projectBuildId" else ""}"
 /* Print out the current version */
 println("This build version was '$projectVersion'")
 
@@ -47,13 +46,16 @@ group = groupId
 version = projectVersion.replaceFirst("v", "").replace("/", "")
 description = "The best way to create a kotlin project."
 
-allprojects {
+subprojects {
     apply {
         plugin("io.github.goooler.shadow")
         plugin("cl.franciscosolis.gradledotenv")
         plugin("org.jetbrains.kotlin.jvm")
         plugin("org.scm-manager.license")
         plugin("net.kyori.blossom")
+        plugin("maven-publish")
+        plugin("org.jetbrains.dokka")
+        plugin("cl.franciscosolis.sonatype-central-upload")
     }
 
     group = rootProject.group
@@ -76,9 +78,10 @@ allprojects {
     }
 
     dependencies {
-        compileOnly(kotlin("stdlib"))
+        implementation(kotlin("stdlib"))
     }
 
+    /* Blossom Placeholder Injection */
     sourceSets {
         main {
             blossom {
@@ -131,7 +134,6 @@ allprojects {
             }
 
             mergeServiceFiles()
-            exclude("kotlin/*")
             exclude("**/*.kotlin_metadata")
             exclude("**/*.kotlin_builtins")
 
@@ -159,31 +161,7 @@ allprojects {
                 }
             }
         }
-    }
 
-    license {
-        header(rootProject.file("LICENSE-HEADER"))
-        include("**/*.kt")
-        newLine(true)
-    }
-
-}
-
-subprojects {
-    apply {
-        plugin("maven-publish")
-        plugin("org.jetbrains.dokka")
-        plugin("cl.franciscosolis.gradledotenv")
-        plugin("cl.franciscosolis.sonatype-central-upload")
-    }
-
-    license {
-        header(rootProject.file("LICENSE-HEADER"))
-        include("**/*.kt")
-        newLine(true)
-    }
-
-    tasks {
         compileJava {
             options.encoding = "UTF-8"
         }
@@ -208,6 +186,12 @@ subprojects {
             signingKeyPassphrase = env["SIGNING_PASSWORD"]
             publicKey = env["PUBLIC_KEY"]
         }
+    }
+
+    license {
+        header(rootProject.file("LICENSE-HEADER"))
+        include("**/*.kt")
+        newLine(true)
     }
 
     publishing {
@@ -268,13 +252,14 @@ subprojects {
 
 tasks {
     register("deploy") {
-        listOf("simplecoreapi-bukkit", "simplecoreapi-paper", "simplecoreapi-bungee", "simplecoreapi-velocity").forEach { project ->
-            if(env["SONATYPE_USERNAME"] != null && env["SONATYPE_PASSWORD"] != null) {
-                dependsOn(project(":$project").tasks.sonatypeCentralUpload)
+        val isSonatypeConfigured = env["SONATYPE_USERNAME"] != null && env["SONATYPE_PASSWORD"] != null
+        dependsOn(listOf("simplecoreapi", "simplecoreapi-bukkit", "simplecoreapi-paper", "simplecoreapi-bungee", "simplecoreapi-velocity").map { project ->
+            if (isSonatypeConfigured) {
+                project(":$project").tasks.named("sonatypeCentralUpload")
             } else {
-                dependsOn(project(":$project").tasks.publish)
+                project(":$project").tasks.named("publish")
             }
-        }
+        })
     }
 
     dokkaHtmlMultiModule {

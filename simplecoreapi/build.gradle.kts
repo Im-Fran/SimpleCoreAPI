@@ -28,25 +28,17 @@ dependencies {
 
 tasks {
     named<ShadowJar>("shadowJar") {
-        manifest {
-            attributes["Main-Class"] = "cl.franciscosolis.simplecoreapi.standalone.StandaloneLoaderKt"
-        }
-
-        relocate("org.apache.commons", "cl.franciscosolis.simplecoreapi.libs.apache.commons")
+        relocate("org.yaml", "cl.franciscosolis.simplecoreapi.libs.yaml")
+        relocate("org.simpleyaml", "cl.franciscosolis.simplecoreapi.libs.simpleyaml")
+        relocate("org.json", "cl.franciscosolis.simplecoreapi.libs.json")
+        relocate("org.apache", "cl.franciscosolis.simplecoreapi.libs.apache")
         relocate("org.checkerframework", "cl.franciscosolis.simplecoreapi.libs.checkerframework")
         relocate("org.intellij", "cl.franciscosolis.simplecoreapi.libs.intellij")
         relocate("org.jetbrains", "cl.franciscosolis.simplecoreapi.libs.jetbrains")
         relocate("javax.annotation", "cl.franciscosolis.simplecoreapi.libs.annotation")
         relocate("net.lingala.zip4j", "cl.franciscosolis.simplecoreapi.libs.zip4j")
         relocate("org.slf4j", "cl.franciscosolis.simplecoreapi.libs.sl4fj")
-
-        mergeServiceFiles()
-        exclude("kotlin/*")
-        exclude("**/*.kotlin_metadata")
-        exclude("**/*.kotlin_builtins")
-
-        archiveBaseName = "simplecoreapi"
-        archiveClassifier = ""
+        relocate("com.google", "cl.franciscosolis.simplecoreapi.libs.google")
     }
 
     test {

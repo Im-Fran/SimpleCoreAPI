@@ -70,7 +70,7 @@ class VelocityTasksModule: Module {
      * @param task The task to run
      * @return the [ScheduledTask]
      */
-    fun runAsync(delay: Int = 1, task: () -> Unit): ScheduledTask =
+    fun runAsync(delay: Int = 1, task: Runnable): ScheduledTask =
         scheduler.buildTask(plugin, task)
             .delay(delay.times(50).toLong(), TimeUnit.MILLISECONDS)
             .schedule()
@@ -82,7 +82,7 @@ class VelocityTasksModule: Module {
      * @param task The task to run
      * @return the [RecurringTask]
      */
-    fun runAsyncRepeating(delay: Int = 1, period: Int = 1, task: () -> Unit): RecurringTask {
+    fun runAsyncRepeating(delay: Int = 1, period: Int = 1, task: Runnable): RecurringTask {
         val velocityTask = scheduler.buildTask(plugin, task)
             .delay(delay.times(50).toLong(), TimeUnit.MILLISECONDS)
             .repeat(period.times(50).toLong(), TimeUnit.MILLISECONDS)

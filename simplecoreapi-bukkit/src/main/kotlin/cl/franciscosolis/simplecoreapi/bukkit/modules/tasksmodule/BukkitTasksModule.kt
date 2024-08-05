@@ -65,14 +65,14 @@ class BukkitTasksModule: Module {
      * @param task The task to run
      * @return the [BukkitTask]
      */
-    fun runTask(task: () -> Unit): BukkitTask = runTaskLater(task = task)
+    fun runTask(task: Runnable): BukkitTask = runTaskLater(task = task)
 
     /**
      * Runs an async task after 1 tick (0.05 seconds)
      * @param task The task to run
      * @return the [BukkitTask]
      */
-    fun runTaskAsynchronously(task: () -> Unit): BukkitTask = runTaskLaterAsynchronously(task = task)
+    fun runTaskAsynchronously(task: Runnable): BukkitTask = runTaskLaterAsynchronously(task = task)
 
     /**
      * Runs a task after the given ticks (1 tick = 0.05 seconds)
@@ -80,7 +80,7 @@ class BukkitTasksModule: Module {
      * @param task The task to run
      * @return the [BukkitTask]
      */
-    fun runTaskLater(ticks: Long = 1, task: () -> Unit): BukkitTask = scheduler.runTaskLater(plugin, task, ticks)
+    fun runTaskLater(ticks: Long = 1, task: Runnable): BukkitTask = scheduler.runTaskLater(plugin, task, ticks)
 
     /**
      * Runs an async task after the given ticks (1 tick = 0.05 seconds)
@@ -88,7 +88,7 @@ class BukkitTasksModule: Module {
      * @param task The task to run
      * @return the [BukkitTask]
      */
-    fun runTaskLaterAsynchronously(ticks: Long = 1, task: () -> Unit): BukkitTask = scheduler.runTaskLaterAsynchronously(plugin, task, ticks)
+    fun runTaskLaterAsynchronously(ticks: Long = 1, task: Runnable): BukkitTask = scheduler.runTaskLaterAsynchronously(plugin, task, ticks)
 
     /**
      * Runs a repeating task every given ticks (1 tick = 0.05 seconds) after the given ticks (1 tick = 0.05 seconds)
@@ -98,7 +98,7 @@ class BukkitTasksModule: Module {
      * @param task The task to run
      * @return the [RecurringTask]
      */
-    fun runTaskTimer(period: Long = 1, delay: Long = 1, manualInit: Boolean = false, task: () -> Unit): RecurringTask = createRecurringTask(manualInit = manualInit){
+    fun runTaskTimer(period: Long = 1, delay: Long = 1, manualInit: Boolean = false, task: Runnable): RecurringTask = createRecurringTask(manualInit = manualInit){
         scheduler.runTaskTimer(plugin, task, delay, period)
     }
 
@@ -110,7 +110,7 @@ class BukkitTasksModule: Module {
      * @param task The task to run
      * @return the [RecurringTask]
      */
-    fun runTaskTimerAsynchronously(period: Long = 1, delay: Long = 1, manualInit: Boolean = false, task: () -> Unit): RecurringTask = createRecurringTask(manualInit = manualInit){
+    fun runTaskTimerAsynchronously(period: Long = 1, delay: Long = 1, manualInit: Boolean = false, task: Runnable): RecurringTask = createRecurringTask(manualInit = manualInit){
         scheduler.runTaskTimerAsynchronously(plugin, task, delay, period)
     }
 

@@ -65,7 +65,7 @@ class BungeeTasksModule: Module {
      * @param task The task to run
      * @return the [ScheduledTask]
      */
-    fun runAsync(delay: Int = 1, task: () -> Unit): ScheduledTask = scheduler.schedule(plugin, task, delay.times(50).toLong(), TimeUnit.MILLISECONDS)
+    fun runAsync(delay: Int = 1, task: Runnable): ScheduledTask = scheduler.schedule(plugin, task, delay.times(50).toLong(), TimeUnit.MILLISECONDS)
 
     /**
      * Runs a repeating task asynchronously every given ticks (1 tick = 0.05 seconds) after the given ticks (1 tick = 0.05 seconds)
@@ -75,7 +75,7 @@ class BungeeTasksModule: Module {
      * @param task The task to run
      * @return the [RecurringTask]
      */
-    fun runAsyncRepeating(delay: Int = 1, period: Int = 1, manualInit: Boolean = false, task: () -> Unit): RecurringTask {
+    fun runAsyncRepeating(delay: Int = 1, period: Int = 1, manualInit: Boolean = false, task: Runnable): RecurringTask {
         var taskId: Int? = null
         if(!manualInit) {
             taskId = scheduler.schedule(plugin, task, delay.times(50).toLong(), period.times(50).toLong(), TimeUnit.MILLISECONDS).id
