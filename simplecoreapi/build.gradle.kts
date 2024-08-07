@@ -31,7 +31,7 @@ tasks {
         relocate("org.yaml", "cl.franciscosolis.simplecoreapi.libs.yaml")
         relocate("org.simpleyaml", "cl.franciscosolis.simplecoreapi.libs.simpleyaml")
         relocate("org.json", "cl.franciscosolis.simplecoreapi.libs.json")
-        relocate("org.apache", "cl.franciscosolis.simplecoreapi.libs.apache")
+        relocate("org.apache.commons", "cl.franciscosolis.simplecoreapi.libs.apache.commons")
         relocate("org.checkerframework", "cl.franciscosolis.simplecoreapi.libs.checkerframework")
         relocate("org.intellij", "cl.franciscosolis.simplecoreapi.libs.intellij")
         relocate("org.jetbrains", "cl.franciscosolis.simplecoreapi.libs.jetbrains")

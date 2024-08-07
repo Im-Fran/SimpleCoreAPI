@@ -19,13 +19,37 @@
 package cl.franciscosolis.simplecoreapi.modules.loggingmodule
 
 import cl.franciscosolis.simplecoreapi.module.*
+import cl.franciscosolis.simplecoreapi.modules.loggingmodule.filter.JavaLoggerFilter
+import cl.franciscosolis.simplecoreapi.modules.loggingmodule.filter.LogFilter
+import cl.franciscosolis.simplecoreapi.modules.loggingmodule.filter.LogFilterAction
+import java.util.logging.Logger
 
 class LoggingModule: Module {
 
     override val description: ModuleDescription = ModuleDescription(
         name = "LoggingModule",
-        version = "0.4.1",
+        version = "0.4.2",
         authors = listOf("Im-Fran")
     )
+
+    /**
+     * Adds a new Log4J Filter
+     * @param filterAction The action to be executed when the filter is triggered
+     *
+     * @return The created filter
+     */
+    fun addLog4JFilter(filterAction: LogFilterAction) = LogFilter(filterAction)
+
+    /**
+     * Adds a new Java Logger Filter
+     * @param filterAction The action to be executed when the filter is triggered
+     *
+     * @return The created filter
+     */
+    fun addJavaLoggerFilter(logger: Logger, filterAction: LogFilterAction): JavaLoggerFilter = let {
+        val filter = JavaLoggerFilter(filterAction)
+        logger.filter = filter
+        filter
+    }
 
 }

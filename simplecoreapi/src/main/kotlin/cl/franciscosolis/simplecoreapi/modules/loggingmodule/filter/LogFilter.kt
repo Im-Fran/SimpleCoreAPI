@@ -30,9 +30,9 @@ import org.apache.logging.log4j.message.Message
 /**
  * Representation of a LogFilter. This can be used to filter messages from the console.
  *
- * @param filter The function to use to filter the messages and return the result of whether to filter or not.
+ * @param logFilterAction The function to use to filter the messages and return the result of whether to filter or not.
  */
-class LogFilter(private val filter: (String) -> FilterResult): AbstractFilter() {
+class LogFilter(private val logFilterAction: LogFilterAction): AbstractFilter() {
 
     companion object {
         private val logger = LogManager.getRootLogger() as Logger
@@ -47,7 +47,7 @@ class LogFilter(private val filter: (String) -> FilterResult): AbstractFilter() 
             return Filter.Result.NEUTRAL
         }
 
-        return Filter.Result.valueOf(filter(message).name)
+        return if(logFilterAction.filter(message) == null) Filter.Result.NEUTRAL else Filter.Result.DENY
     }
 
     override fun filter(event: LogEvent?): Filter.Result = process(event?.message?.formattedMessage)
