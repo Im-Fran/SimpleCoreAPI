@@ -1,7 +1,0 @@
-name: 'SimpleCoreAPI'
-main: 'cl.franciscosolis.simplecoreapi.spigot.SpigotLoader'
-version: '{{ version }}'
-api-version: '1.21'
-authors: ['GitHub/Im-Fran']
-website: https://franciscosolis.cl
-description: '{{ description }}'

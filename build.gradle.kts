@@ -1,20 +1,20 @@
 
 import com.github.jengelman.gradle.plugins.shadow.ShadowExtension
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.*
 
 plugins {
     `maven-publish`
 
-    id("io.github.goooler.shadow") version "8.1.8"                   // ShadowJar
+    id("io.github.goooler.shadow") version "8.1.8"                          // ShadowJar
     id("cl.franciscosolis.gradledotenv") version "1.0.1"                    // .env support
     kotlin("jvm") version "2.0.0"                                           // Kotlin
     id("org.jetbrains.dokka") version "1.9.20"                              // Dokka (Kotlin Docs)
     id("cl.franciscosolis.sonatype-central-upload") version "1.0.3"         // Sonatype Central Upload
     id("org.scm-manager.license") version "0.7.1"                           // License Header
-
+    id("net.kyori.blossom") version "2.1.0"                                 // Placeholder injection
 }
 
 /*
@@ -29,7 +29,7 @@ val projectBuildId = env["GIT_COMMIT_SHORT_HASH"] ?: UUID.randomUUID().toString(
  * otherwise it will be added '$projectBuildId'
  * (no snapshot because maven central does not support it)
  */
-val projectVersion = "${env["VERSION"] ?: "1.0.1"}${if (env["ENV"] != "prod") "-$projectBuildId" else ""}"
+val projectVersion = "${env["VERSION"] ?: "1.1.0"}${if (env["ENV"] != "prod") "-$projectBuildId" else ""}"
 /* Print out the current version */
 println("This build version was '$projectVersion'")
 
@@ -46,11 +46,16 @@ group = groupId
 version = projectVersion.replaceFirst("v", "").replace("/", "")
 description = "The best way to create a kotlin project."
 
-allprojects {
+subprojects {
     apply {
         plugin("io.github.goooler.shadow")
         plugin("cl.franciscosolis.gradledotenv")
         plugin("org.jetbrains.kotlin.jvm")
+        plugin("org.scm-manager.license")
+        plugin("net.kyori.blossom")
+        plugin("maven-publish")
+        plugin("org.jetbrains.dokka")
+        plugin("cl.franciscosolis.sonatype-central-upload")
     }
 
     group = rootProject.group
@@ -72,6 +77,33 @@ allprojects {
         mavenLocal()
     }
 
+    dependencies {
+        implementation(kotlin("stdlib"))
+    }
+
+    /* Blossom Placeholder Injection */
+    sourceSets {
+        main {
+            blossom {
+                val variables = mapOf(
+                    "name" to rootProject.name,
+                    "version" to "${project.version}",
+                    "description" to project.description,
+                    "git_short" to (env["GIT_COMMIT_SHORT_HASH"] ?: "unknown"),
+                    "git_full" to (env["GIT_COMMIT_LONG_HASH"] ?: "unknown"),
+                )
+
+                kotlinSources {
+                    variables.forEach(this::property)
+                }
+
+                resources {
+                    variables.forEach(this::property)
+                }
+            }
+        }
+    }
+
     kotlin {
         compilerOptions.jvmTarget = JvmTarget.JVM_21
     }
@@ -91,107 +123,80 @@ allprojects {
         copy {
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         }
-    }
-}
 
-subprojects {
-    apply {
-        plugin("org.scm-manager.license")
-        plugin("org.jetbrains.dokka")
-    }
+        named<ShadowJar>("shadowJar") {
+            doLast {
+                copy {
+                    from(archiveFile.get().asFile.absolutePath)
+                    into(rootProject.layout.buildDirectory.dir("libs"))
+                    rename { "${project.name}.jar" }
+                }
+            }
 
-    license {
-        header(rootProject.file("LICENSE-HEADER"))
-        include("**/src/main/**/*.kt")
-        newLine(true)
-    }
+            mergeServiceFiles()
+            exclude("**/*.kotlin_metadata")
+            exclude("**/*.kotlin_builtins")
 
-    tasks {
+            archiveBaseName = project.name
+            archiveClassifier = ""
+        }
+
+        register<Jar>("mergeSourcesJar") {
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+            archiveClassifier = "sources"
+            from(subprojects.filter { subproject -> subproject.tasks.any { task -> task.name == "sourcesJar" } }
+                .flatMap { subproject -> subproject.sourceSets.map { sourceSet -> sourceSet.allSource } })
+
+            copy {
+                duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+            }
+
+            archiveBaseName = project.name
+        }
+
+        withType<DokkaTask>().configureEach {
+            dokkaSourceSets {
+                configureEach {
+                    sourceRoots.from(file("src/"))
+                }
+            }
+        }
+
         compileJava {
             options.encoding = "UTF-8"
         }
 
-        named<DokkaTaskPartial>("dokkaHtmlPartial") {
-            outputDirectory = layout.buildDirectory.dir("dokka")
-            cacheRoot = file("${System.getProperty("user.home")}/.cache/dokka").apply {
-                if(!exists()) mkdirs()
-            }
-        }
-    }
-}
-
-dependencies {
-    implementation(project(":build-info", "shadow"))
-    implementation(project(":simplecoreapi", "shadow"))
-}
-
-tasks {
-    named<ShadowJar>("shadowJar") {
-        doLast {
-            copy {
-                from(archiveFile.get().asFile.absolutePath)
-                into(rootProject.layout.buildDirectory.dir("libs"))
-                rename { "simplecoreapi.jar" }
-            }
+        register<Jar>("dokkaJavadocJar") {
+            dependsOn(dokkaJavadoc)
+            from(dokkaJavadoc.get().outputDirectory.get())
+            archiveClassifier = "javadoc"
         }
 
-        manifest {
-            attributes["Main-Class"] = "cl.franciscosolis.simplecoreapi.standalone.StandaloneLoaderKt"
+        sonatypeCentralUpload {
+            dependsOn(publish)
+
+            username = env["SONATYPE_USERNAME"]
+            password = env["SONATYPE_PASSWORD"]
+
+            val publication = publishing.publications.named<MavenPublication>("shadow").orNull ?: error("Publication 'shadow' not found")
+            archives = files(publication.artifacts?.map { artifact -> artifact.file })
+            pom = file(layout.buildDirectory.file("publications/shadow/pom-default.xml"))
+
+            signingKey = env["SIGNING_KEY"]
+            signingKeyPassphrase = env["SIGNING_PASSWORD"]
+            publicKey = env["PUBLIC_KEY"]
         }
-
-        mergeServiceFiles()
-        exclude("**/*.kotlin_metadata")
-        exclude("**/*.kotlin_builtins")
-
-        archiveBaseName = "simplecoreapi"
-        archiveClassifier = ""
     }
 
-    register<Jar>("mergeSourcesJar") {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        archiveClassifier = "sources"
-        from(subprojects.filter { subproject -> subproject.tasks.any { task -> task.name == "sourcesJar" } }
-            .flatMap { subproject -> subproject.sourceSets.map { sourceSet -> sourceSet.allSource } })
-
-        copy {
-            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        }
-
-        archiveBaseName = "simplecoreapi"
+    license {
+        header(rootProject.file("LICENSE-HEADER"))
+        include("**/*.kt")
+        newLine(true)
     }
 
-    dokkaHtmlMultiModule {
-        dependsOn(":dokkaHtml")
-        outputDirectory = rootProject.layout.buildDirectory.dir("dokka/")
-    }
-
-    register<Jar>("dokkaJavadocJar") {
-        dependsOn(dokkaHtmlMultiModule)
-        from(dokkaHtmlMultiModule.flatMap { dokkaTask -> dokkaTask.outputDirectory })
-        archiveClassifier = "javadoc"
-        archiveBaseName = "simplecoreapi"
-    }
-
-    sonatypeCentralUpload {
-        dependsOn(named("publish"))
-
-        username = env["SONATYPE_USERNAME"]
-        password = env["SONATYPE_PASSWORD"]
-
-        val publication = publishing.publications.named<MavenPublication>("shadow").orNull ?: error("Publication 'shadow' not found")
-        archives = files(publication.artifacts?.map { artifact -> artifact.file })
-        pom = file(layout.buildDirectory.file("publications/shadow/pom-default.xml"))
-
-        signingKey = env["SIGNING_KEY"]
-        signingKeyPassphrase = env["SIGNING_PASSWORD"]
-        publicKey = env["PUBLIC_KEY"]
-    }
-}
-
-publishing {
-    repositories {
-        if (env["ENV"] in listOf("prod", "dev")) {
-            if (env["GITHUB_ACTOR"] != null && env["GITHUB_TOKEN"] != null) {
+    publishing {
+        repositories {
+            if (env["ENV"] in listOf("prod", "dev") && env["GITHUB_ACTOR"] != null && env["GITHUB_TOKEN"] != null) {
                 maven {
                     name = "GithubPackages"
                     url = uri("https://maven.pkg.github.com/Im-Fran/SimpleCoreAPI")
@@ -201,46 +206,64 @@ publishing {
                     }
                 }
             }
+
+            mavenLocal()
         }
 
-        mavenLocal()
-    }
+        publications {
+            create<MavenPublication>("shadow") {
+                configure<ShadowExtension> {
+                    artifactId = project.name.lowercase()
 
-    publications {
-        create<MavenPublication>("shadow") {
-            configure<ShadowExtension> {
-                artifactId = rootProject.name.lowercase()
+                    component(this@create)
+                    artifact(tasks.named("dokkaJavadocJar"))
+                    artifact(tasks.named("mergeSourcesJar"))
 
-                component(this@create)
-                artifact(tasks.named("dokkaJavadocJar"))
-                artifact(tasks.named("mergeSourcesJar"))
+                    // Add contents from pom template
+                    pom {
+                        name = project.name
+                        description = project.description
+                        url = repo
 
-                // Add contents from pom template
-                pom {
-                    name = rootProject.name
-                    description = project.description
-                    url = repo
-
-                    licenses {
-                        license {
-                            name = "GNU GPL v3"
-                            url = "${repo}/blob/master/LICENSE"
+                        licenses {
+                            license {
+                                name = "GNU GPL v3"
+                                url = "${repo}/blob/master/LICENSE"
+                            }
                         }
-                    }
 
-                    developers {
-                        developer {
-                            id = "Im-Fran"
-                            name = "Francisco Solís"
-                            email = "imfran@duck.com"
+                        developers {
+                            developer {
+                                id = "Im-Fran"
+                                name = "Francisco Solís"
+                                email = "imfran@duck.com"
+                            }
                         }
-                    }
 
-                    scm {
-                        url = "$repo${if(repo.endsWith(".git")) "" else ".git"}"
+                        scm {
+                            url = "$repo${if(repo.endsWith(".git")) "" else ".git"}"
+                        }
                     }
                 }
             }
         }
+    }
+}
+
+tasks {
+    register("deploy") {
+        val isSonatypeConfigured = env["SONATYPE_USERNAME"] != null && env["SONATYPE_PASSWORD"] != null
+        dependsOn(listOf("simplecoreapi", "simplecoreapi-bukkit", "simplecoreapi-paper", "simplecoreapi-bungee", "simplecoreapi-velocity").map { project ->
+            if (isSonatypeConfigured) {
+                project(":$project").tasks.named("sonatypeCentralUpload")
+            } else {
+                project(":$project").tasks.named("publish")
+            }
+        })
+    }
+
+    dokkaHtmlMultiModule {
+        dependsOn(dokkaHtml)
+        outputDirectory = rootProject.layout.buildDirectory.dir("dokka/")
     }
 }

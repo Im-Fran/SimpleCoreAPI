@@ -28,15 +28,94 @@ It also supports creating Standalone applications (but only with the global modu
 The docs can be found [here](https://im-fran.github.io/SimpleCoreAPI/) (it's a Dokka Resource), everything is documented through the Kotlin Docs (Similar to JavaDocs but for Kotlin :p )
 
 ## How does this work?
-Ok, so we have multiple types of initializers for different software, Spigot, Bungee, Velocity and Standalone.
+Ok, so we have multiple types of initializers for different software, Bukkit (for bukkit based runtimes), Paper (for paper based runtimes), Bungee, Velocity and Standalone.
 
-The Standalone system is meant to be executed without any extra software, like desktop applications or command line tools.
-Only the global modules are available in this mode.
+Every package has its own abilities for their own runtimes, for example the paper package will take advantage of the paper utilities, the bukkit package will take advantage of the bukkit utilities, etc.
+The Standalone package its meant to be used for standalone applications, it has the global modules and the global utilities, which are utilities that do not require any other software to work.
 
-## Ok, and how do I use the Standalone mode?
-In the Standalone system you will naturally shade SimpleCoreAPI and use the `xyz.theprogramsrc.simplecoreapi.standalone.StandaloneLoader` as your main class.<br/>
-Later you will mark your main class with the `@EntryPoint` annotation. Then SimpleCoreAPI will load all modules, then execute the `@EntryPoint` class.
-
-## How do I use the other modes?
+## How do I use the packages?
 Depending on the software you're using you'll need to mark SimpleCoreAPI and the modules you need as `dependency` (NOT `soft-dependency`) so the system will load all 
 modules and files you need before your plugin is loaded.
+
+Let's take a look to the different packages
+<details>
+<summary>Bukkit</summary>
+
+In order to use the Bukkit package you'll need to add the following package:
+
+![Maven Central Version (Prod)](https://img.shields.io/maven-central/v/cl.franciscosolis/simplecoreapi-bukkit?label=Maven+Central+(Prod)&color=blue)
+![Maven Central Version (Dev)](https://img.shields.io/maven-central/v/cl.franciscosolis.dev/simplecoreapi-bukkit?label=Maven+Central+(Dev)&color=orange)
+```groovy
+dependencies {
+    compileOnly("cl.franciscosolis:simplecoreapi-bukkit:VERSION")
+}
+```
+
+You'll also need to make sure to include the runnable (`simplecoreapi-bukkit.jar`) in your `plugins/` folder, so make sure to also tell your users to download it from the [Releases Page](https://github.com/Im-Fran/SimpleCoreAPI/releases/latest).
+That's all you need to know in order to use the API.
+</details>
+
+<details>
+<summary>Paper</summary>
+
+In order to use the Paper package you'll need to add the following package:
+
+![Maven Central Version (Prod)](https://img.shields.io/maven-central/v/cl.franciscosolis/simplecoreapi-paper?label=Maven+Central+(Prod)&color=blue)
+![Maven Central Version (Dev)](https://img.shields.io/maven-central/v/cl.franciscosolis.dev/simplecoreapi-paper?label=Maven+Central+(Dev)&color=orange)
+```groovy
+dependencies {
+    compileOnly("cl.franciscosolis:simplecoreapi-paper:VERSION")
+}
+```
+
+You'll also need to make sure to include the runnable (`simplecoreapi-paper.jar`) in your `plugins/` folder, so make sure to also tell your users to download it from the [Releases Page](https://github.com/Im-Fran/SimpleCoreAPI/releases/latest).
+That's all you need to know in order to use the API.
+</details>
+
+<details>
+<summary>Bungee</summary>
+
+In order to use the Bungee package you'll need to add the following package:
+
+![Maven Central Version (Prod)](https://img.shields.io/maven-central/v/cl.franciscosolis/simplecoreapi-bungee?label=Maven+Central+(Prod)&color=blue)
+![Maven Central Version (Dev)](https://img.shields.io/maven-central/v/cl.franciscosolis.dev/simplecoreapi-bungee?label=Maven+Central+(Dev)&color=orange)
+```groovy
+dependencies {
+    compileOnly("cl.franciscosolis:simplecoreapi-bungee:VERSION")
+}
+```
+
+You'll also need to make sure to include the runnable (`simplecoreapi-bungee.jar`) in your `plugins/` folder, so make sure to also tell your users to download it from the [Releases Page](https://github.com/Im-Fran/SimpleCoreAPI/releases/latest).
+That's all you need to know in order to use the API.
+</details>
+
+<details>
+<summary>Velocity</summary>
+
+In order to use the Velocity package you'll need to add the following package:
+
+![Maven Central Version (Prod)](https://img.shields.io/maven-central/v/cl.franciscosolis/simplecoreapi-velocity?label=Maven+Central+(Prod)&color=blue)
+![Maven Central Version (Dev)](https://img.shields.io/maven-central/v/cl.franciscosolis.dev/simplecoreapi-velocity?label=Maven+Central+(Dev)&color=orange)
+```groovy
+dependencies {
+    compileOnly("cl.franciscosolis:simplecoreapi-velocity:VERSION")
+}
+```
+
+You'll also need to make sure to include the runnable (`simplecoreapi-velocity.jar`) in your `plugins/` folder, so make sure to also tell your users to download it from the [Releases Page](https://github.com/Im-Fran/SimpleCoreAPI/releases/latest).
+That's all you need to know in order to use the API.
+</details>
+
+<details>
+<summary>Standalone</summary>
+
+In order to use the Standalone package you'll need to add the following package:
+
+![Maven Central Version (Prod)](https://img.shields.io/maven-central/v/cl.franciscosolis/simplecoreapi?label=Maven+Central+(Prod)&color=blue)
+![Maven Central Version (Dev)](https://img.shields.io/maven-central/v/cl.franciscosolis.dev/simplecoreapi?label=Maven+Central+(Dev)&color=orange)
+```groovy
+dependencies {
+    implementation("cl.franciscosolis:simplecoreapi:VERSION")
+}
+```
+</details>
