@@ -5,3 +5,4 @@ api-version: '1.21'
 authors: ['GitHub/Im-Fran']
 website: https://franciscosolis.cl
 description: '{{ description }}'
+prefix: 'SimpleCoreAPI'
