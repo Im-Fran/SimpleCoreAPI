@@ -2,12 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 dependencies {
     /* Api */
-    compileOnly(project(":build-info"))
-
-    /* Runtimes */
-    compileOnly("org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT")
-    compileOnly("net.md-5:bungeecord-api:1.21-R0.1-SNAPSHOT")
-    compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
+    implementation(project(":build-info"))
 
     /* Logging Module */
     implementation("org.apache.logging.log4j:log4j-api:2.23.1")
@@ -28,17 +23,14 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.13")
     implementation("org.slf4j:slf4j-simple:2.0.13")
 
-    annotationProcessor("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
-
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
 }
 
 tasks {
     named<ShadowJar>("shadowJar") {
-        manifest {
-            attributes["Main-Class"] = "cl.franciscosolis.simplecoreapi.standalone.StandaloneLoaderKt"
-        }
-
+        relocate("org.yaml", "cl.franciscosolis.simplecoreapi.libs.yaml")
+        relocate("org.simpleyaml", "cl.franciscosolis.simplecoreapi.libs.simpleyaml")
+        relocate("org.json", "cl.franciscosolis.simplecoreapi.libs.json")
         relocate("org.apache.commons", "cl.franciscosolis.simplecoreapi.libs.apache.commons")
         relocate("org.checkerframework", "cl.franciscosolis.simplecoreapi.libs.checkerframework")
         relocate("org.intellij", "cl.franciscosolis.simplecoreapi.libs.intellij")
@@ -46,25 +38,11 @@ tasks {
         relocate("javax.annotation", "cl.franciscosolis.simplecoreapi.libs.annotation")
         relocate("net.lingala.zip4j", "cl.franciscosolis.simplecoreapi.libs.zip4j")
         relocate("org.slf4j", "cl.franciscosolis.simplecoreapi.libs.sl4fj")
-
-        mergeServiceFiles()
-        exclude("**/*.kotlin_metadata")
-        exclude("**/*.kotlin_builtins")
-
-        archiveBaseName.set("SimpleCoreAPI")
-        archiveClassifier.set("")
+        relocate("com.google", "cl.franciscosolis.simplecoreapi.libs.google")
     }
 
     test {
         useJUnitPlatform()
-    }
-
-    jar {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
-
-    copy {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 }
 

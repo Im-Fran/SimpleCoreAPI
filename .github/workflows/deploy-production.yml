@@ -39,18 +39,22 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: clean test shadowJar dokkaHtml publish sonatypeCentralUpload
-      # Now we store the artifact in the action
-      - name: Upload the artifact
+          arguments: clean test deploy
+      # Now we store the artifacts in the action
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: SimpleCoreAPI
-          path: ./build/libs/simplecoreapi.jar
+          path: ./build/libs/simplecoreapi-*.jar
       # Here we upload the binary to the release
-      - name: Upload to release
-        uses: JasonEtco/upload-to-release@master
+      - uses: d1ceward/draft-assets-release-action@v2
+        name: Upload to release
         with:
-          args: ./build/libs/simplecoreapi.jar application/java-archive
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            build/libs/simplecoreapi-bukkit.jar
+            build/libs/simplecoreapi-paper.jar
+            build/libs/simplecoreapi-bungee.jar
+            build/libs/simplecoreapi-velocity.jar
       # Now we deploy the documents to GitHub pages
       - name: Deploy Dokka
         uses: JamesIves/github-pages-deploy-action@v4.5.0

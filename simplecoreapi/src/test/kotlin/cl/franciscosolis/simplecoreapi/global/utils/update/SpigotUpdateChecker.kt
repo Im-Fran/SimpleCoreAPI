@@ -18,6 +18,7 @@
 
 package cl.franciscosolis.simplecoreapi.global.utils.update
 
+import cl.franciscosolis.simplecoreapi.utils.update.SpigotUpdateChecker
 import com.google.gson.JsonParser
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue

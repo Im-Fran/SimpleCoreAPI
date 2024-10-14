@@ -1,0 +1,8 @@
+name: SimpleCoreAPI
+version: '{{ version }}'
+main: cl.franciscosolis.simplecoreapi.paper.PaperLoader
+description: '{{ description }}'
+api-version: '1.21'
+authors: [GitHub/Im-Fran]
+website: https://franciscosolis.cl
+prefix: 'SimpleCoreAPI'
