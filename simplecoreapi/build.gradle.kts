@@ -1,70 +1,44 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
+val log4jVersion: String = rootProject.findProperty("log4j.version") as String
+val simpleYamlVersion: String = rootProject.findProperty("simpleyaml.version") as String
+val jetbrainsAnnotationsVersion: String = rootProject.findProperty("jetbrains-annotations.version") as String
+val commonsIoVersion: String = rootProject.findProperty("commons-io.version") as String
+val googleGsonVersion: String = rootProject.findProperty("google-gson.version") as String
+val jsonVersion: String = rootProject.findProperty("json.version") as String
+val zip4jVersion: String = rootProject.findProperty("zip4j.version") as String
+val slf4jVersion: String = rootProject.findProperty("slf4j.version") as String
+
 dependencies {
     /* Api */
-    compileOnly(project(":build-info"))
-
-    /* Runtimes */
-    compileOnly("org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT")
-    compileOnly("net.md-5:bungeecord-api:1.21-R0.1-SNAPSHOT")
-    compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
+    implementation(project(":build-info"))
 
     /* Logging Module */
-    implementation("org.apache.logging.log4j:log4j-api:2.23.1")
-    implementation("org.apache.logging.log4j:log4j-core:2.23.1")
+    compileOnly("org.apache.logging.log4j:log4j-api:$log4jVersion")
+    compileOnly("org.apache.logging.log4j:log4j-core:$log4jVersion")
 
     /* Files Module */
-    implementation("me.carleslc.Simple-YAML:Simple-Yaml:1.8.4")
-
-    /* UIs Module */
-    implementation("com.github.cryptomorin:XSeries:11.2.0")
+    implementation("me.carleslc.Simple-YAML:Simple-Yaml:$simpleYamlVersion")
 
     /* Global Depends */
-    implementation("org.jetbrains:annotations:24.1.0")
-    implementation("commons-io:commons-io:2.16.1")
-    implementation("com.google.code.gson:gson:2.11.0")
-    implementation("org.json:json:20240303")
-    implementation("net.lingala.zip4j:zip4j:2.11.5")
-    implementation("org.slf4j:slf4j-api:2.0.13")
-    implementation("org.slf4j:slf4j-simple:2.0.13")
+    compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
+    compileOnly("commons-io:commons-io:$commonsIoVersion")
+    compileOnly("com.google.code.gson:gson:$googleGsonVersion")
+    compileOnly("org.json:json:$jsonVersion")
+    compileOnly("net.lingala.zip4j:zip4j:$zip4jVersion")
+    compileOnly("org.slf4j:slf4j-api:$slf4jVersion")
+    compileOnly("org.slf4j:slf4j-simple:$slf4jVersion")
 
-    annotationProcessor("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
-
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
+    testImplementation(kotlin("test"))
 }
 
 tasks {
     named<ShadowJar>("shadowJar") {
-        manifest {
-            attributes["Main-Class"] = "cl.franciscosolis.simplecoreapi.standalone.StandaloneLoaderKt"
-        }
-
-        relocate("org.apache.commons", "cl.franciscosolis.simplecoreapi.libs.apache.commons")
-        relocate("org.checkerframework", "cl.franciscosolis.simplecoreapi.libs.checkerframework")
-        relocate("org.intellij", "cl.franciscosolis.simplecoreapi.libs.intellij")
-        relocate("org.jetbrains", "cl.franciscosolis.simplecoreapi.libs.jetbrains")
-        relocate("javax.annotation", "cl.franciscosolis.simplecoreapi.libs.annotation")
-        relocate("net.lingala.zip4j", "cl.franciscosolis.simplecoreapi.libs.zip4j")
-        relocate("org.slf4j", "cl.franciscosolis.simplecoreapi.libs.sl4fj")
-
-        mergeServiceFiles()
-        exclude("**/*.kotlin_metadata")
-        exclude("**/*.kotlin_builtins")
-
-        archiveBaseName.set("SimpleCoreAPI")
-        archiveClassifier.set("")
+        dependsOn(":build-info:shadowJar")
     }
 
     test {
         useJUnitPlatform()
-    }
-
-    jar {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
-
-    copy {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 }
 

@@ -31,4 +31,6 @@ jobs:
       run: chmod +x gradlew
     # Test building without dokka
     - name: Build Jar with Java ${{ matrix.java-version }}
-      run: ./gradlew clean shadowJar test -x dokkaHtml -x sonatypeCentralUpload -no-daemon
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: clean test

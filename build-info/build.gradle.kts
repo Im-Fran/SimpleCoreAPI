@@ -1,35 +1,8 @@
-import org.jetbrains.dokka.gradle.DokkaTask
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-plugins {
-    id("net.kyori.blossom") version "2.1.0"                     // Placeholder injection
-}
-
-sourceSets {
-    main {
-        blossom {
-            val variables = mapOf(
-                "name" to rootProject.name,
-                "version" to "${project.version}",
-                "description" to project.description,
-                "git_short" to (env["GIT_COMMIT_SHORT_HASH"] ?: "unknown"),
-                "git_full" to (env["GIT_COMMIT_LONG_HASH"] ?: "unknown")
-            )
-
-            kotlinSources {
-                variables.forEach(this::property)
-            }
-
-            resources {
-                variables.forEach(this::property)
-            }
-        }
-    }
-}
-
-tasks.withType<DokkaTask>().configureEach {
-    dokkaSourceSets {
-        configureEach {
-            sourceRoots.from(file("src/"))
-        }
+tasks {
+    named<ShadowJar>("shadowJar") {
+        relocate("org.intellij", "cl.franciscosolis.simplecoreapi.libs.intellij")
+        relocate("org.jetbrains", "cl.franciscosolis.simplecoreapi.libs.jetbrains")
     }
 }

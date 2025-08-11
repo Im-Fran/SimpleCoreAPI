@@ -18,13 +18,14 @@
 
 package cl.franciscosolis.simplecoreapi.global.utils.update
 
+import cl.franciscosolis.simplecoreapi.utils.update.GitHubUpdateChecker
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 internal class GitHubUpdateCheckerTest {
 
-    private val check1 = GitHubUpdateChecker("TheProgramSrc/SimpleCoreAPI", "0.4.0-SNAPSHOT", "v0.4.0-SNAPSHOT")
-    private val check2 = GitHubUpdateChecker("TheProgramSrc/SimpleCoreAPI", "0.3.6-SNAPSHOT")
+    private val check1 = GitHubUpdateChecker("Im-Fran/SimpleCoreAPI", "0.4.0-SNAPSHOT", "v0.4.0-SNAPSHOT")
+    private val check2 = GitHubUpdateChecker("Im-Fran/SimpleCoreAPI", "0.3.6-SNAPSHOT")
 
     @Test
     fun getReleaseData() {
