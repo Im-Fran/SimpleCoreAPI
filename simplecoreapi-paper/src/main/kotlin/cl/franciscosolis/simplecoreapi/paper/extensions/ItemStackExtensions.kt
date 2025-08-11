@@ -21,6 +21,7 @@ package cl.franciscosolis.simplecoreapi.paper.extensions
 import cl.franciscosolis.simplecoreapi.paper.modules.uismodule.models.SimpleEnchantment
 import com.cryptomorin.xseries.XMaterial
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -44,7 +45,7 @@ val ItemStack.name: Component?
  * @param name the name of the item
  * @return this [ItemStack]
  */
-fun ItemStack.name(name: Component): ItemStack = this.apply {
+fun ItemStack.withName(name: Component): ItemStack = this.apply {
     this.editMeta {
         it.displayName(name)
     }
@@ -56,7 +57,7 @@ fun ItemStack.name(name: Component): ItemStack = this.apply {
  * @param append if the lore should be appended or replaced
  * @return this [ItemStack]
  */
-fun ItemStack.lore(lore: List<Component>, append: Boolean = false): ItemStack = this.apply {
+fun ItemStack.withLore(lore: List<Component>, append: Boolean = false): ItemStack = this.apply {
     if(append) {
         this.lore((this.lore() ?: emptyList<Component>())
             .toMutableList()
@@ -74,7 +75,7 @@ fun ItemStack.lore(lore: List<Component>, append: Boolean = false): ItemStack = 
  * @param append if the lore should be appended or replaced
  * @return this [ItemStack]
  */
-fun ItemStack.lore(vararg lore: Component, append: Boolean = false): ItemStack = this.lore(lore.toList(), append)
+fun ItemStack.withLore(vararg lore: Component, append: Boolean = false): ItemStack = this.withLore(lore.toList(), append)
 
 /**
  * Sets the amount of this [ItemStack]
@@ -130,6 +131,13 @@ fun ItemStack.removeFlags(vararg flags: ItemFlag): ItemStack = this.apply {
         removeItemFlags(*flags)
     }
 }
+
+/**
+ * Gets the enchantments of this [ItemStack] as [SimpleEnchantment]
+ * @return the enchantments of the item
+ */
+val ItemStack.simpleEnchantments: List<SimpleEnchantment>
+    get() = this.enchantments.map { SimpleEnchantment(it.key, it.value) }
 
 /**
  * Toggles the given enchantments on this [ItemStack]. If the enchantment is already set, it will be removed.
@@ -204,34 +212,127 @@ fun ItemStack.setGlowing(glowing: Boolean = true): ItemStack = this.apply {
 }
 
 /**
+ * Gets the glowing effect of this [ItemStack]
+ * @return if the item is glowing
+ */
+fun ItemStack.isGlowing(): Boolean = this.itemMeta?.let {
+    it.hasEnchantmentGlintOverride() && it.enchantmentGlintOverride
+} ?: false
+
+/**
  * Sets the damage to this [ItemStack]
  * @param damage the damage to the item
  * @return this [ItemStack]
  */
 fun ItemStack.damage(damage: Int): ItemStack = this.apply {
-    val meta = this.itemMeta ?: return this
-    if(meta is Damageable) {
-        meta.damage = damage
-        this.itemMeta = meta
+    this.itemMeta = this.itemMeta?.apply {
+        check(this is Damageable) { "Item is not damageable!" }
+        this.damage = damage
     }
 }
+
+/**
+ * Gets the damage of this [ItemStack].
+ * First check if the item is damageable, then check if it has a damage value.
+ * @see [ItemStack.hasDamage]
+ * @return the damage of the item
+ */
+val ItemStack.damage: Int
+    get() = this.itemMeta?.let {
+        check(it is Damageable) { "Item is not damageable!" }
+        check(it.hasDamageValue()) { "Item has no damage value!" }
+        return it.damage
+    } ?: 0
+
+/**
+ * Checks if the item has a damage value
+ * @return if the item has a damage value
+ */
+fun ItemStack.hasDamage(): Boolean = this.itemMeta?.let {
+    return it is Damageable && it.hasDamageValue()
+} ?: false
 
 /**
  * Sets the color if the item is leather armor
  * @param color the color of the item
  */
 fun ItemStack.color(color: Color): ItemStack = this.apply {
-    val meta = this.itemMeta ?: return this
-    if ((type == Material.LEATHER_BOOTS || type == Material.LEATHER_CHESTPLATE || type == Material.LEATHER_HELMET || type == Material.LEATHER_LEGGINGS) && meta is LeatherArmorMeta) {
-        meta.setColor(color)
-        this.itemMeta = meta
-    } else {
-        throw IllegalArgumentException("Colors only applicable for leather armor!")
+    this.itemMeta = this.itemMeta?.apply {
+        check(type == Material.LEATHER_BOOTS || type == Material.LEATHER_CHESTPLATE || type == Material.LEATHER_HELMET || type == Material.LEATHER_LEGGINGS) { "Item is not leather armor!" }
+        check(this is LeatherArmorMeta) { "Item is not leather armor!" }
+        setColor(color)
     }
 }
+
+/**
+ * Checks if the item can be set a color
+ * @return if the item can be colored
+ */
+val ItemStack.canColor: Boolean
+    get() = this.itemMeta?.let {
+        type == Material.LEATHER_BOOTS || type == Material.LEATHER_CHESTPLATE || type == Material.LEATHER_HELMET || type == Material.LEATHER_LEGGINGS
+    } ?: false
+
+/**
+ * Gets the color of this [ItemStack]
+ * @return the color of the item
+ */
+val ItemStack.color: Color?
+    get() = this.itemMeta?.let {
+        check(it is LeatherArmorMeta) { "Item is not leather armor!" }
+        return it.color
+    }
 
 /**
  * Gets the [XMaterial] of this [ItemStack]
  * @return the [XMaterial]
  */
 fun ItemStack.xmaterial(): XMaterial = XMaterial.matchXMaterial(this.type)
+
+/**
+ * Serializes the [ItemStack] into a [Map].
+ * @return the serialized item
+ */
+fun ItemStack.serializeToMap(): Map<String, Any> {
+    val map = mutableMapOf<String, Any>()
+    map["Material"] = xmaterial().name
+    name?.let { map["Name"] = LegacyComponentSerializer.legacyAmpersand().serialize(it) }
+    lore()?.map { LegacyComponentSerializer.legacyAmpersand().serialize(it) }?.let { map["Lore"] = it }
+    if(amount > 1) map["Amount"] = amount
+    if(flags.isNotEmpty()) map["Flags"] = flags.map { it.name }
+    if(simpleEnchantments.isNotEmpty()) map["Enchants"] = simpleEnchantments.map { it.toString() }
+    if(isGlowing()) map["Glowing"] = isGlowing()
+    if(hasDamage()) map["Damage"] = (itemMeta as? Damageable)?.damage ?: 0
+    if (canColor && color != null) map["Color"] = "hex:${color!!.asHex()}"
+
+    return map
+}
+
+/**
+ * Deserializes the [ItemStack] from a [Map].
+ */
+fun deserializeItemStack(map: Map<String, Any>): ItemStack {
+    checkNotNull(map["Material"]) { "Item type is required!" }
+    return XMaterial.valueOf(map["Material"] as String)
+        .itemStack()
+        .amount(map["Amount"] as? Int ?: 1)
+        .addFlags(*(map["Flags"] as? List<*>)?.map { ItemFlag.valueOf(it as String) }?.toTypedArray() ?: emptyArray())
+        .addEnchantments(*(map["Enchants"] as? List<*>)?.map { SimpleEnchantment.fromString(it as String) }?.toTypedArray() ?: emptyArray())
+        .apply {
+            if(map.containsKey("Name")) withName(LegacyComponentSerializer.legacyAmpersand().deserialize(map["Name"] as String))
+            if(map.containsKey("Lore")) withLore((map["Lore"] as List<*>).map { LegacyComponentSerializer.legacyAmpersand().deserialize(it as String) })
+
+            if(map.containsKey("Glowing")) setGlowing(map["Glowing"] as Boolean)
+            if (map.containsKey("Damage")) damage(map["Damage"] as Int)
+
+            if (map.containsKey("Color")) {
+                val color = (map["Color"] as String).split(":")
+                if(color[0] == "hex") {
+                    color(color[1].hexToColor())
+                } else if (color[0] == "rgb") {
+                    val rgb = color[1].split(",")
+                    color(Color.fromRGB(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()))
+                }
+            }
+        }
+}

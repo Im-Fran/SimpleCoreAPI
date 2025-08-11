@@ -41,6 +41,10 @@ class BukkitLoader: JavaPlugin() {
         SimpleCoreAPI(logger = this.logger)
     }
 
+    override fun onDisable() {
+        SimpleCoreAPI.disableTasks.forEach { it() }
+    }
+
     /**
      * This function should only be called if you need to reload settings.
      * This will fire the [ConfigurationReloadEvent] and [AsyncConfigurationReloadEvent] events.

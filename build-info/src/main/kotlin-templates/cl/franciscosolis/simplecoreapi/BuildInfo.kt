@@ -47,3 +47,19 @@ const val getName: String = "{{ name }}"
  * @return The description of the project
  */
 const val getDescription: String = "{{ description }}"
+
+/**
+ * Gets the versions of the dependencies of the project
+ * @return The versions of the dependencies of the project
+ */
+val getDependencyVersions: Map<String, String> = mapOf(
+    "log4j.version" to "{{ log4j_version }}",
+    "simpleyaml.version" to "{{ simpleyaml_version }}",
+    "jetbrains-annotations.version" to "{{ jetbrains_annotations_version }}",
+    "commons-io.version" to "{{ commons_io_version }}",
+    "google-gson.version" to "{{ google_gson_version }}",
+    "json.version" to "{{ json_version }}",
+    "zip4j.version" to "{{ zip4j_version }}",
+    "slf4j.version" to "{{ slf4j_version }}",
+    "xseries.version" to "{{ xseries_version }}"
+)

@@ -20,6 +20,9 @@ package cl.franciscosolis.simplecoreapi.velocity
 
 import cl.franciscosolis.simplecoreapi.SimpleCoreAPI
 import com.google.inject.Inject
+import com.velocitypowered.api.event.Subscribe
+import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
+import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.proxy.ProxyServer
 import java.util.logging.Logger
@@ -44,5 +47,15 @@ class VelocityLoader @Inject constructor(val server: ProxyServer, logger: Logger
     init {
         instance = this
         SimpleCoreAPI(logger = logger)
+    }
+
+    @Subscribe
+    fun onInitialize(e: ProxyInitializeEvent) {
+        // TODO
+    }
+
+    @Subscribe
+    fun onDisable(e: ProxyShutdownEvent) {
+        SimpleCoreAPI.disableTasks.forEach { it() }
     }
 }

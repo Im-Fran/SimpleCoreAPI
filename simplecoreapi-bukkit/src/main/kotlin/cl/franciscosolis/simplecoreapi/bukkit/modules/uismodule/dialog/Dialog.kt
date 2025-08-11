@@ -49,7 +49,10 @@ import cl.franciscosolis.simplecoreapi.bukkit.BukkitLoader
 import cl.franciscosolis.simplecoreapi.bukkit.extensions.*
 import cl.franciscosolis.simplecoreapi.bukkit.modules.tasksmodule.BukkitTasksModule
 import cl.franciscosolis.simplecoreapi.bukkit.modules.uismodule.models.EditableItemStack
+import cl.franciscosolis.simplecoreapi.extensions.placeholders
 import cl.franciscosolis.simplecoreapi.modules.tasksmodule.models.RecurringTask
+import cl.franciscosolis.simplecoreapi.utils.text.Text
+import cl.franciscosolis.simplecoreapi.utils.text.TextColor
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import java.util.*
@@ -91,17 +94,17 @@ class Dialog(
                     id = "Dialog.CloseItem.Name",
                     defaultValue = "Close",
                     group = "UIsModule",
-                    mainColor = "&c"
+                    mainColor = TextColor.RED
                 ).translate()
             )
             .lore(
-                "&7",
+                TextColor.GRAY.toString(),
                 Translation(
                     id = "Dialog.CloseItem.Lore",
                     defaultValue = "Click **this** to close the dialog.",
                     group = "UIsModule",
-                    mainColor = "&7",
-                    colors = arrayOf("&c")
+                    mainColor = TextColor.GRAY,
+                    colors = arrayOf(TextColor.RED)
                 ).translate()
             )
     )
@@ -124,7 +127,7 @@ class Dialog(
         }
 
         if (this.title != null || this.subtitle != null) {
-            this.player.sendTitle((this.title ?: "&7").bukkitColor(), (this.subtitle ?: "&7").bukkitColor(), 0, 20, 0)
+            this.player.sendTitle(Text((this.title ?: TextColor.GRAY.toString())).colorize(), Text((this.subtitle ?: TextColor.GRAY.toString())).colorize(), 0, 20, 0)
         } else {
             this.player.resetTitle()
         }
@@ -135,13 +138,9 @@ class Dialog(
         // Show the close actionbar translation if the player has moved in the last 5 seconds, otherwise show the actionbar
         val actionbar = if (calc < 5000L && calc != now && this.canBeClosed) {
             when (closeAction) {
-                CloseAction.CHAT_COMMAND -> closeAction.howToCloseTranslation.translate(
-                    placeholders = mapOf("exit_command" to exitCommand.translate(colorize = false))
-                )
+                CloseAction.CHAT_COMMAND -> closeAction.howToCloseTranslation.translate().placeholders(mapOf("exit_command" to exitCommand.translate(colorize = false)))
 
-                CloseAction.HOTBAR_MENU -> closeAction.howToCloseTranslation.translate(
-                    placeholders = mapOf("item_material" to "N/A")
-                )
+                CloseAction.HOTBAR_MENU -> closeAction.howToCloseTranslation.translate().placeholders(mapOf("item_material" to "N/A"))
 
                 else -> closeAction.howToCloseTranslation.translate()
             }
@@ -185,7 +184,7 @@ class Dialog(
                     id = "Dialog.Closed",
                     defaultValue = "The dialog has been closed.",
                     group = "UIsModule",
-                    mainColor = "&c"
+                    mainColor = TextColor.RED
                 ).translate()
             )
         }

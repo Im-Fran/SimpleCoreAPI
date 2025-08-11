@@ -18,6 +18,7 @@
 
 package cl.franciscosolis.simplecoreapi.module
 
+import cl.franciscosolis.simplecoreapi.SimpleCoreAPI
 import cl.franciscosolis.simplecoreapi.utils.measureLoad
 import java.util.*
 
@@ -83,12 +84,6 @@ inline fun <reified T : Module> requireModule(): T {
     measureLoad("Module ${moduleInstance.description.name} enabled in {time}") {
         moduleInstance.onEnable()
     }
-
-    Runtime.getRuntime().addShutdownHook(Thread {
-        measureLoad("Module ${moduleInstance.description.name} disabled in {time}") {
-            moduleInstance.onDisable()
-        }
-    })
 
     return moduleInstance
 }

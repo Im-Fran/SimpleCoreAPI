@@ -18,9 +18,11 @@
 
 package cl.franciscosolis.simplecoreapi
 
+import cl.franciscosolis.simplecoreapi.module.Module
 import cl.franciscosolis.simplecoreapi.modules.filesmodule.extensions.file
 import cl.franciscosolis.simplecoreapi.modules.filesmodule.extensions.folder
 import cl.franciscosolis.simplecoreapi.utils.SoftwareType
+import cl.franciscosolis.simplecoreapi.utils.measureLoad
 import cl.franciscosolis.simplecoreapi.utils.update.GitHubUpdateChecker
 import java.io.File
 import java.util.logging.Logger
@@ -32,6 +34,12 @@ import java.util.logging.Logger
 class SimpleCoreAPI(private var logger: Logger? = null){
 
     companion object {
+        /**
+         * List of tasks to disable when the plugin is disabled
+         * @see disableTasks
+         */
+        val disableTasks = mutableListOf<() -> Unit>()
+
         /**
          * Instance of [Logger] used by [SimpleCoreAPI].
          * @return The instance of [Logger]
@@ -68,6 +76,12 @@ class SimpleCoreAPI(private var logger: Logger? = null){
          * @return true if the current [SoftwareType] is the one specified
          */
         fun isRunningSoftwareType(softwareType: SoftwareType) = softwareType.check()
+
+        /**
+         * Adds a task to be executed when the plugin is disabled
+         * @param task The task to execute
+         */
+        fun addOnDisableTask(task: () -> Unit) = disableTasks.add(task)
     }
 
     /**
@@ -91,6 +105,10 @@ class SimpleCoreAPI(private var logger: Logger? = null){
             Companion.logger.info("Running API with software ${softwareType.display}")
         } else {
             Companion.logger.info("Running on unknown server software. Some features might not work as expected!")
+        }
+
+        addOnDisableTask {
+            Module.loadedModules.values.forEach { measureLoad("Module ${it.description.name} disabled in {time}", it::onDisable) }
         }
     }
 }

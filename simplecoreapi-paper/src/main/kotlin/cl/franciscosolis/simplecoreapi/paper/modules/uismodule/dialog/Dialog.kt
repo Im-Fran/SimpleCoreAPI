@@ -18,14 +18,26 @@
 
 package cl.franciscosolis.simplecoreapi.paper.modules.uismodule.dialog
 
+import cl.franciscosolis.simplecoreapi.SimpleCoreAPI
+import cl.franciscosolis.simplecoreapi.extensions.capitalize
+import cl.franciscosolis.simplecoreapi.extensions.debug
+import cl.franciscosolis.simplecoreapi.extensions.placeholders
+import cl.franciscosolis.simplecoreapi.module.requireModule
+import cl.franciscosolis.simplecoreapi.modules.tasksmodule.models.RecurringTask
+import cl.franciscosolis.simplecoreapi.modules.translationsmodule.models.Translation
+import cl.franciscosolis.simplecoreapi.paper.PaperLoader
+import cl.franciscosolis.simplecoreapi.paper.extensions.*
+import cl.franciscosolis.simplecoreapi.paper.modules.tasksmodule.PaperTasksModule
+import cl.franciscosolis.simplecoreapi.paper.modules.uismodule.models.EditableItemStack
+import cl.franciscosolis.simplecoreapi.utils.text.TextColor
 import com.cryptomorin.xseries.XMaterial
+import io.papermc.paper.event.player.AsyncChatEvent
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import net.kyori.adventure.title.Title
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
-import org.bukkit.event.Cancellable
-import org.bukkit.event.EventHandler
-import org.bukkit.event.EventPriority
-import org.bukkit.event.HandlerList
-import org.bukkit.event.Listener
+import org.bukkit.event.*
 import org.bukkit.event.block.BlockFertilizeEvent
 import org.bukkit.event.block.BlockIgniteEvent
 import org.bukkit.event.block.BlockPlaceEvent
@@ -36,28 +48,8 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.hanging.HangingPlaceEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
-import org.bukkit.event.player.AsyncPlayerChatEvent
-import org.bukkit.event.player.PlayerBucketEmptyEvent
-import org.bukkit.event.player.PlayerBucketFillEvent
-import org.bukkit.event.player.PlayerCommandPreprocessEvent
-import org.bukkit.event.player.PlayerDropItemEvent
-import org.bukkit.event.player.PlayerInteractAtEntityEvent
-import org.bukkit.event.player.PlayerInteractEntityEvent
-import org.bukkit.event.player.PlayerInteractEvent
-import cl.franciscosolis.simplecoreapi.modules.translationsmodule.models.Translation
-import cl.franciscosolis.simplecoreapi.bukkit.BukkitLoader
-import cl.franciscosolis.simplecoreapi.bukkit.extensions.*
-import cl.franciscosolis.simplecoreapi.bukkit.modules.tasksmodule.BukkitTasksModule
-import cl.franciscosolis.simplecoreapi.bukkit.modules.uismodule.models.EditableItemStack
-import cl.franciscosolis.simplecoreapi.modules.tasksmodule.models.RecurringTask
-import cl.franciscosolis.simplecoreapi.paper.extensions.itemStack
-import cl.franciscosolis.simplecoreapi.paper.extensions.lore
-import cl.franciscosolis.simplecoreapi.paper.extensions.name
-import cl.franciscosolis.simplecoreapi.paper.modules.uismodule.models.EditableItemStack
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.title.Title
-import net.md_5.bungee.api.ChatMessageType
-import net.md_5.bungee.api.chat.TextComponent
+import org.bukkit.event.player.*
+import java.time.Duration
 import java.util.*
 
 /**
@@ -92,20 +84,20 @@ class Dialog(
     private val closeItem = EditableItemStack(
         id = "Dialog.CloseItem",
         itemStack = XMaterial.BARRIER.itemStack()
-            .name(Component.text(Translation(
+            .withName(Component.text(Translation(
                 id = "Dialog.CloseItem.Name",
                 defaultValue = "Close",
                 group = "UIsModule",
-                mainColor = "&c"
+                mainColor = TextColor.RED
             ).translate()))
-            .lore(
+            .withLore(
                 Component.empty(),
                 Component.text(Translation(
                     id = "Dialog.CloseItem.Lore",
                     defaultValue = "Click **this** to close the dialog.",
                     group = "UIsModule",
-                    mainColor = "&7",
-                    colors = arrayOf("&c")
+                    mainColor = TextColor.GRAY,
+                    colors = arrayOf(TextColor.RED)
                 ).translate()),
             )
     )
@@ -128,7 +120,7 @@ class Dialog(
         }
 
         if (this.title != null || this.subtitle != null) {
-            this.player.showTitle(Title.title(this.title ?: Component.empty(), this.subtitle ?: Component.empty()))
+            this.player.showTitle(Title.title(this.title ?: Component.empty(), this.subtitle ?: Component.empty(), Title.Times.times(Duration.ZERO, Duration.ofSeconds(1), Duration.ZERO)))
         } else {
             this.player.resetTitle()
         }
@@ -139,30 +131,22 @@ class Dialog(
         // Show the close actionbar translation if the player has moved in the last 5 seconds, otherwise show the actionbar
         val actionbar = if (calc < 5000L && calc != now && this.canBeClosed) {
             when (closeAction) {
-                CloseAction.CHAT_COMMAND -> Component.text(closeAction.howToCloseTranslation.translate(
-                    placeholders = mapOf("exit_command" to exitCommand.translate(colorize = false))
-                ))
+                CloseAction.CHAT_COMMAND -> Component.text(closeAction.howToCloseTranslation.translate().placeholders(mapOf("exit_command" to exitCommand.translate(colorize = false))))
 
-                CloseAction.HOTBAR_MENU -> Component.text(closeAction.howToCloseTranslation.translate(
-                    placeholders = mapOf("item_material" to "N/A")
-                ))
+                CloseAction.HOTBAR_MENU -> Component.text(closeAction.howToCloseTranslation.translate().placeholders(mapOf("item_material" to closeItem.asItemStack().type.name.split("_").joinToString(" "){ it.capitalize() })))
 
-                else -> closeAction.howToCloseTranslation.translate()
+                else -> Component.text(closeAction.howToCloseTranslation.translate())
             }
         } else {
             this.actionbar
         }
 
-        if (actionbar != null) {
-            this.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacy(actionbar.bukkitColor()))
-        } else {
-            this.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacy(" "))
-        }
+        this.player.sendActionBar(actionbar ?: Component.empty())
     }
 
     fun open(): Dialog = this.apply {
         if (this.task == null) {
-            this.task = BukkitTasksModule.instance.runTaskTimerAsynchronously(
+            this.task = requireModule<PaperTasksModule>().runTaskTimerAsynchronously(
                 delay = 1L,
                 period = 5L,
                 task = this::send
@@ -171,8 +155,8 @@ class Dialog(
 
         this.task?.stop() // Stop the task if it's running
         HandlerList.unregisterAll(this)
-        BukkitTasksModule.instance.runTask(this.player::closeInventory)
-        BukkitLoader.instance.let { it.server.pluginManager.registerEvents(this, it) }
+        requireModule<PaperTasksModule>().runTask(this.player::closeInventory)
+        PaperLoader.instance.let { it.server.pluginManager.registerEvents(this, it) }
         this.task?.start()
         this.closedByPlayer = false
     }
@@ -182,16 +166,15 @@ class Dialog(
         HandlerList.unregisterAll(this)
         this.closedByPlayer = true
         this.player.resetTitle()
-        this.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacy(" "))
+        this.player.sendActionBar(Component.empty())
         if (sendMessage) {
-            this.player.sendMessage(
-                Translation(
-                    id = "Dialog.Closed",
-                    defaultValue = "The dialog has been closed.",
-                    group = "UIsModule",
-                    mainColor = "&c"
-                ).translate()
-            )
+            this.player.sendMessage(Translation(
+                id = "Dialog.Closed",
+                defaultValue = "The dialog has been **closed**.",
+                group = "UIsModule",
+                mainColor = TextColor.GRAY,
+                colors = arrayOf(TextColor.RED)
+            ).translate())
         }
     }
 
@@ -206,10 +189,7 @@ class Dialog(
             return
         }
 
-        if (e.action.name.lowercase().startsWith(closeAction.name.lowercase()) || (e.action.name.lowercase()
-                .contains("CLICK") && closeAction == CloseAction.ANY_CLICK)
-        ) { // This only works with a left or right click
-
+        if (e.action.name.lowercase().startsWith(closeAction.name.lowercase()) || (e.action.name.lowercase().contains("CLICK") && closeAction == CloseAction.ANY_CLICK)) { // This only works with a left or right click
             e.isCancelled = true
             this.close()
             return
@@ -224,42 +204,27 @@ class Dialog(
             e.isCancelled = true
             if (item.isSimilar(this.closeItem.asItemStack())) {
                 this.close()
-                return
             }
-            return
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun onInventoryClick(e: InventoryClickEvent) {
-        if (e.whoClicked.uniqueId != this.player.uniqueId) {
-            return
-        }
+        handleInteract(e, e.whoClicked as? Player, AllowedActions.INVENTORY_CLICK)
 
-        if (!this.canBeClosed || closeAction != CloseAction.HOTBAR_MENU) {
-            return
-        }
-
-        // Cancel the event if the player can't click in their inventory
-        e.isCancelled = AllowedActions.INVENTORY_CLICK !in allowedActions
-
-        if (e.currentItem?.isSimilar(this.closeItem.asItemStack()) == true) {
+        if (this.canBeClosed && closeAction == CloseAction.HOTBAR_MENU && e.currentItem?.isSimilar(this.closeItem.asItemStack()) == true) {
             this.close()
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun onInventoryOpen(e: InventoryOpenEvent) {
-        if (e.player.uniqueId != this.player.uniqueId) {
+        handleInteract(e, e.player, AllowedActions.INVENTORY_OPEN)
+
+        if (this.canBeClosed && closeAction == CloseAction.HOTBAR_MENU) {
             return
         }
 
-        if (!this.canBeClosed || closeAction != CloseAction.HOTBAR_MENU) {
-            return
-        }
-
-        // Cancel the event if the player can't open their inventory
-        e.isCancelled = AllowedActions.INVENTORY_OPEN !in allowedActions
         if (e.isCancelled) {
             // Close the inventory for all viewers
             e.inventory.viewers.forEach { it.closeInventory() }
@@ -267,29 +232,26 @@ class Dialog(
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    fun onMessageReceived(e: AsyncPlayerChatEvent) {
-        if (e.player.uniqueId != this.player.uniqueId) {
-            return
+    fun onMessageReceived(e: AsyncChatEvent) {
+        handleInteract(e, e.player, AllowedActions.CHAT)
+        val serializedMessage = LegacyComponentSerializer.legacyAmpersand().serialize(e.originalMessage())
+
+        if(this.canBeClosed && closeAction == CloseAction.CHAT_COMMAND && serializedMessage.equals(exitCommand.translate(colorize = false), ignoreCase = true)) {
+            e.isCancelled = true
+            this.closedByPlayer = true
+            this.close()
         }
 
-        e.isCancelled = AllowedActions.CHAT !in allowedActions
-
-        if (!this.canBeClosed || closeAction != CloseAction.CHAT_COMMAND) {
-            return
-        }
-
-        if (e.message.lowercase().bukkitStripColors()?.startsWith(exitCommand.translate(colorize = false).lowercase()) == true) {
-            BukkitTasksModule.instance.runTask {
-                if (this.onChat(this.player, e.message)) {
-                    this.closedByPlayer = true
-                    this.close()
-                }
+        requireModule<PaperTasksModule>().runTask {
+            if (this.onChat(this.player, serializedMessage)) {
+                this.closedByPlayer = true
+                this.close()
             }
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    fun onMove(e: PlayerInteractEvent) {
+    fun onMove(e: PlayerMoveEvent) {
         handleInteract(e, e.player, AllowedActions.MOVE)
 
         this.lastMovementAt = System.currentTimeMillis()
@@ -349,6 +311,6 @@ class Dialog(
             return
         }
 
-        e.isCancelled = allowedActions !in this.allowedActions
+        e.isCancelled = allowedActions !in this.allowedActions || AllowedActions.NONE in this.allowedActions
     }
 }

@@ -25,10 +25,9 @@ import org.bukkit.inventory.ItemStack
  * Gets the [ItemStack] of this [XMaterial]
  * @return the item stack
  */
-fun XMaterial.itemStack(): ItemStack = this.let {
-    if(this == XMaterial.AIR) {
-        throw IllegalArgumentException("Cannot create an itemstack of air!")
-    }
-    val material = this.parseMaterial() ?: throw IllegalArgumentException("${this.name} is an invalid material!")
+fun XMaterial.itemStack(): ItemStack = let {
+    check(this != XMaterial.AIR) { "Cannot create an ItemStack of air!" }
+    val material = parseMaterial()
+    checkNotNull(material) { "$name is an invalid material!" }
     ItemStack(material)
 }

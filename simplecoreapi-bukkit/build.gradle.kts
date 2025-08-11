@@ -1,5 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
+val xseriesVersion: String = rootProject.findProperty("xseries.version") as String
+
 dependencies {
     /* Api */
     compileOnly(project(":build-info"))
@@ -7,10 +9,10 @@ dependencies {
     implementation(project(":simplecoreapi", "shadow"))
 
     /* Runtimes */
-    compileOnly("org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.21.3-R0.1-SNAPSHOT")
 
     /* UIs Module */
-    implementation("com.github.cryptomorin:XSeries:11.2.0")
+    compileOnly("com.github.cryptomorin:XSeries:$xseriesVersion")
 }
 
 tasks {

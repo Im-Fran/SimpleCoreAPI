@@ -20,7 +20,7 @@ package cl.franciscosolis.simplecoreapi.paper.modules.uismodule.models
 
 import cl.franciscosolis.simplecoreapi.paper.extensions.itemStack
 import cl.franciscosolis.simplecoreapi.paper.modules.uismodule.ui.Ui
-import cl.franciscosolis.simplecoreapi.paper.extensions.name
+import cl.franciscosolis.simplecoreapi.paper.extensions.withName
 import cl.franciscosolis.simplecoreapi.paper.extensions.setGlowing
 import com.cryptomorin.xseries.XMaterial
 import net.kyori.adventure.text.Component
@@ -47,7 +47,7 @@ data class UiEntry(
          */
         fun empty(item: () -> ItemStack = {
             XMaterial.GRAY_STAINED_GLASS_PANE.itemStack()
-                .name(Component.empty())
+                .withName(Component.empty())
                 .setGlowing(glowing = true)
         }) = UiEntry(item = item)
     }

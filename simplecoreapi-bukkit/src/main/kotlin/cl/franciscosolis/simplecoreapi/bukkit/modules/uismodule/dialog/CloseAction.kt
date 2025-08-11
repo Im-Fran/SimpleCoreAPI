@@ -19,6 +19,7 @@
 package cl.franciscosolis.simplecoreapi.bukkit.modules.uismodule.dialog
 
 import cl.franciscosolis.simplecoreapi.modules.translationsmodule.models.Translation
+import cl.franciscosolis.simplecoreapi.utils.text.TextColor
 
 /**
  * Represents a CloseAction to close a dialog.
@@ -34,8 +35,8 @@ enum class CloseAction(val howToCloseTranslation: Translation){
         id = "HowToClose.LeftClick",
         defaultValue = "To close this dialog use **left click**",
         group = "UIsModule",
-        mainColor = "&f",
-        colors = arrayOf("&b"),
+        mainColor = TextColor.WHITE,
+        colors = arrayOf(TextColor.AQUA),
     )),
 
     /**
@@ -45,8 +46,8 @@ enum class CloseAction(val howToCloseTranslation: Translation){
         id = "Dialog.HowToClose.RightClick",
         defaultValue = "To close this dialog use **right click**",
         group = "UIsModule",
-        mainColor = "&f",
-        colors = arrayOf("&b"),
+        mainColor = TextColor.WHITE,
+        colors = arrayOf(TextColor.AQUA),
     )),
 
     /**
@@ -56,8 +57,8 @@ enum class CloseAction(val howToCloseTranslation: Translation){
         id = "Dialog.Dialog.HowToClose.AnyClick",
         defaultValue = "To close this dialog use **any click**",
         group = "UIsModule",
-        mainColor = "&f",
-        colors = arrayOf("&b"),
+        mainColor = TextColor.WHITE,
+        colors = arrayOf(TextColor.AQUA),
     )),
 
     /**
@@ -67,8 +68,8 @@ enum class CloseAction(val howToCloseTranslation: Translation){
         id = "Dialog.HowToClose.ChatCommand",
         defaultValue = "To close this dialog type **{exit_command}** in the chat",
         group = "UIsModule",
-        mainColor = "&f",
-        colors = arrayOf("&b"),
+        mainColor = TextColor.WHITE,
+        colors = arrayOf(TextColor.AQUA),
     )),
 
     /**
@@ -79,7 +80,7 @@ enum class CloseAction(val howToCloseTranslation: Translation){
         id = "Dialog.HowToClose.HotbarMenu",
         defaultValue = "To close this dialog use the **{item_material}** in your hotbar",
         group = "UIsModule",
-        mainColor = "&f",
-        colors = arrayOf("&b"),
+        mainColor = TextColor.WHITE,
+        colors = arrayOf(TextColor.AQUA),
     )),
 }

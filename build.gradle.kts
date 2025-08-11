@@ -10,7 +10,7 @@ plugins {
 
     id("io.github.goooler.shadow") version "8.1.8"                          // ShadowJar
     id("cl.franciscosolis.gradledotenv") version "1.0.1"                    // .env support
-    kotlin("jvm") version "2.0.0"                                           // Kotlin
+    kotlin("jvm") version "2.1.0"                                           // Kotlin
     id("org.jetbrains.dokka") version "1.9.20"                              // Dokka (Kotlin Docs)
     id("cl.franciscosolis.sonatype-central-upload") version "1.0.3"         // Sonatype Central Upload
     id("org.scm-manager.license") version "0.7.1"                           // License Header
@@ -46,6 +46,23 @@ group = groupId
 version = projectVersion.replaceFirst("v", "").replace("/", "")
 description = "The best way to create a kotlin project."
 
+allprojects {
+    repositories {
+        mavenCentral()
+
+        maven("https://s01.oss.sonatype.org/content/groups/public/")
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
+        maven("https://oss.sonatype.org/content/repositories/releases/")
+        maven("https://oss.sonatype.org/content/groups/public/")
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+        maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://repo.codemc.org/repository/maven-public/")
+        maven("https://jitpack.io/")
+
+        mavenLocal()
+    }
+}
+
 subprojects {
     apply {
         plugin("io.github.goooler.shadow")
@@ -62,36 +79,29 @@ subprojects {
     version = rootProject.version
     description = rootProject.description
 
-    repositories {
-        mavenCentral()
-
-        maven("https://s01.oss.sonatype.org/content/groups/public/")
-        maven("https://oss.sonatype.org/content/repositories/snapshots/")
-        maven("https://oss.sonatype.org/content/repositories/releases/")
-        maven("https://oss.sonatype.org/content/groups/public/")
-        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-        maven("https://repo.papermc.io/repository/maven-public/")
-        maven("https://repo.codemc.org/repository/maven-public/")
-        maven("https://jitpack.io/")
-
-        mavenLocal()
-    }
-
     dependencies {
-        implementation(kotlin("stdlib"))
+        compileOnly(kotlin("stdlib"))
     }
 
     /* Blossom Placeholder Injection */
     sourceSets {
         main {
             blossom {
-                val variables = mapOf(
+                val variables = mutableMapOf(
                     "name" to rootProject.name,
                     "version" to "${project.version}",
                     "description" to project.description,
                     "git_short" to (env["GIT_COMMIT_SHORT_HASH"] ?: "unknown"),
                     "git_full" to (env["GIT_COMMIT_LONG_HASH"] ?: "unknown"),
                 )
+
+                arrayOf("kotlin","log4j", "simpleyaml", "jetbrains-annotations", "commons-io", "google-gson", "json", "zip4j", "slf4j", "xseries").forEach { dependency ->
+                    variables[dependency.replace("-","_") + "_version"] = rootProject.findProperty("$dependency.version") as String
+                }
+
+                javaSources {
+                    variables.forEach(this::property)
+                }
 
                 kotlinSources {
                     variables.forEach(this::property)
@@ -124,15 +134,7 @@ subprojects {
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         }
 
-        named<ShadowJar>("shadowJar") {
-            doLast {
-                copy {
-                    from(archiveFile.get().asFile.absolutePath)
-                    into(rootProject.layout.buildDirectory.dir("libs"))
-                    rename { "${project.name}.jar" }
-                }
-            }
-
+        withType<ShadowJar>().configureEach {
             mergeServiceFiles()
             exclude("**/*.kotlin_metadata")
             exclude("**/*.kotlin_builtins")
@@ -188,9 +190,21 @@ subprojects {
         }
     }
 
+    afterEvaluate {
+        (tasks.findByName("shadowJar") as? ShadowJar)?.let { shadowTask ->
+            shadowTask.doLast {
+                copy {
+                    from(shadowTask.archiveFile.get().asFile.absolutePath)
+                    into(rootProject.layout.buildDirectory.dir("libs"))
+                    rename { "${project.name}.jar" }
+                }
+            }
+        }
+    }
+
     license {
         header(rootProject.file("LICENSE-HEADER"))
-        include("**/*.kt")
+        include("**/*.kt", "**/*.java")
         newLine(true)
     }
 

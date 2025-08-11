@@ -27,6 +27,21 @@ It also supports creating Standalone applications (but only with the global modu
 ## Where is the documentation?
 The docs can be found [here](https://im-fran.github.io/SimpleCoreAPI/) (it's a Dokka Resource), everything is documented through the Kotlin Docs (Similar to JavaDocs but for Kotlin :p )
 
+## Available commands
+<details>
+<summary>Update License</summary>
+
+> This command updates the license header in every file of the project.
+
+```bash
+./gradlew updateLicenses # This will update the licenses
+```
+
+```bash
+./gradlew checkLicenses # This will check and tell you which files doesn't have valid licenses.
+```
+</details>
+
 ## How does this work?
 Ok, so we have multiple types of initializers for different software, Bukkit (for bukkit based runtimes), Paper (for paper based runtimes), Bungee, Velocity and Standalone.
 

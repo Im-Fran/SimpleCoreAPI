@@ -18,6 +18,11 @@
 
 package cl.franciscosolis.simplecoreapi.paper.modules.uismodule.models
 
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
+import io.papermc.paper.registry.RegistryAccess
+import io.papermc.paper.registry.RegistryKey
+import net.kyori.adventure.key.Key
 import org.bukkit.enchantments.Enchantment
 
 /**
@@ -25,4 +30,44 @@ import org.bukkit.enchantments.Enchantment
  * @param enchantment the enchantment
  * @param level the level of the enchantment
  */
-data class SimpleEnchantment(val enchantment: Enchantment, val level: Int = 1)
+data class SimpleEnchantment(val enchantment: Enchantment, val level: Int = 1) {
+
+    /**
+     * Gets the name of the enchantment
+     * @return the name of the enchantment
+     */
+    val name: String
+        get() = enchantment.key.key
+
+    /**
+     * Gets the level of the enchantment
+     * @return the level of the enchantment
+     */
+    val enchantmentLevel: Int
+        get() = level
+
+    /**
+     * Gets the enchantment as a string
+     * @return the enchantment as a string
+     */
+    override fun toString(): String {
+        val registry = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT)
+        return JsonObject().apply {
+            addProperty("enchantment", registry.getKeyOrThrow(enchantment).toString())
+            addProperty("level", level)
+        }.toString()
+    }
+
+    companion object {
+        /**
+         * Parses a string to a [SimpleEnchantment]
+         * @param string the string to parse
+         * @return the parsed [SimpleEnchantment]
+         */
+        fun fromString(string: String): SimpleEnchantment {
+            val json = JsonParser.parseString(string).asJsonObject
+            val enchantment = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).getOrThrow(Key.key(json.get("enchantment").asString))
+            return SimpleEnchantment(enchantment, json.get("level").asInt)
+        }
+    }
+}

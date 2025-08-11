@@ -18,6 +18,7 @@
 
 package cl.franciscosolis.simplecoreapi.bungee
 
+import cl.franciscosolis.simplecoreapi.SimpleCoreAPI
 import net.md_5.bungee.api.plugin.Plugin
 
 class BungeeLoader: Plugin() {
@@ -32,6 +33,10 @@ class BungeeLoader: Plugin() {
 
     override fun onLoad() {
         instance = this
-        // SimpleCoreAPI(logger = logger)
+        SimpleCoreAPI(logger = logger)
+    }
+
+    override fun onDisable() {
+        SimpleCoreAPI.disableTasks.forEach { it() }
     }
 }

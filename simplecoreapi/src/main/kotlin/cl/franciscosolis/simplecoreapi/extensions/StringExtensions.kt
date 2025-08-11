@@ -55,3 +55,25 @@ fun String.fromBase64(): String = String(Base64.getDecoder().decode(this))
  * @return the capitalized string
  */
 fun String.capitalize(): String = replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+
+/**
+ * Applies the given placeholders to this string
+ * @param placeholders The placeholders to use. Example (using placeholder id 'test' and value 'test_value'): '{test}' should return 'test_value'.
+ *                      You can use '{}' or '%%' as placeholder identifiers like '{test}' or '%test%'. Defaults to an empty map.
+ *
+ * Example:
+ * ```
+ * "Hello, {name}!".applyPlaceholders(mapOf("name" to "Francisco")) // Returns "Hello, Francisco!"
+ * ```
+ *
+ * @return the string with the placeholders applied
+ */
+fun String.placeholders(placeholders: Map<String, String> = emptyMap()): String {
+    var newString = this
+    placeholders.forEach { (key, value) ->
+        newString = newString.replace("{$key}", value)
+            .replace("%$key%", value)
+    }
+    return newString
+
+}

@@ -257,6 +257,24 @@ class YmlConfig(val file: File){
     fun getStringListOrAdd(path: String, default: List<String>): List<String> = if(has(path)) getStringList(path) else set(path, default).getStringList(path)
 
     /**
+     * Gets a [List] of [Byte] from the given path
+     *
+     * @param path The path to get the value of
+     * @return The value of the given path as [List] of [Byte]
+     */
+    fun getByteList(path: String): List<Byte> = config.getByteList(path)
+
+    /**
+     * Gets a [List] of [Byte] from the given path
+     * or adds the default value if it doesn't exist
+     *
+     * @param path The path to get the value of
+     * @param default The default value to set if the path doesn't exist
+     * @return The value of the given path as [List] of [Byte]
+     */
+    fun getByteListOrAdd(path: String, default: List<Byte>): List<Byte> = if(has(path)) getByteList(path) else set(path, default).getByteList(path)
+
+    /**
      * Gets a [List] of [Int] from the given path
      *
      * @param path The path to get the value of

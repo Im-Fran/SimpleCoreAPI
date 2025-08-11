@@ -1,6 +1,8 @@
 plugins {
-    id("io.papermc.paperweight.userdev") version "1.7.1"        // Paperweight
+    id("io.papermc.paperweight.userdev") version "1.7.7"        // Paperweight
 }
+
+val xseriesVersion: String = rootProject.findProperty("xseries.version") as String
 
 dependencies {
     /* Api */
@@ -9,10 +11,10 @@ dependencies {
     implementation(project(":simplecoreapi", "shadow"))
 
     /* Runtimes */
-    paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.3-R0.1-SNAPSHOT")
 
     /* UIs Module */
-    implementation("com.github.cryptomorin:XSeries:11.2.0")
+    compileOnly("com.github.cryptomorin:XSeries:$xseriesVersion")
 }
 
 tasks {

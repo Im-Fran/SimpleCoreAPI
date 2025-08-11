@@ -6,3 +6,4 @@ api-version: '1.21'
 authors: [GitHub/Im-Fran]
 website: https://franciscosolis.cl
 prefix: 'SimpleCoreAPI'
+loader: cl.franciscosolis.simplecoreapi.paper.PluginLoader
