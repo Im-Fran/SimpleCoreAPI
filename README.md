@@ -4,7 +4,7 @@
 
 **A modular Kotlin API for building Minecraft plugins on Paper, Spigot and BungeeCord — without shipping the same library inside every plugin.**
 
-[![License](https://img.shields.io/badge/license-GPL--3.0-blue)](#-license)
+[![License](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/Im-Fran/SimpleCoreAPI/ci.yml?label=CI)](https://github.com/Im-Fran/SimpleCoreAPI/actions/workflows/ci.yml)
 [![Kotlin](https://img.shields.io/badge/kotlin-2.4.20-7F52FF)](https://kotlinlang.org)
 [![Java](https://img.shields.io/badge/java-25-ED8B00)](https://adoptium.net)
@@ -359,7 +359,8 @@ Contributions are welcome.
 
 ## 📄 License
 
-GNU General Public License v3.0.
+This project is licensed under the **GNU General Public License v3.0** — see the
+[LICENSE](LICENSE) file for details.
 
 ---
 
