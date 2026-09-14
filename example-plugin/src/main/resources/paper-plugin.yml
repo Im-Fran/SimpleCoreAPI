@@ -1,0 +1,14 @@
+name: ExamplePlugin
+version: '1.0.0'
+main: cl.franciscosolis.exampleplugin.ExamplePlugin
+api-version: '26.2'
+description: Example plugin that uses SimpleCoreAPI as a dependency
+
+dependencies:
+  server:
+    SimpleCoreAPI:
+      # BEFORE: the server loads SimpleCoreAPI before this plugin.
+      load: BEFORE
+      required: true
+      # Grants access to SimpleCoreAPI's classes, kotlin-stdlib included.
+      join-classpath: true
