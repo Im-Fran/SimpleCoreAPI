@@ -1,0 +1,44 @@
+name: Publish
+
+# Un tag `v0.1.0` publica la version 0.1.0 en cl.franciscosolis.
+# Un tag `v0.2.0-SNAPSHOT` la publica en cl.franciscosolis.dev.
+on:
+  push:
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Version desde el tag
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+
+      - name: Tests
+        run: ./gradlew build -Pversion="$VERSION"
+
+      - name: Publicar en Maven Central
+        # Queda en staging: la release se aprueba a mano en central.sonatype.com
+        run: ./gradlew publishToMavenCentral -Pversion="$VERSION" --no-configuration-cache
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+
+      - name: GitHub Release con el jar universal
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/build/libs/*.jar
+          generate_release_notes: true
