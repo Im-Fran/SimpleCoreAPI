@@ -1,0 +1,8 @@
+name: SimpleCoreAPI
+version: '${version}'
+main: cl.franciscosolis.simplecoreapi.paper.PaperBootstrap
+api-version: '26.2'
+description: Modular API for building Minecraft plugins in Kotlin
+authors:
+  - Im-Fran
+website: https://github.com/Im-Fran/SimpleCoreAPI

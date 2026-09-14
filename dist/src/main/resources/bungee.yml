@@ -1,0 +1,5 @@
+name: SimpleCoreAPI
+version: '${version}'
+main: cl.franciscosolis.simplecoreapi.bungee.BungeeBootstrap
+author: Im-Fran
+description: Modular API for building Minecraft plugins in Kotlin
