@@ -309,10 +309,10 @@ reload; use `registerCommand` for those cases.
 
 | Module | Published artifact | Contents |
 |---|---|---|
-| `core` | `simplecoreapi-core` | Module registry and the modules with no Minecraft dependencies |
-| `paper` | `simplecoreapi-paper` | Paper 26.2 bootstrap and modules |
-| `spigot` | `simplecoreapi-spigot` | Spigot 26.2 bootstrap and modules |
-| `bungee` | `simplecoreapi-bungee` | BungeeCord bootstrap and modules |
+| [`core`](core) | `simplecoreapi-core` | Module registry and the modules with no Minecraft dependencies |
+| [`paper`](paper) | `simplecoreapi-paper` | Paper 26.2 bootstrap and modules |
+| [`spigot`](spigot) | `simplecoreapi-spigot` | Spigot 26.2 bootstrap and modules |
+| [`bungee`](bungee) | `simplecoreapi-bungee` | BungeeCord bootstrap and modules |
 | `dist` | — | Universal jar with all three platforms and `kotlin-stdlib` |
 | `example-plugin` | — | Example plugin, end-to-end verification |
 
