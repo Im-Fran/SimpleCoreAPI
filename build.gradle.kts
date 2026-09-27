@@ -57,7 +57,8 @@ configure(subprojects.filter { it.name in publishedProjects }) {
         coordinates(group.toString(), "simplecoreapi-${project.name}", version.toString())
 
         // Only sign when a key is available, so publishToMavenLocal keeps working locally.
-        if (providers.gradleProperty("signingInMemoryKey").isPresent) {
+        // CI passes an empty value when the secret is missing, so blank counts as absent.
+        if (!providers.gradleProperty("signingInMemoryKey").orNull.isNullOrBlank()) {
             signAllPublications()
         }
 
